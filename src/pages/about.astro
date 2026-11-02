@@ -1,0 +1,80 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Image from '~/components/common/Image.astro';
+import VisitInfo from '~/components/widgets/VisitInfo.astro';
+import { SHOP } from '~/data/shop';
+
+const metadata = {
+  title: '소개',
+  description: '서울 을지로에서 목선반(로구로)으로 나무를 깎는 목공예 공방, 성창공예를 소개합니다.',
+};
+---
+
+<Layout metadata={metadata}>
+  <section class="px-4 pt-16 pb-10 md:pt-24 text-center wood-grain">
+    <p class="text-sm tracking-[0.3em] text-primary mb-3">ABOUT</p>
+    <h1 class="font-heading text-4xl md:text-6xl font-bold text-heading">{SHOP.name}</h1>
+    <div class="gold-rule mx-auto my-6 max-w-xs"></div>
+    <p class="text-muted">을지로에서 나무를 돌려 깎는 공방</p>
+  </section>
+
+  <section class="px-4 py-14 md:py-20">
+    <div class="max-w-6xl mx-auto grid gap-12 lg:grid-cols-2 items-center">
+      <div class="overflow-hidden rounded-xl border border-primary/25 aspect-[3/4] max-w-md mx-auto w-full">
+        <Image
+          src="~/assets/images/works/workshop-46.jpg"
+          alt="을지로 성창공예 매장 전경"
+          widths={[480, 800]}
+          sizes="(max-width: 1023px) 100vw, 448px"
+          width={800}
+          height={1066}
+          layout="cover"
+          format="webp"
+          class="h-full w-full object-cover"
+        />
+      </div>
+      <div class="space-y-6 text-lg leading-relaxed">
+        <h2 class="font-heading text-3xl md:text-4xl font-bold text-heading">
+          나무 한 토막이<br /><span class="gold-text">쓰임이 되기까지</span>
+        </h2>
+        <p>
+          성창공예는 서울 을지로에서 목선반, 일본말로 <b class="text-heading">로구로</b>라고 부르는 기계로 나무를 돌려
+          깎는 공방입니다. 빠르게 돌아가는 나무에 날을 대어 기둥과 다리, 그릇과 받침처럼 둥근 형태를 만들어 냅니다.
+        </p>
+        <p>
+          계단 난간과 가구 다리 같은 <b class="text-heading">몰딩 부재의 수량 생산</b>부터, 디자인을 공부하는 학생들의
+          <b class="text-heading">졸업 작품</b>, 가게 간판과 생활 소품까지 — 나무로 만들 수 있는 것이라면 무엇이든
+          상담합니다.
+        </p>
+        <p>
+          견본 하나를 수백 개로 똑같이 옮겨 내는 정밀함, 그리고 처음 보는 모양도 방법을 찾아내는 경험. 그것이 성창공예가
+          가진 기술입니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="px-4 pb-16">
+    <div class="max-w-6xl mx-auto grid gap-4 sm:grid-cols-3">
+      {
+        ['column-14', 'lathe-27', 'workshop-08'].map((file) => (
+          <div class="overflow-hidden rounded-lg border border-primary/20 aspect-[4/3]">
+            <Image
+              src={`~/assets/images/works/${file}.jpg`}
+              alt=""
+              widths={[400, 640]}
+              sizes="(max-width: 639px) 100vw, 33vw"
+              width={640}
+              height={480}
+              layout="cover"
+              format="webp"
+              class="h-full w-full object-cover"
+            />
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <VisitInfo />
+</Layout>

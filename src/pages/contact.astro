@@ -1,0 +1,165 @@
+---
+import { Icon } from 'astro-icon/components';
+import Layout from '~/layouts/PageLayout.astro';
+import VisitInfo from '~/components/widgets/VisitInfo.astro';
+import { SHOP, SERVICES } from '~/data/shop';
+
+const metadata = {
+  title: '주문·문의',
+  description: `성창공예 주문 문의 — 전화 ${SHOP.tel.label}, 휴대폰 ${SHOP.mobile.label}. ${SHOP.address}.`,
+};
+
+const field =
+  'w-full rounded-lg border border-primary/30 bg-black/30 px-4 py-3 text-heading placeholder:text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40';
+---
+
+<Layout metadata={metadata}>
+  <section class="px-4 pt-16 pb-10 md:pt-24 text-center wood-grain">
+    <p class="text-sm tracking-[0.3em] text-primary mb-3">ORDER &amp; CONTACT</p>
+    <h1 class="font-heading text-4xl md:text-6xl font-bold text-heading">주문 · 문의</h1>
+    <div class="gold-rule mx-auto my-6 max-w-xs"></div>
+    <p class="text-muted max-w-2xl mx-auto">
+      가장 빠른 방법은 전화입니다. 사진이나 도면이 있으면 문자로 보내 주세요.
+    </p>
+  </section>
+
+  <section class="px-4 py-12">
+    <div class="max-w-6xl mx-auto grid gap-4 sm:grid-cols-3">
+      <a href={SHOP.tel.href} class="rounded-xl border border-primary/40 p-6 text-center hover:bg-primary/10 transition">
+        <Icon name="tabler:phone-call" class="w-10 h-10 mx-auto text-primary" />
+        <p class="mt-3 text-muted text-sm">가게 전화</p>
+        <p class="font-heading text-2xl font-bold text-heading">{SHOP.tel.label}</p>
+      </a>
+      <a href={SHOP.mobile.href} class="rounded-xl border border-primary/40 p-6 text-center hover:bg-primary/10 transition">
+        <Icon name="tabler:device-mobile" class="w-10 h-10 mx-auto text-primary" />
+        <p class="mt-3 text-muted text-sm">휴대폰</p>
+        <p class="font-heading text-2xl font-bold text-heading">{SHOP.mobile.label}</p>
+      </a>
+      <a href={SHOP.mobile.sms} class="rounded-xl border border-primary/40 p-6 text-center hover:bg-primary/10 transition">
+        <Icon name="tabler:photo-up" class="w-10 h-10 mx-auto text-primary" />
+        <p class="mt-3 text-muted text-sm">사진·도면 보내기</p>
+        <p class="font-heading text-2xl font-bold text-heading">문자 보내기</p>
+      </a>
+    </div>
+    <p class="text-center text-sm text-muted mt-4">{SHOP.hours} · {SHOP.closed}</p>
+  </section>
+
+  <!-- 주문서: 서버 없이 작성 내용을 문자 메시지로 만들어 보냅니다 -->
+  <section id="order" class="px-4 py-14 md:py-20 bg-dark border-y border-primary/15">
+    <div class="max-w-3xl mx-auto">
+      <div class="text-center mb-10">
+        <h2 class="font-heading text-3xl md:text-4xl font-bold text-heading">주문서 작성</h2>
+        <p class="mt-3 text-muted">
+          아래를 채우고 <b class="text-heading">문자로 보내기</b>를 누르면 휴대폰 문자 앱에 주문 내용이 자동으로
+          입력됩니다. 컴퓨터에서는 <b class="text-heading">내용 복사</b> 후 문자나 카카오톡으로 보내 주세요.
+        </p>
+      </div>
+
+      <form id="order-form" class="grid gap-5 sm:grid-cols-2" novalidate>
+        <label class="block">
+          <span class="text-sm text-muted">성함 / 업체명 *</span>
+          <input name="name" required class={field} placeholder="홍길동 / ○○디자인" />
+        </label>
+        <label class="block">
+          <span class="text-sm text-muted">연락처 *</span>
+          <input name="phone" required inputmode="tel" class={field} placeholder="010-0000-0000" />
+        </label>
+        <label class="block">
+          <span class="text-sm text-muted">작업 종류</span>
+          <select name="type" class={field}>
+            {SERVICES.map((service) => <option>{service.title}</option>)}
+            <option>잘 모르겠어요 (상담 필요)</option>
+          </select>
+        </label>
+        <label class="block">
+          <span class="text-sm text-muted">수량</span>
+          <input name="qty" class={field} placeholder="예: 1개 / 200개" />
+        </label>
+        <label class="block">
+          <span class="text-sm text-muted">크기 (대략)</span>
+          <input name="size" class={field} placeholder="예: 지름 8cm, 높이 70cm" />
+        </label>
+        <label class="block">
+          <span class="text-sm text-muted">원하는 날짜</span>
+          <input name="due" class={field} placeholder="예: 12월 중순까지" />
+        </label>
+        <label class="block sm:col-span-2">
+          <span class="text-sm text-muted">내용 *</span>
+          <textarea
+            name="message"
+            required
+            rows="5"
+            class={field}
+            placeholder="만들고 싶은 것, 수종(나무 종류), 마감(칠) 등을 자유롭게 적어 주세요. 사진·도면은 문자에 함께 첨부해 주세요."
+          ></textarea>
+        </label>
+
+        <p id="order-error" class="sm:col-span-2 hidden text-sm text-red-400" role="alert">
+          * 표시 항목(성함, 연락처, 내용)을 채워 주세요.
+        </p>
+
+        <div class="sm:col-span-2 flex flex-wrap gap-3 justify-center">
+          <button type="submit" data-action="sms" class="btn-primary">
+            <Icon name="tabler:message" class="w-5 h-5 mr-2" />문자로 보내기
+          </button>
+          <button type="submit" data-action="copy" class="btn border-primary/60 text-heading hover:bg-primary/15">
+            <Icon name="tabler:copy" class="w-5 h-5 mr-2" />내용 복사
+          </button>
+        </div>
+        <p id="order-copied" class="sm:col-span-2 hidden text-center text-sm text-primary" role="status">
+          주문 내용을 복사했습니다. {SHOP.mobile.label}로 문자나 카카오톡에 붙여넣어 보내 주세요.
+        </p>
+      </form>
+    </div>
+  </section>
+
+  <VisitInfo />
+</Layout>
+
+<script define:vars={{ smsNumber: SHOP.mobile.label.replace(/-/g, ''), shopName: SHOP.name }}>
+  const setup = () => {
+    const form = document.getElementById('order-form');
+    if (!form || form.dataset.ready) return;
+    form.dataset.ready = '1';
+    const error = document.getElementById('order-error');
+    const copied = document.getElementById('order-copied');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const action = event.submitter?.dataset.action ?? 'sms';
+      const data = new FormData(form);
+      const get = (key) => String(data.get(key) ?? '').trim();
+      if (!get('name') || !get('phone') || !get('message')) {
+        error.classList.remove('hidden');
+        return;
+      }
+      error.classList.add('hidden');
+
+      const lines = [
+        `[${shopName} 주문 문의]`,
+        `성함: ${get('name')}`,
+        `연락처: ${get('phone')}`,
+        `작업 종류: ${get('type')}`,
+        get('qty') && `수량: ${get('qty')}`,
+        get('size') && `크기: ${get('size')}`,
+        get('due') && `희망 날짜: ${get('due')}`,
+        `내용: ${get('message')}`,
+      ].filter(Boolean);
+      const text = lines.join('\n');
+
+      if (action === 'copy') {
+        try {
+          await navigator.clipboard.writeText(text);
+          copied.classList.remove('hidden');
+        } catch {
+          window.prompt('아래 내용을 복사해 주세요', text);
+        }
+        return;
+      }
+      const isApple = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
+      window.location.href = `sms:${smsNumber}${isApple ? '&' : '?'}body=${encodeURIComponent(text)}`;
+    });
+  };
+  setup();
+  document.addEventListener('astro:page-load', setup);
+</script>

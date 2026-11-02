@@ -1,0 +1,176 @@
+---
+import { Icon } from 'astro-icon/components';
+import Layout from '~/layouts/PageLayout.astro';
+import Intro from '~/components/widgets/Intro.astro';
+import HeroShowcase from '~/components/widgets/HeroShowcase.astro';
+import Gallery from '~/components/widgets/Gallery.astro';
+import VisitInfo from '~/components/widgets/VisitInfo.astro';
+import BlogLatestPosts from '~/components/widgets/BlogLatestPosts.astro';
+import StructuredData from '~/components/common/StructuredData.astro';
+import Image from '~/components/common/Image.astro';
+import { SITE } from 'astrowind:config';
+import { SHOP, SERVICES } from '~/data/shop';
+import { FEATURED, WORKS, pick } from '~/data/works';
+import { getPermalink } from '~/utils/permalinks';
+
+const metadata = {
+  title: '성창공예 — 로구로·몰딩·목공예 주문제작 | 서울 을지로',
+  ignoreTitleTemplate: true,
+};
+
+const serviceImages: Record<string, string> = {
+  lathe: '~/assets/images/works/lathe-56.jpg',
+  column: '~/assets/images/works/column-13.jpg',
+  custom: '~/assets/images/works/custom-40.jpg',
+  furniture: '~/assets/images/works/furniture-57.jpg',
+};
+
+// 검색엔진에 가게 정보를 알려 주는 구조화 데이터 (주소·전화·영업시간)
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'HomeAndConstructionBusiness',
+  '@id': `${SITE?.site}/#business`,
+  name: SHOP.name,
+  url: SITE?.site,
+  telephone: ['+82-2-2292-0062', '+82-10-8548-7264'],
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '을지로 219',
+    addressLocality: '중구',
+    addressRegion: '서울특별시',
+    addressCountry: 'KR',
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      opens: '08:00',
+      closes: '18:00',
+    },
+  ],
+};
+---
+
+<Layout metadata={metadata}>
+  <StructuredData slot="head" schema={structuredData} />
+  <Intro />
+  <HeroShowcase />
+
+  <!-- 작업 분야 -->
+  <section id="services" class="px-4 py-20 md:py-28">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-14">
+        <p class="text-sm tracking-[0.3em] text-primary mb-3">CRAFTSMANSHIP</p>
+        <h2 class="font-heading text-3xl md:text-5xl font-bold text-heading">손끝으로 완성하는 네 가지 기술</h2>
+        <div class="gold-rule mx-auto my-6 max-w-xs"></div>
+        <p class="text-muted max-w-2xl mx-auto">
+          도면 한 장, 견본 하나만 있으면 됩니다. 원하는 모양을 정확히, 원하는 수량만큼 깎아 드립니다.
+        </p>
+      </div>
+
+      <div class="grid gap-6 sm:grid-cols-2">
+        {
+          SERVICES.map((service) => (
+            <a
+              href={getPermalink('/services') + `#${service.key}`}
+              class="group relative overflow-hidden rounded-xl border border-primary/20 aspect-[16/10] intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
+            >
+              <Image
+                src={serviceImages[service.key]}
+                alt=""
+                widths={[640, 960]}
+                sizes="(max-width: 639px) 100vw, 50vw"
+                width={960}
+                height={600}
+                layout="cover"
+                format="webp"
+                class="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+              <div class="absolute bottom-0 p-6 md:p-8">
+                <Icon name={service.icon} class="w-8 h-8 text-primary mb-3" />
+                <h3 class="font-heading text-2xl font-bold text-heading">{service.title}</h3>
+                <p class="mt-2 text-sm md:text-base text-default/85">{service.description}</p>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 강점 -->
+  <section class="px-4 py-16 md:py-20 border-y border-primary/15 bg-dark">
+    <div class="max-w-6xl mx-auto grid gap-10 md:grid-cols-3 text-center">
+      <div>
+        <Icon name="tabler:target" class="w-10 h-10 mx-auto text-primary" />
+        <h3 class="mt-4 font-heading text-xl font-bold text-heading">견본 그대로, 정밀하게</h3>
+        <p class="mt-2 text-muted">견본이나 도면의 치수와 곡선을 그대로 살려 깎습니다.</p>
+      </div>
+      <div>
+        <Icon name="tabler:stack-2" class="w-10 h-10 mx-auto text-primary" />
+        <h3 class="mt-4 font-heading text-xl font-bold text-heading">한 개부터 대량까지</h3>
+        <p class="mt-2 text-muted">작품 하나도, 난간 동자 수백 개도 같은 정성으로 만듭니다.</p>
+      </div>
+      <div>
+        <Icon name="tabler:messages" class="w-10 h-10 mx-auto text-primary" />
+        <h3 class="mt-4 font-heading text-xl font-bold text-heading">상담부터 함께</h3>
+        <p class="mt-2 text-muted">어떻게 만들지 막막해도 괜찮습니다. 방법부터 같이 찾습니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 대표 작업 -->
+  <Gallery id="works" columns={4} images={pick(FEATURED)}>
+    <Fragment slot="tagline">SELECTED WORKS</Fragment>
+    <Fragment slot="title">대표 작업</Fragment>
+    <Fragment slot="subtitle">사진을 누르면 크게 볼 수 있습니다.</Fragment>
+  </Gallery>
+  <div class="text-center -mt-6 mb-20">
+    <a href={getPermalink('/works')} class="btn border-primary/60 text-heading hover:bg-primary/15">
+      작업물 전체 보기 ({WORKS.length}점) <Icon name="tabler:arrow-right" class="w-5 h-5 ml-2" />
+    </a>
+  </div>
+
+  <!-- 주문 안내 -->
+  <section class="relative px-4 py-20 md:py-28 overflow-hidden">
+    <div class="absolute inset-0" aria-hidden="true">
+      <Image
+        src="~/assets/images/works/column-04.jpg"
+        alt=""
+        widths={[768, 1600]}
+        sizes="100vw"
+        width={1600}
+        height={900}
+        layout="cover"
+        format="webp"
+        class="h-full w-full object-cover"
+      />
+      <div class="absolute inset-0 bg-black/75"></div>
+    </div>
+    <div class="relative max-w-3xl mx-auto text-center">
+      <p class="text-sm tracking-[0.3em] text-primary mb-3">ORDER</p>
+      <h2 class="font-heading text-3xl md:text-5xl font-bold text-heading">만들고 싶은 것이 있으신가요?</h2>
+      <p class="mt-6 text-lg text-default/90">
+        사진이나 도면, 대략적인 크기만 알려 주시면 제작 방법과 견적을 안내해 드립니다.
+      </p>
+      <div class="mt-10 flex flex-wrap justify-center gap-3">
+        <a href={getPermalink('/contact')} class="btn-primary"
+          ><Icon name="tabler:clipboard-text" class="w-5 h-5 mr-2" />주문서 작성</a
+        >
+        <a href={SHOP.tel.href} class="btn border-primary/60 text-heading hover:bg-primary/15"
+          ><Icon name="tabler:phone" class="w-5 h-5 mr-2" />{SHOP.tel.label}</a
+        >
+        <a href={SHOP.mobile.sms} class="btn border-white/30 text-heading hover:bg-white/10"
+          ><Icon name="tabler:message" class="w-5 h-5 mr-2" />문자로 사진 보내기</a
+        >
+      </div>
+    </div>
+  </section>
+
+  <BlogLatestPosts count={3} linkText="소식 전체 보기">
+    <Fragment slot="title">성창공예 소식</Fragment>
+  </BlogLatestPosts>
+
+  <VisitInfo />
+</Layout>

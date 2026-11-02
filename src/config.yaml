@@ -1,0 +1,72 @@
+site:
+  name: 성창공예
+  site: 'https://bobby-choi7264.github.io'
+  base: '/'
+  trailingSlash: false
+
+  googleSiteVerificationId: null
+
+# Default SEO metadata
+metadata:
+  title:
+    default: 성창공예 — 로구로·몰딩·목공예 주문제작
+    template: '%s — 성창공예'
+  description: '서울 을지로 성창공예. 로구로(목선반) 전문, 몰딩·재단, 학생 작품, 각종 목공예품을 주문 제작합니다. 월~토 08:00~18:00.'
+  robots:
+    index: true
+    follow: true
+  openGraph:
+    site_name: 성창공예
+    images:
+      - url: '~/assets/images/works/lathe-80.jpg'
+        width: 1200
+        height: 626
+    type: website
+  twitter:
+    handle: null
+    site: null
+    cardType: summary_large_image
+
+i18n:
+  language: ko
+  textDirection: ltr
+
+apps:
+  blog:
+    isEnabled: true
+    postsPerPage: 8
+
+    post:
+      isEnabled: true
+      permalink: '/news/%slug%'
+      robots:
+        index: true
+
+    list:
+      isEnabled: true
+      pathname: 'news'
+      robots:
+        index: true
+
+    category:
+      isEnabled: true
+      pathname: 'category'
+      robots:
+        index: true
+
+    tag:
+      isEnabled: true
+      pathname: 'tag'
+      robots:
+        index: false
+
+    isRelatedPostsEnabled: true
+    relatedPostsCount: 4
+
+analytics:
+  vendors:
+    googleAnalytics:
+      id: null # or "G-XXXXXXXXXX"
+
+ui:
+  theme: 'dark:only' # Values: "system" | "light" | "dark" | "light:only" | "dark:only"

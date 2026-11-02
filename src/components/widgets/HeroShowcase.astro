@@ -1,0 +1,71 @@
+---
+// 화면 전체를 채우는 작업 사진 슬라이드쇼 + 가게 소개 문구.
+import { Icon } from 'astro-icon/components';
+import Image from '~/components/common/Image.astro';
+import { HERO_SLIDES, pick } from '~/data/works';
+import { SHOP } from '~/data/shop';
+import { getPermalink } from '~/utils/permalinks';
+
+const slides = pick(HERO_SLIDES);
+const seconds = 36 / slides.length;
+---
+
+<section class="relative -mt-[72px] h-[100svh] min-h-[560px] w-full overflow-hidden bg-[#0e0a07]">
+  <div class="absolute inset-0" aria-hidden="true">
+    {
+      slides.map((slide, index) => (
+        <div class="hero-slide" style={`animation-delay:${index * seconds}s`}>
+          <Image
+            src={slide.src}
+            alt=""
+            widths={[768, 1280, 1800]}
+            sizes="100vw"
+            width={1800}
+            height={1000}
+            layout="none"
+            format="webp"
+            loading={index === 0 ? 'eager' : 'lazy'}
+            fetchpriority={index === 0 ? 'high' : undefined}
+            style={`animation-delay:${index * seconds}s`}
+          />
+        </div>
+      ))
+    }
+    <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/45 to-[#140f0b]"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(0,0,0,0.55)_100%)]"></div>
+  </div>
+
+  <div class="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
+    <div class="hero-reveal flex flex-col items-center">
+      <p class="mb-5 text-xs md:text-sm tracking-[0.45em] text-primary pl-[0.45em]">
+        {SHOP.nameEn} · 을지로 목공예
+      </p>
+      <h1 class="font-heading text-4xl sm:text-5xl md:text-7xl font-bold leading-tight text-heading">
+        한 치의 오차 없이,<br /><span class="gold-text">나무를 깎는 기술</span>
+      </h1>
+      <p class="mt-6 max-w-xl text-base md:text-lg text-default/90">
+        로구로(목선반) 전문 · 몰딩 · 재단 · 학생 작품 · 공예품 일절 <br class="hidden sm:inline" />
+        견본 하나부터 수백 개 수량 생산까지 직접 깎아 만듭니다.
+      </p>
+      <div class="mt-10 flex flex-wrap justify-center gap-3">
+        <a href={getPermalink('/contact')} class="btn-primary"
+          ><Icon name="tabler:clipboard-text" class="w-5 h-5 mr-2" />주문 문의</a
+        >
+        <a href={SHOP.tel.href} class="btn border-primary/60 text-heading hover:bg-primary/15"
+          ><Icon name="tabler:phone" class="w-5 h-5 mr-2" />전화하기</a
+        >
+        <a href={getPermalink('/works')} class="btn border-white/30 text-heading hover:bg-white/10"
+          ><Icon name="tabler:photo" class="w-5 h-5 mr-2" />작업물 보기</a
+        >
+      </div>
+    </div>
+  </div>
+
+  <a
+    href="#services"
+    class="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 text-primary/80 hover:text-primary motion-safe:animate-bounce"
+    aria-label="아래로 스크롤"
+  >
+    <Icon name="tabler:chevrons-down" class="w-8 h-8" />
+  </a>
+</section>

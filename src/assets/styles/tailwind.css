@@ -1,0 +1,256 @@
+@import 'tailwindcss';
+
+@plugin "@tailwindcss/typography";
+
+/* shadcn/ui-compatible tokens derived from the --aw-* variables. */
+@import './shadcn.css';
+
+@variant dark (&:where(.dark, .dark *));
+
+@custom-variant intersect (&:not([no-intersect]));
+
+@theme {
+  --color-primary: var(--aw-color-primary);
+  --color-secondary: var(--aw-color-secondary);
+  --color-accent: var(--aw-color-accent);
+  --color-heading: var(--aw-color-text-heading);
+  --color-default: var(--aw-color-text-default);
+  --color-muted: var(--aw-color-text-muted);
+  --color-link: var(--aw-color-link, var(--aw-color-primary));
+
+  --font-sans:
+    var(--aw-font-sans, ui-sans-serif), ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-serif: var(--aw-font-serif, ui-serif), ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+  --font-heading: var(--aw-font-heading, ui-sans-serif), ui-sans-serif, system-ui, sans-serif;
+
+  --animate-fade: fadeInUp 0.5s both;
+
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(0.75rem);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@utility bg-page {
+  background-color: var(--aw-color-bg-page);
+}
+
+@utility bg-dark {
+  background-color: var(--aw-color-bg-page-dark);
+}
+
+@utility text-page {
+  color: var(--aw-color-text-default);
+}
+
+@utility text-muted {
+  color: var(--aw-color-text-muted);
+}
+
+@utility btn {
+  @apply inline-flex items-center justify-center rounded-full border-gray-400 border bg-transparent font-medium text-center text-base text-page leading-snug transition py-3.5 px-6 md:px-8 ease-in duration-200 focus:ring-blue-500 focus:ring-offset-blue-200 focus:ring-2 focus:ring-offset-2 hover:bg-gray-100 hover:border-gray-600 dark:text-slate-300 dark:border-slate-500 dark:hover:bg-slate-800 dark:hover:border-slate-800 cursor-pointer;
+}
+
+@utility btn-primary {
+  @apply btn font-semibold bg-primary text-[#140f0b] border-primary hover:bg-accent hover:border-accent hover:text-[#140f0b] dark:text-[#140f0b] dark:bg-primary dark:border-primary dark:hover:border-accent dark:hover:bg-accent;
+}
+
+@utility btn-secondary {
+  @apply btn;
+}
+
+@utility btn-tertiary {
+  @apply btn border-none shadow-none text-muted hover:text-gray-900 dark:text-gray-400 dark:hover:text-white;
+}
+
+/* Sticky header: solid page background on phones, translucent page background with blur on desktop. */
+#header.scroll > div:first-child {
+  @apply bg-page lg:backdrop-blur-md;
+  box-shadow: 0 0.375rem 1.5rem 0 rgb(140 152 164 / 13%);
+}
+@media (width >= 64rem) {
+  #header.scroll > div:first-child {
+    background-color: color-mix(in srgb, var(--aw-color-bg-page) 90%, transparent);
+  }
+}
+.dark #header.scroll > div:first-child,
+#header.scroll.dark > div:first-child {
+  @apply border-b border-gray-500/20;
+  box-shadow: none;
+}
+
+#header.expanded nav {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  right: 0;
+  bottom: 70px !important;
+  padding: 0 5px;
+}
+
+.dropdown:focus .dropdown-menu,
+.dropdown:focus-within .dropdown-menu,
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+[astro-icon].icon-light > * {
+  stroke-width: 1.2;
+}
+
+[astro-icon].icon-bold > * {
+  stroke-width: 2.4;
+}
+
+[data-aw-toggle-menu] path {
+  @apply transition;
+}
+[data-aw-toggle-menu].expanded g > path:first-child {
+  @apply -rotate-45 translate-y-[15px] translate-x-[-3px];
+}
+[data-aw-toggle-menu].expanded g > path:last-child {
+  @apply rotate-45 translate-y-[-8px] translate-x-[14px];
+}
+
+/* Current page in the header navigation (set server-side in Header.astro and
+   kept in sync on client-side navigations). Override --aw-color-link in
+   CustomStyles.astro to change the colour. */
+#header nav .aw-link-active {
+  @apply text-link;
+}
+
+.dd *:first-child {
+  margin-top: 0;
+}
+
+/* Blog prose: inline code without the typography plugin's backticks, and
+   code blocks that follow the light/dark theme (Shiki dual themes). */
+.prose :where(code):not(:where(pre *)) {
+  background-color: color-mix(in oklab, var(--aw-color-text-default) 8%, transparent);
+  border-radius: 0.25rem;
+  padding: 0.125rem 0.375rem;
+  font-weight: 500;
+}
+.prose :where(code):not(:where(pre *))::before,
+.prose :where(code):not(:where(pre *))::after {
+  content: none;
+}
+.prose :where(pre.astro-code) {
+  border: 1px solid color-mix(in oklab, var(--aw-color-text-default) 12%, transparent);
+}
+.dark .astro-code,
+.dark .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+}
+
+/* ---------- 성창공예 ---------- */
+
+/* 나무결 느낌의 은은한 배경 */
+.wood-grain {
+  background-image:
+    repeating-linear-gradient(92deg, rgb(255 255 255 / 0.015) 0 2px, transparent 2px 9px),
+    radial-gradient(ellipse at 20% 0%, rgb(196 150 84 / 0.12), transparent 60%),
+    radial-gradient(ellipse at 80% 100%, rgb(120 72 32 / 0.18), transparent 55%);
+}
+
+.gold-text {
+  background: linear-gradient(100deg, #f3d9a4 0%, #c49654 40%, #f6e2b8 55%, #a87a3e 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.gold-rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #c49654, transparent);
+}
+
+/* 첫 화면 슬라이드쇼: 사진이 천천히 확대되며 교차 */
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  animation: heroFade 36s infinite;
+}
+.hero-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: kenBurns 36s infinite;
+}
+@keyframes heroFade {
+  0% { opacity: 0; }
+  3% { opacity: 1; }
+  16.6% { opacity: 1; }
+  20% { opacity: 0; }
+  100% { opacity: 0; }
+}
+@keyframes kenBurns {
+  0% { transform: scale(1.0); }
+  20% { transform: scale(1.12); }
+  100% { transform: scale(1.12); }
+}
+
+/* 입장 화면 */
+#intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0e0a07;
+  animation: introOut 0.9s cubic-bezier(0.7, 0, 0.2, 1) 3.4s forwards;
+}
+#intro.skip { display: none; }
+#intro .intro-line {
+  width: 0;
+  animation: introLine 1.2s cubic-bezier(0.6, 0, 0.2, 1) 0.2s forwards;
+}
+#intro .intro-title {
+  opacity: 0;
+  letter-spacing: 0.9em;
+  filter: blur(8px);
+  animation: introTitle 1.6s cubic-bezier(0.2, 0.6, 0.2, 1) 0.7s forwards;
+}
+#intro .intro-sub {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: introSub 1s ease 1.8s forwards;
+}
+#intro .gold-text { animation: goldShine 3s linear 0.7s infinite; }
+@keyframes introLine { to { width: min(320px, 70vw); } }
+@keyframes introTitle { to { opacity: 1; letter-spacing: 0.35em; filter: blur(0); } }
+@keyframes introSub { to { opacity: 1; transform: translateY(0); } }
+@keyframes introOut { to { transform: translateY(-100%); visibility: hidden; } }
+@keyframes goldShine { to { background-position: -200% 0; } }
+
+/* 첫 화면 글자 등장 */
+.hero-reveal > * {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: heroReveal 1s cubic-bezier(0.2, 0.6, 0.2, 1) forwards;
+}
+.hero-reveal > *:nth-child(1) { animation-delay: 3.7s; }
+.hero-reveal > *:nth-child(2) { animation-delay: 3.9s; }
+.hero-reveal > *:nth-child(3) { animation-delay: 4.1s; }
+.hero-reveal > *:nth-child(4) { animation-delay: 4.3s; }
+.intro-done .hero-reveal > * { animation-delay: 0.1s; }
+@keyframes heroReveal { to { opacity: 1; transform: translateY(0); } }
+
+@media (prefers-reduced-motion: reduce) {
+  #intro { display: none; }
+  .hero-slide, .hero-slide img { animation: none; }
+  .hero-slide:first-child { opacity: 1; }
+  .hero-reveal > * { animation: none; opacity: 1; transform: none; }
+}
+.intro-done #intro { display: none; }

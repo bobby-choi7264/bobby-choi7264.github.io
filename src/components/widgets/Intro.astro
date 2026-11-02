@@ -1,0 +1,38 @@
+---
+// 첫 방문 때만 나오는 입장 화면. CSS 애니메이션만으로 3.4초 뒤 스스로 걷히고,
+// 같은 방문(세션) 안에서 홈으로 돌아오면 다시 나오지 않습니다.
+// 클릭하거나 아무 키나 누르면 바로 넘어갑니다.
+import { SHOP } from '~/data/shop';
+---
+
+<script is:inline data-astro-rerun>
+  try {
+    if (sessionStorage.getItem('sc-intro-seen')) document.documentElement.classList.add('intro-done');
+    else sessionStorage.setItem('sc-intro-seen', '1');
+  } catch (e) {
+    /* storage unavailable: just play the intro */
+  }
+</script>
+
+<div id="intro" class="wood-grain" role="presentation" aria-hidden="true">
+  <div class="flex flex-col items-center text-center px-6">
+    <div class="intro-line gold-rule mb-8"></div>
+    <p class="intro-title font-heading text-4xl md:text-6xl font-bold pl-[0.35em]"><span class="gold-text">{SHOP.name}</span></p>
+    <p class="intro-sub mt-6 text-xs md:text-sm tracking-[0.5em] text-[#c49654]/80 pl-[0.5em]">{SHOP.nameEn}</p>
+    <p class="intro-sub mt-3 text-sm md:text-base text-[#e2d6c4]/70">나무를 돌려 깎아, 쓰임을 만듭니다</p>
+  </div>
+</div>
+
+<script is:inline data-astro-rerun>
+  (() => {
+    const intro = document.getElementById('intro');
+    if (!intro) return;
+    const skip = () => {
+      intro.classList.add('skip');
+      document.documentElement.classList.add('intro-done');
+    };
+    intro.addEventListener('click', skip, { once: true });
+    window.addEventListener('keydown', skip, { once: true });
+    setTimeout(() => document.documentElement.classList.add('intro-done'), 4400);
+  })();
+</script>
