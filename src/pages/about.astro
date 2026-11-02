@@ -11,11 +11,28 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
-  <section class="px-4 pt-16 pb-10 md:pt-24 text-center wood-grain">
-    <p class="text-sm tracking-[0.3em] text-primary mb-3">공방 소개</p>
-    <h1 class="font-heading text-4xl md:text-6xl font-bold text-heading">{SHOP.name}</h1>
-    <div class="gold-rule mx-auto my-6 max-w-xs"></div>
-    <p class="text-muted">을지로에서 나무를 돌려 깎는 공방</p>
+  <section class="relative overflow-hidden px-4 pt-20 pb-14 md:pt-32 md:pb-20 text-center">
+    <div class="absolute inset-0" aria-hidden="true">
+      <Image
+        src="~/assets/images/works/column-14.jpg"
+        alt=""
+        widths={[768, 1600]}
+        sizes="100vw"
+        width={1600}
+        height={700}
+        layout="cover"
+        format="webp"
+        loading="eager"
+        class="h-full w-full object-cover parallax-img sepia-[0.4]"
+      />
+      <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-[#140f0b]"></div>
+    </div>
+    <div class="relative">
+      <p class="text-sm tracking-[0.3em] text-primary mb-3">공방 소개</p>
+      <h1 class="font-heading text-4xl md:text-6xl font-bold text-heading">{SHOP.name}</h1>
+      <div class="ruler mx-auto my-6 max-w-md"></div>
+      <p class="text-default/80">55년, 을지로에서 나무를 돌려 깎는 공방</p>
+    </div>
   </section>
 
   <section class="px-4 py-14 md:py-20">
@@ -34,6 +51,10 @@ const metadata = {
         />
       </div>
       <div class="space-y-6 text-lg leading-relaxed">
+        <p class="font-heading font-bold leading-none">
+          <span class="gold-text text-6xl md:text-7xl">55</span><span class="text-2xl text-primary ml-1">년</span>
+          <span class="ml-3 align-middle text-sm tracking-[0.3em] text-primary">나무만 깎아 온 손</span>
+        </p>
         <h2 class="font-heading text-3xl md:text-4xl font-bold text-heading">
           나무 한 토막이<br /><span class="gold-text">쓰임이 되기까지</span>
         </h2>
@@ -55,25 +76,41 @@ const metadata = {
     </div>
   </section>
 
-  <section class="px-4 pb-16">
-    <div class="max-w-6xl mx-auto grid gap-4 sm:grid-cols-3">
-      {
-        ['column-14', 'lathe-27', 'workshop-08'].map((file) => (
-          <div class="overflow-hidden rounded-lg border border-primary/20 aspect-[4/3]">
-            <Image
-              src={`~/assets/images/works/${file}.jpg`}
-              alt=""
-              widths={[400, 640]}
-              sizes="(max-width: 639px) 100vw, 33vw"
-              width={640}
-              height={480}
-              layout="cover"
-              format="webp"
-              class="h-full w-full object-cover"
-            />
-          </div>
-        ))
-      }
+  <section class="px-4 pb-20">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-10">
+        <p class="text-sm tracking-[0.3em] text-primary mb-3">작업장 풍경</p>
+        <h2 class="font-heading text-2xl md:text-4xl font-bold text-heading">톱밥 냄새 나는 을지로 공방</h2>
+        <div class="ruler mx-auto my-6 max-w-md"></div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 auto-rows-[140px] md:auto-rows-[190px] gap-3">
+        {
+          [
+            { file: 'workshop-47', cls: 'col-span-2 row-span-2' },
+            { file: 'column-16', cls: '' },
+            { file: 'workshop-08', cls: '' },
+            { file: 'lathe-27', cls: 'row-span-2' },
+            { file: 'column-29', cls: '' },
+            { file: 'furniture-07', cls: 'col-span-2 md:col-span-1' },
+            { file: 'column-49', cls: 'col-span-2' },
+            { file: 'lathe-55', cls: 'col-span-2 md:col-span-1' },
+          ].map(({ file, cls }) => (
+            <div class={`overflow-hidden rounded-lg border border-primary/20 reveal-wipe intersect intersect-once intersect-quarter ${cls}`}>
+              <Image
+                src={`~/assets/images/works/${file}.jpg`}
+                alt=""
+                widths={[400, 800]}
+                sizes="(max-width: 767px) 50vw, 25vw"
+                width={800}
+                height={600}
+                layout="cover"
+                format="webp"
+                class="h-full w-full object-cover transition duration-700 hover:scale-105 sepia-[0.2] hover:sepia-0"
+              />
+            </div>
+          ))
+        }
+      </div>
     </div>
   </section>
 

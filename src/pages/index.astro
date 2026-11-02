@@ -7,6 +7,8 @@ import Gallery from '~/components/widgets/Gallery.astro';
 import VisitInfo from '~/components/widgets/VisitInfo.astro';
 import BlogLatestPosts from '~/components/widgets/BlogLatestPosts.astro';
 import StructuredData from '~/components/common/StructuredData.astro';
+import PhotoRibbon from '~/components/widgets/PhotoRibbon.astro';
+import CraftProcess from '~/components/widgets/CraftProcess.astro';
 import Image from '~/components/common/Image.astro';
 import { SITE } from 'astrowind:config';
 import { SHOP, SERVICES } from '~/data/shop';
@@ -62,7 +64,7 @@ const structuredData = {
       <div class="text-center mb-14">
         <p class="text-sm tracking-[0.3em] text-primary mb-3">장인의 기술</p>
         <h2 class="font-heading text-3xl md:text-5xl font-bold text-heading">손끝으로 완성하는 네 가지 기술</h2>
-        <div class="gold-rule mx-auto my-6 max-w-xs"></div>
+        <div class="ruler mx-auto my-6 max-w-md"></div>
         <p class="text-muted max-w-2xl mx-auto">
           도면 한 장, 견본 하나만 있으면 됩니다. 원하는 모양을 정확히, 원하는 수량만큼 깎아 드립니다.
         </p>
@@ -99,12 +101,26 @@ const structuredData = {
     </div>
   </section>
 
+  <!-- 흘러가는 작업 사진 -->
+  <section class="py-16 md:py-20">
+    <div class="px-4 text-center mb-8">
+      <p class="text-sm tracking-[0.3em] text-primary mb-3">손으로 깎은 것들</p>
+      <h2 class="font-heading text-2xl md:text-4xl font-bold text-heading">을지로 작업장에서 나온 물건들</h2>
+    </div>
+    <PhotoRibbon
+      rows={[
+        ['lathe-85', 'lathe-79', 'lathe-28', 'lathe-21', 'lathe-56', 'lathe-55', 'lathe-50', 'lathe-03', 'lathe-23', 'lathe-88', 'lathe-73', 'lathe-82'],
+        ['column-13', 'custom-40', 'column-36', 'furniture-57', 'column-37', 'custom-53', 'column-26', 'furniture-42', 'column-17', 'custom-87', 'column-29', 'furniture-22'],
+      ]}
+    />
+  </section>
+
   <!-- 장인의 작업대 -->
   <section class="relative px-4 py-20 md:py-28 border-y border-primary/15 bg-dark overflow-hidden">
     <span class="hanja-mark -right-8 -top-10 text-[16rem] md:text-[26rem]" aria-hidden="true">匠</span>
     <div class="relative max-w-6xl mx-auto grid gap-12 lg:grid-cols-2 items-center">
       <div class="grid grid-cols-2 gap-3">
-        <div class="col-span-2 overflow-hidden rounded-lg border border-primary/20 aspect-[16/10]">
+        <div class="col-span-2 overflow-hidden rounded-lg border border-primary/20 aspect-[16/10] reveal-wipe intersect intersect-once intersect-quarter">
           <Image
             src="~/assets/images/works/column-14.jpg"
             alt="로구로에 걸어 깎고 있는 나무 기둥"
@@ -117,7 +133,7 @@ const structuredData = {
             class="h-full w-full object-cover"
           />
         </div>
-        <div class="overflow-hidden rounded-lg border border-primary/20 aspect-square">
+        <div class="overflow-hidden rounded-lg border border-primary/20 aspect-square reveal-wipe intersect intersect-once intersect-quarter">
           <Image
             src="~/assets/images/works/workshop-08.jpg"
             alt="작업장의 선반 공구"
@@ -130,7 +146,7 @@ const structuredData = {
             class="h-full w-full object-cover"
           />
         </div>
-        <div class="overflow-hidden rounded-lg border border-primary/20 aspect-square">
+        <div class="overflow-hidden rounded-lg border border-primary/20 aspect-square reveal-wipe intersect intersect-once intersect-quarter">
           <Image
             src="~/assets/images/works/lathe-27.jpg"
             alt="로구로로 깎은 원목 접시와 볼"
@@ -147,7 +163,7 @@ const structuredData = {
 
       <div>
         <p class="font-heading font-bold leading-none mb-2">
-          <span class="gold-text text-7xl md:text-8xl">55</span><span class="text-3xl md:text-4xl text-primary ml-1">년</span>
+          <span class="gold-text text-7xl md:text-8xl" data-count-to="55">55</span><span class="text-3xl md:text-4xl text-primary ml-1">년</span>
         </p>
         <p class="text-sm tracking-[0.3em] text-primary mb-8">나무만 깎아 온 장인의 손</p>
         <blockquote class="font-heading text-2xl md:text-4xl font-bold leading-snug text-heading">
@@ -181,6 +197,8 @@ const structuredData = {
     </div>
   </section>
 
+  <CraftProcess />
+
   <!-- 대표 작업 -->
   <Gallery id="works" columns={4} images={pick(FEATURED)}>
     <Fragment slot="tagline">손으로 깎은 것들</Fragment>
@@ -205,7 +223,7 @@ const structuredData = {
         height={900}
         layout="cover"
         format="webp"
-        class="h-full w-full object-cover"
+        class="h-full w-full object-cover parallax-img"
       />
       <div class="absolute inset-0 bg-black/75"></div>
     </div>
@@ -233,5 +251,71 @@ const structuredData = {
     <Fragment slot="title">성창공예 소식</Fragment>
   </BlogLatestPosts>
 
+  <!-- 을지로 작업장 -->
+  <section class="relative overflow-hidden py-28 md:py-40 px-4">
+    <div class="absolute inset-0" aria-hidden="true">
+      <Image
+        src="~/assets/images/works/workshop-47.jpg"
+        alt=""
+        widths={[768, 1600]}
+        sizes="100vw"
+        width={1600}
+        height={900}
+        layout="cover"
+        format="webp"
+        class="h-full w-full object-cover parallax-img sepia-[0.3]"
+      />
+      <div class="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/30"></div>
+    </div>
+    <div class="relative max-w-6xl mx-auto">
+      <p class="text-sm tracking-[0.3em] text-primary mb-4">서울 중구 을지로 219</p>
+      <p class="font-heading text-3xl md:text-6xl font-bold leading-tight text-heading">
+        오늘도 을지로에서<br /><span class="gold-text">로구로가 돌아갑니다</span>
+      </p>
+      <div class="ruler my-8 max-w-sm" style="-webkit-mask-image:none;mask-image:none"></div>
+      <a href={getPermalink('/about')} class="btn border-primary/60 text-heading hover:bg-primary/15">
+        공방 이야기 보기 <Icon name="tabler:arrow-right" class="w-5 h-5 ml-2" />
+      </a>
+    </div>
+  </section>
+
   <VisitInfo />
 </Layout>
+
+<script>
+  // 숫자가 0부터 올라가며 채워지는 효과 (예: 55년)
+  const run = () => {
+    const els = document.querySelectorAll<HTMLElement>('[data-count-to]');
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          io.unobserve(entry.target);
+          const el = entry.target as HTMLElement;
+          const to = Number(el.dataset.countTo);
+          const start = performance.now();
+          const tick = (now: number) => {
+            const t = Math.min(1, (now - start) / 1600);
+            el.textContent = String(Math.round(to * (1 - Math.pow(1 - t, 3))));
+            if (t < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        }),
+      { threshold: 0.6 }
+    );
+    // 화면 가까이 오면 0으로 바꿔 두고, 충분히 보이면 올라가기 시작
+    const near = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          near.unobserve(entry.target);
+          if (entry.intersectionRatio < 0.6) (entry.target as HTMLElement).textContent = '0';
+          io.observe(entry.target);
+        }),
+      { rootMargin: '0px 0px 300px 0px' }
+    );
+    els.forEach((el) => near.observe(el));
+  };
+  document.addEventListener('astro:page-load', run);
+</script>

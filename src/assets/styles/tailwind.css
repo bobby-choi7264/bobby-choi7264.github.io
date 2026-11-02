@@ -312,85 +312,106 @@ body::before {
   user-select: none;
 }
 
-/* 페이지 이동 연출: 대패가 지나가듯 원목 판재가 화면을 덮었다 빠짐 (PageTransition.astro) */
-#plank {
+/* 먹줄: 스크롤 진행 표시 + 페이지 이동 연출 (PageTransition.astro) */
+#mukjul {
   position: fixed;
-  inset: 0;
-  z-index: 110;
-  display: none;
-  pointer-events: none;
-  transform: translateX(-102%);
-  will-change: transform;
-}
-#plank.is-active { display: block; pointer-events: auto; }
-/* 원목 결: 가로로 길게 늘인 노이즈를 갈색으로 물들임 */
-#plank .plank-board {
-  position: absolute;
-  inset: 0;
-  background-color: #2b1b10;
-  background-image:
-    linear-gradient(180deg, rgb(0 0 0 / 0.35), transparent 18%, transparent 82%, rgb(0 0 0 / 0.35)),
-    linear-gradient(rgb(40 22 10 / 0.45), rgb(40 22 10 / 0.45)),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='600'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.003 0.11' numOctaves='4' seed='7'/%3E%3CfeColorMatrix values='0.62 0 0 0 -0.08  0.40 0 0 0 -0.06  0.22 0 0 0 -0.03  0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
-  background-size: 100% 100%, 100% 100%, cover;
-  box-shadow: inset -30px 0 40px -20px rgb(0 0 0 / 0.6);
-}
-/* 앞쪽 끝의 황동색 날 */
-#plank .plank-edge {
-  position: absolute;
   top: 0;
-  bottom: 0;
-  right: -2px;
-  width: 4px;
-  background: linear-gradient(180deg, transparent, #f3d9a4 20%, #c49654 50%, #f3d9a4 80%, transparent);
-  box-shadow: 0 0 18px 4px rgb(243 217 164 / 0.45), 0 0 60px 10px rgb(196 150 84 / 0.25);
-}
-/* 날 끝에서 날리는 대팻밥 */
-#plank .plank-shavings {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: -6px;
-  width: 0;
-}
-#plank .plank-shavings i {
-  position: absolute;
+  left: 0;
   right: 0;
-  width: 16px;
-  height: 8px;
-  border: 2px solid #d9b27a;
-  border-color: #e8c891 transparent transparent transparent;
-  border-radius: 50%;
-  opacity: 0;
+  height: 2px;
+  z-index: 70;
+  pointer-events: none;
 }
-#plank.is-active:not(.is-labeled) .plank-shavings i { animation: shaving 0.55s ease-out infinite; }
-#plank .plank-shavings i:nth-child(1) { top: 18%; animation-delay: 0s; }
-#plank .plank-shavings i:nth-child(2) { top: 37%; animation-delay: 0.12s; }
-#plank .plank-shavings i:nth-child(3) { top: 52%; animation-delay: 0.05s; }
-#plank .plank-shavings i:nth-child(4) { top: 68%; animation-delay: 0.18s; }
-#plank .plank-shavings i:nth-child(5) { top: 84%; animation-delay: 0.09s; }
-@keyframes shaving {
-  0% { opacity: 0; transform: translate(0, 0) rotate(0deg) scale(0.6); }
-  20% { opacity: 1; }
-  100% { opacity: 0; transform: translate(48px, -26px) rotate(160deg) scale(1.1); }
-}
-/* 가운데: 도장과 갈 페이지 이름 */
-#plank .plank-label {
+#mukjul .mukjul-progress,
+#mukjul .mukjul-snap {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.9rem;
-  opacity: 0;
-  transform: scale(1.06);
-  transition: opacity 0.2s ease, transform 0.25s ease;
+  transform-origin: left center;
 }
-#plank.is-labeled .plank-label { opacity: 1; transform: scale(1); }
-#plank .plank-title {
-  font-size: clamp(1.6rem, 5vw, 2.6rem);
-  font-weight: 700;
-  letter-spacing: 0.3em;
-  color: #f3e3c6;
-  text-shadow: 0 2px 12px rgb(0 0 0 / 0.6);
+#mukjul .mukjul-progress {
+  transform: scaleX(0);
+  background: linear-gradient(90deg, #7a5428, #c49654 70%, #f3d9a4);
+  box-shadow: 0 0 8px rgb(196 150 84 / 0.5);
+}
+#mukjul .mukjul-snap {
+  transform: scaleX(0);
+  opacity: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #1a120c, #3b2a1d 40%, #f3d9a4 92%, #fff6e2);
+  box-shadow: 0 0 14px rgb(243 217 164 / 0.7);
+}
+
+/* 페이지 내용 전환: 옛 페이지는 살짝 올라가며 사라지고, 새 페이지는 아래에서 떠오름 */
+@keyframes pageOut {
+  to { opacity: 0; transform: translateY(-12px); }
+}
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(22px); filter: blur(6px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*) { animation: none !important; }
+}
+
+/* 자(눈금자) 모양 구분선: 1칸·5칸·10칸 눈금 */
+.ruler {
+  height: 14px;
+  background:
+    linear-gradient(#c49654, #c49654) left bottom / 100% 1px no-repeat,
+    repeating-linear-gradient(90deg, rgb(196 150 84 / 0.9) 0 1px, transparent 1px 60px) left bottom / 100% 14px no-repeat,
+    repeating-linear-gradient(90deg, rgb(196 150 84 / 0.7) 0 1px, transparent 1px 30px) left bottom / 100% 9px no-repeat,
+    repeating-linear-gradient(90deg, rgb(196 150 84 / 0.45) 0 1px, transparent 1px 6px) left bottom / 100% 5px no-repeat;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
+}
+/* 위아래에 자 눈금 테 */
+.ruler-frame::before,
+.ruler-frame::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background:
+    repeating-linear-gradient(90deg, rgb(196 150 84 / 0.6) 0 1px, transparent 1px 50px) left top / 100% 10px no-repeat,
+    repeating-linear-gradient(90deg, rgb(196 150 84 / 0.35) 0 1px, transparent 1px 10px) left top / 100% 5px no-repeat;
+}
+.ruler-frame::before { top: 0; }
+.ruler-frame::after { bottom: 0; transform: scaleY(-1); }
+
+/* 작업 과정: 단계들을 잇는 황동선이 화면에 들어오면 그어짐 */
+.process-line {
+  position: absolute;
+  top: 28px;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #c49654 10%, #f3d9a4 50%, #c49654 90%, transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1.6s cubic-bezier(0.6, 0, 0.2, 1) 0.2s;
+}
+.process-line:not([no-intersect]) { transform: scaleX(1); }
+
+/* 사진이 화면에 들어올 때 커튼 걷히듯 드러남 */
+.reveal-wipe { clip-path: inset(0 0 0 0); transition: clip-path 1.2s cubic-bezier(0.7, 0, 0.2, 1); }
+.reveal-wipe[no-intersect] { clip-path: inset(0 100% 0 0); }
+
+/* 스크롤할 때 배경 사진이 천천히 움직이는 효과 (지원하는 브라우저만) */
+@supports (animation-timeline: view()) {
+  .parallax-img {
+    animation: parallaxY linear both;
+    animation-timeline: view();
+    animation-range: cover;
+  }
+  @keyframes parallaxY {
+    from { transform: translateY(-8%) scale(1.15); }
+    to { transform: translateY(8%) scale(1.15); }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .process-line { transition: none; transform: none; }
+  .reveal-wipe, .reveal-wipe[no-intersect] { clip-path: none; transition: none; }
+  .parallax-img { animation: none; }
 }

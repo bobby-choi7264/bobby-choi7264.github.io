@@ -1,0 +1,124 @@
+---
+// 작업장 창으로 들어오는 빛줄기와, 그 빛 속에 떠다니는 톱밥 먼지.
+// 부모 요소 위에 겹쳐 놓는 장식이며, 클릭을 가로막지 않습니다.
+export interface Props {
+  count?: number;
+}
+const { count = 32 } = Astro.props;
+
+// 빌드할 때 정해지는 '무작위' 값 (매번 같은 배치)
+let seed = 7;
+const rand = () => {
+  seed = (seed * 9301 + 49297) % 233280;
+  return seed / 233280;
+};
+const specks = Array.from({ length: count }, () => ({
+  left: (rand() * 100).toFixed(1),
+  top: (20 + rand() * 75).toFixed(1),
+  size: (1 + rand() * 2.6).toFixed(1),
+  dur: (9 + rand() * 12).toFixed(1),
+  delay: (-rand() * 20).toFixed(1),
+  dx: (rand() * 80 - 40).toFixed(0),
+}));
+---
+
+<div class="workshop-light" aria-hidden="true">
+  <span class="beam beam-1"></span>
+  <span class="beam beam-2"></span>
+  <span class="beam beam-3"></span>
+  {
+    specks.map((s) => (
+      <i
+        style={`left:${s.left}%;top:${s.top}%;width:${s.size}px;height:${s.size}px;animation-duration:${s.dur}s;animation-delay:${s.delay}s;--dx:${s.dx}px`}
+      />
+    ))
+  }
+</div>
+
+<style>
+  .workshop-light {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .beam {
+    position: absolute;
+    top: -30%;
+    height: 160%;
+    transform: rotate(24deg);
+    transform-origin: top center;
+    background: linear-gradient(180deg, rgb(255 228 180 / 0.16), rgb(255 228 180 / 0.04) 60%, transparent);
+    filter: blur(18px);
+    mix-blend-mode: screen;
+    animation: beamPulse 9s ease-in-out infinite;
+  }
+  .beam-1 {
+    left: 12%;
+    width: 9%;
+  }
+  .beam-2 {
+    left: 27%;
+    width: 4%;
+    animation-delay: -3s;
+    opacity: 0.7;
+  }
+  .beam-3 {
+    left: 38%;
+    width: 13%;
+    animation-delay: -6s;
+    opacity: 0.6;
+  }
+  @keyframes beamPulse {
+    0%,
+    100% {
+      opacity: 0.55;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+  i {
+    position: absolute;
+    border-radius: 50%;
+    background: rgb(255 232 196);
+    box-shadow: 0 0 6px rgb(255 220 160 / 0.8);
+    opacity: 0;
+    animation-name: dustFloat;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  @keyframes dustFloat {
+    0% {
+      opacity: 0;
+      transform: translate(0, 0);
+    }
+    15% {
+      opacity: 0.8;
+    }
+    50% {
+      opacity: 0.35;
+    }
+    80% {
+      opacity: 0.7;
+    }
+    100% {
+      opacity: 0;
+      transform: translate(var(--dx), -120px);
+    }
+  }
+  @media (max-width: 640px) {
+    i:nth-child(2n) {
+      display: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .beam,
+    i {
+      animation: none;
+    }
+    i {
+      opacity: 0.4;
+    }
+  }
+</style>

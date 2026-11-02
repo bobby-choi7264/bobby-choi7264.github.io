@@ -69,6 +69,8 @@ const persistKey = `header-${Array.from(
       { sticky: isSticky, relative: !isSticky, dark: isDark },
       'top-0 z-40 flex-none mx-auto w-full border-b border-gray-50/0 transition-[opacity] ease-in-out',
     ]}
+    transition:name="site-header"
+    transition:animation="none"
     {...isSticky ? { 'data-aw-sticky-header': true } : {}}
     {...id ? { id } : {}}
   >

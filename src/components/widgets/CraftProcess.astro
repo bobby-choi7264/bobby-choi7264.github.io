@@ -1,0 +1,79 @@
+---
+// 나무 한 토막이 작품이 되기까지 네 단계. 화면에 들어오면 황동색 선이 그어지고 단계가 차례로 떠오릅니다.
+import Image from '~/components/common/Image.astro';
+import LatheSpin from '~/components/widgets/LatheSpin.astro';
+
+const STEPS = [
+  {
+    num: '一',
+    title: '나무를 고릅니다',
+    text: '만들 물건에 맞는 나무와 결을 보고 원목을 고른 뒤, 알맞은 크기로 재단합니다.',
+    src: '~/assets/images/works/column-31.jpg',
+  },
+  {
+    num: '二',
+    title: '로구로에 겁니다',
+    text: '나무의 중심을 잡아 로구로에 단단히 물립니다. 중심이 틀어지면 모양도 틀어집니다.',
+    src: '~/assets/images/works/column-14.jpg',
+  },
+  {
+    num: '三',
+    title: '날을 대어 깎습니다',
+    text: '빠르게 도는 나무에 날을 대고, 손의 감각으로 곡선과 치수를 만들어 냅니다.',
+    src: '~/assets/images/works/column-16.jpg',
+  },
+  {
+    num: '四',
+    title: '다듬어 마감합니다',
+    text: '사포로 결을 고르고 칠을 올려, 손에 닿는 느낌까지 마무리합니다.',
+    src: '~/assets/images/works/lathe-80.jpg',
+  },
+];
+---
+
+<section class="relative px-4 py-20 md:py-28 overflow-hidden wood-grain">
+  <span class="hanja-mark -left-10 bottom-0 text-[14rem] md:text-[22rem]" aria-hidden="true">木</span>
+  <div class="relative max-w-6xl mx-auto">
+    <div class="text-center">
+      <p class="text-sm tracking-[0.3em] text-primary mb-3">작업 과정</p>
+      <h2 class="font-heading text-3xl md:text-5xl font-bold text-heading">나무 한 토막이 작품이 되기까지</h2>
+      <div class="ruler mx-auto my-6 max-w-md"></div>
+    </div>
+
+    <LatheSpin class="mx-auto max-w-3xl my-6 md:my-10 drop-shadow-[0_20px_30px_rgba(0,0,0,0.55)]" />
+    <p class="text-center text-muted -mt-2 mb-14 text-sm md:text-base">
+      로구로는 나무를 빠르게 돌리고, 장인은 그 위에 날을 대어 모양을 깎아 냅니다.
+    </p>
+
+    <ol class="relative grid gap-10 md:grid-cols-4 md:gap-6">
+      <span class="process-line intersect intersect-once intersect-quarter hidden md:block" aria-hidden="true"></span>
+      {
+        STEPS.map((step, index) => (
+          <li
+            class="relative intersect-once intersect-quarter motion-safe:opacity-0 motion-safe:intersect:animate-fade"
+            style={`animation-delay:${index * 0.15}s`}
+          >
+            <div class="relative z-10 mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-primary/50 bg-[#140f0b] font-heading text-2xl font-bold text-primary shadow-[0_0_0_6px_#140f0b]">
+              {step.num}
+            </div>
+            <div class="group overflow-hidden rounded-lg border border-primary/25 aspect-[4/3] md:aspect-[3/4]">
+              <Image
+                src={step.src}
+                alt={step.title}
+                widths={[400, 600]}
+                sizes="(max-width: 767px) 100vw, 280px"
+                width={600}
+                height={800}
+                layout="cover"
+                format="webp"
+                class="h-full w-full object-cover transition duration-700 group-hover:scale-105 sepia-[0.25] group-hover:sepia-0"
+              />
+            </div>
+            <h3 class="mt-4 font-heading text-xl font-bold text-heading">{step.title}</h3>
+            <p class="mt-1 text-muted">{step.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

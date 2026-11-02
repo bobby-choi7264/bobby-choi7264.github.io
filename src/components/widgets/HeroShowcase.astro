@@ -3,6 +3,7 @@
 import { Icon } from 'astro-icon/components';
 import Image from '~/components/common/Image.astro';
 import Seal from '~/components/common/Seal.astro';
+import WorkshopLight from '~/components/widgets/WorkshopLight.astro';
 import { HERO_SLIDES, pick } from '~/data/works';
 import { SHOP } from '~/data/shop';
 import { getPermalink } from '~/utils/permalinks';
@@ -34,6 +35,7 @@ const seconds = 36 / slides.length;
     }
     <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/45 to-[#140f0b]"></div>
     <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(0,0,0,0.55)_100%)]"></div>
+    <WorkshopLight />
   </div>
 
   <div class="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
