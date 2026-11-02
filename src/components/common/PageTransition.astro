@@ -1,0 +1,85 @@
+---
+// 페이지를 옮겨 갈 때 나오는 연출: 원목 판재가 대패 날처럼 왼쪽에서 밀려 들어와 화면을 덮고,
+// 가운데에 도장과 갈 페이지 이름이 찍힌 뒤 오른쪽으로 빠져나갑니다.
+// ClientRouter(astro:transitions)의 이벤트에 맞춰 움직이며, transition:persist로 페이지가 바뀌어도 남아 있습니다.
+import Seal from '~/components/common/Seal.astro';
+---
+
+<div id="plank" transition:persist aria-hidden="true">
+  <div class="plank-board"></div>
+  <div class="plank-edge"></div>
+  <div class="plank-shavings"><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="plank-label">
+    <Seal class="text-base md:text-lg" />
+    <span class="plank-title font-heading"></span>
+  </div>
+</div>
+
+<script>
+  const TITLES: Record<string, string> = {
+    '': '성창공예',
+    about: '소개',
+    services: '작업 분야',
+    works: '작업물',
+    news: '소식',
+    contact: '주문 · 문의',
+  };
+  const COVER_MS = 520;
+  const REVEAL_MS = 560;
+  const EASE_IN = 'cubic-bezier(0.7, 0, 0.3, 1)';
+  const EASE_OUT = 'cubic-bezier(0.6, 0, 0.25, 1)';
+
+  const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const plank = () => document.getElementById('plank') as HTMLElement | null;
+
+  const titleFor = (url: URL) => {
+    const first = url.pathname.split('/').filter(Boolean)[0] ?? '';
+    return TITLES[first] ?? '성창공예';
+  };
+
+  let covered = false;
+
+  const cover = async (title: string) => {
+    const el = plank();
+    if (!el) return;
+    el.querySelector('.plank-title')!.textContent = title;
+    el.classList.remove('is-labeled');
+    el.classList.add('is-active');
+    await el.animate([{ transform: 'translateX(-102%)' }, { transform: 'translateX(0)' }], {
+      duration: COVER_MS,
+      easing: EASE_IN,
+      fill: 'forwards',
+    }).finished;
+    el.classList.add('is-labeled');
+    covered = true;
+  };
+
+  const reveal = async () => {
+    const el = plank();
+    if (!el || !covered) return;
+    covered = false;
+    // 도장이 찍히는 것을 잠깐 보여 준 뒤 빠져나감
+    await new Promise((r) => setTimeout(r, 260));
+    await el.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(102%)' }], {
+      duration: REVEAL_MS,
+      easing: EASE_OUT,
+      fill: 'forwards',
+    }).finished;
+    el.classList.remove('is-active', 'is-labeled');
+    el.getAnimations().forEach((a) => a.cancel());
+  };
+
+  document.addEventListener('astro:before-preparation', (event) => {
+    if (reduced()) return;
+    // 같은 페이지 안의 이동(#작업분야 등)에는 연출하지 않음
+    if (event.to.pathname === event.from.pathname) return;
+    const load = event.loader;
+    event.loader = async () => {
+      await Promise.all([cover(titleFor(event.to)), load()]);
+    };
+  });
+
+  document.addEventListener('astro:after-swap', () => {
+    requestAnimationFrame(() => reveal());
+  });
+</script>
