@@ -33,9 +33,11 @@ const { id = 'visit', showMap = true } = Astro.props;
         <div class="flex gap-4">
           <dt><Icon name="tabler:phone" class="w-6 h-6 text-primary" /><span class="sr-only">전화</span></dt>
           <dd class="text-heading">
-            <a class="hover:text-primary" href={SHOP.tel.href}>{SHOP.tel.label}</a>
+            <a class="inline-flex min-h-11 items-center hover:text-primary" href={SHOP.tel.href}>{SHOP.tel.label}</a>
             <span class="text-muted mx-2">/</span>
-            <a class="hover:text-primary" href={SHOP.mobile.href}>{SHOP.mobile.label}</a>
+            <a class="inline-flex min-h-11 items-center hover:text-primary" href={SHOP.mobile.href}
+              >{SHOP.mobile.label}</a
+            >
           </dd>
         </div>
       </dl>
@@ -45,15 +47,25 @@ const { id = 'visit', showMap = true } = Astro.props;
         <a href={SHOP.mobile.href} class="btn border-primary/60 text-heading hover:bg-primary/15"
           ><Icon name="tabler:device-mobile" class="w-5 h-5 mr-2" />휴대폰 전화</a
         >
-        <a href={MAP_LINKS.naver} target="_blank" rel="noopener" class="btn border-white/25 text-heading hover:bg-white/10"
+        <a
+          href={MAP_LINKS.naver}
+          target="_blank"
+          rel="noopener"
+          class="btn border-white/25 text-heading hover:bg-white/10"
           ><Icon name="tabler:map-2" class="w-5 h-5 mr-2" />네이버 지도</a
         >
-        <a href={MAP_LINKS.kakao} target="_blank" rel="noopener" class="btn border-white/25 text-heading hover:bg-white/10"
+        <a
+          href={MAP_LINKS.kakao}
+          target="_blank"
+          rel="noopener"
+          class="btn border-white/25 text-heading hover:bg-white/10"
           ><Icon name="tabler:map-2" class="w-5 h-5 mr-2" />카카오맵</a
         >
       </div>
       <p class="mt-3 text-sm text-muted">
-        <a href={MAP_LINKS.google} target="_blank" rel="noopener" class="underline hover:text-primary">구글 지도로 보기</a>
+        <a href={MAP_LINKS.google} target="_blank" rel="noopener" class="underline hover:text-primary"
+          >구글 지도로 보기</a
+        >
       </p>
     </div>
 

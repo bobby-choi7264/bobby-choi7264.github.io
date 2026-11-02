@@ -188,16 +188,32 @@
   animation: kenBurns 36s infinite;
 }
 @keyframes heroFade {
-  0% { opacity: 0; }
-  3% { opacity: 1; }
-  16.6% { opacity: 1; }
-  20% { opacity: 0; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 0;
+  }
+  3% {
+    opacity: 1;
+  }
+  16.6% {
+    opacity: 1;
+  }
+  20% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 @keyframes kenBurns {
-  0% { transform: scale(1.0); }
-  20% { transform: scale(1.12); }
-  100% { transform: scale(1.12); }
+  0% {
+    transform: scale(1);
+  }
+  20% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1.12);
+  }
 }
 
 /* 입장 화면 — 글꼴이 준비되면 Intro.astro가 .play를 붙여서 시작 */
@@ -212,11 +228,19 @@
   touch-action: none;
   overscroll-behavior: none;
 }
-.intro-active #intro { display: flex; }
+.intro-active #intro {
+  display: flex;
+}
 .intro-active,
-.intro-active body { overflow: hidden; }
-#intro.play { animation: introOut 0.9s cubic-bezier(0.7, 0, 0.2, 1) 3.4s forwards; }
-#intro .intro-line { width: 0; }
+.intro-active body {
+  overflow: hidden;
+}
+#intro.play {
+  animation: introOut 0.9s cubic-bezier(0.7, 0, 0.2, 1) 3.4s forwards;
+}
+#intro .intro-line {
+  width: 0;
+}
 #intro .intro-title {
   opacity: 0;
   letter-spacing: 0.9em;
@@ -226,20 +250,62 @@
   opacity: 0;
   transform: translateY(10px);
 }
-#intro .intro-seal { opacity: 0; }
-#intro.play .intro-line { animation: introLine 1.2s cubic-bezier(0.6, 0, 0.2, 1) 0.2s forwards; }
-#intro.play .intro-title { animation: introTitle 1.6s cubic-bezier(0.2, 0.6, 0.2, 1) 0.4s forwards; }
-#intro.play .intro-sub { animation: introSub 1s ease 1.4s forwards; }
-#intro.play .intro-seal { animation: sealStamp 0.45s cubic-bezier(0.3, 0, 0.3, 1.4) 2s forwards; }
-#intro.play .gold-text { animation: goldShine 3s linear 0.4s infinite; }
-@keyframes introLine { to { width: min(320px, 70vw); } }
-@keyframes introTitle { to { opacity: 1; letter-spacing: 0.35em; filter: blur(0); } }
-@keyframes introSub { to { opacity: 1; transform: translateY(0); } }
-@keyframes introOut { to { transform: translateY(-100%); visibility: hidden; } }
-@keyframes goldShine { to { background-position: -200% 0; } }
+#intro .intro-seal {
+  opacity: 0;
+}
+#intro.play .intro-line {
+  animation: introLine 1.2s cubic-bezier(0.6, 0, 0.2, 1) 0.2s forwards;
+}
+#intro.play .intro-title {
+  animation: introTitle 1.6s cubic-bezier(0.2, 0.6, 0.2, 1) 0.4s forwards;
+}
+#intro.play .intro-sub {
+  animation: introSub 1s ease 1.4s forwards;
+}
+#intro.play .intro-seal {
+  animation: sealStamp 0.45s cubic-bezier(0.3, 0, 0.3, 1.4) 2s forwards;
+}
+#intro.play .gold-text {
+  animation: goldShine 3s linear 0.4s infinite;
+}
+@keyframes introLine {
+  to {
+    width: min(320px, 70vw);
+  }
+}
+@keyframes introTitle {
+  to {
+    opacity: 1;
+    letter-spacing: 0.35em;
+    filter: blur(0);
+  }
+}
+@keyframes introSub {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes introOut {
+  to {
+    transform: translateY(-100%);
+    visibility: hidden;
+  }
+}
+@keyframes goldShine {
+  to {
+    background-position: -200% 0;
+  }
+}
 @keyframes sealStamp {
-  0% { opacity: 0; transform: scale(2.2) rotate(-4deg); }
-  100% { opacity: 1; transform: scale(1) rotate(-4deg); }
+  0% {
+    opacity: 0;
+    transform: scale(2.2) rotate(-4deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(-4deg);
+  }
 }
 
 /* 첫 화면 글자: 입장 화면이 걷힐 때(.intro-reveal) 차례로 올라옴 */
@@ -248,28 +314,74 @@
   transform: translateY(24px);
 }
 .intro-reveal .hero-reveal > *,
-.intro-done .hero-reveal > * { animation: heroReveal 1s cubic-bezier(0.2, 0.6, 0.2, 1) forwards; }
-.hero-reveal > *:nth-child(2) { animation-delay: 0.15s; }
-.hero-reveal > *:nth-child(3) { animation-delay: 0.3s; }
-.hero-reveal > *:nth-child(4) { animation-delay: 0.45s; }
-@keyframes heroReveal { to { opacity: 1; transform: translateY(0); } }
+.intro-done .hero-reveal > * {
+  animation: heroReveal 1s cubic-bezier(0.2, 0.6, 0.2, 1) forwards;
+}
+.hero-reveal > *:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.hero-reveal > *:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.hero-reveal > *:nth-child(4) {
+  animation-delay: 0.45s;
+}
+@keyframes heroReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 /* 움직임 줄이기 설정: 입장 화면은 움직임 없이 보여 주고 사라짐 */
 @media (prefers-reduced-motion: reduce) {
-  #intro.play { animation: introFade 0.4s ease 3.4s forwards; }
-  #intro.play .intro-line { animation: none; width: min(320px, 70vw); }
+  #intro.play {
+    animation: introFade 0.4s ease 3.4s forwards;
+  }
+  #intro.play .intro-line {
+    animation: none;
+    width: min(320px, 70vw);
+  }
   #intro.play .intro-title,
   #intro.play .intro-sub,
-  #intro.play .intro-seal { animation: none; opacity: 1; filter: none; letter-spacing: 0.35em; transform: none; }
-  #intro.play .intro-sub { letter-spacing: normal; }
-  #intro.play .intro-seal { transform: rotate(-4deg); }
-  #intro.play .gold-text { animation: none; }
-  .hero-slide, .hero-slide img { animation: none; }
-  .hero-slide:first-child { opacity: 1; }
-  .hero-reveal > * { animation: none !important; opacity: 1; transform: none; }
+  #intro.play .intro-seal {
+    animation: none;
+    opacity: 1;
+    filter: none;
+    letter-spacing: 0.35em;
+    transform: none;
+  }
+  #intro.play .intro-sub {
+    letter-spacing: normal;
+  }
+  #intro.play .intro-seal {
+    transform: rotate(-4deg);
+  }
+  #intro.play .gold-text {
+    animation: none;
+  }
+  .hero-slide,
+  .hero-slide img {
+    animation: none;
+  }
+  .hero-slide:first-child {
+    opacity: 1;
+  }
+  .hero-reveal > * {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
 }
-@keyframes introFade { to { opacity: 0; visibility: hidden; } }
-.intro-done #intro { display: none; }
+@keyframes introFade {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+.intro-done #intro {
+  display: none;
+}
 
 /* 장인 느낌: 붉은 낙관(도장) */
 .seal {
@@ -280,7 +392,9 @@
   border-radius: 0.12em;
   color: #f8ecdc;
   background: #b8322a;
-  box-shadow: inset 0 0 0 0.07em #f8ecdc, 0 0 0 0.05em #b8322a;
+  box-shadow:
+    inset 0 0 0 0.07em #f8ecdc,
+    0 0 0 0.05em #b8322a;
   font-family: 'Noto Serif KR', serif;
   font-weight: 900;
   line-height: 1;
@@ -343,14 +457,23 @@ body::before {
 
 /* 페이지 내용 전환: 옛 페이지는 살짝 올라가며 사라지고, 새 페이지는 아래에서 떠오름 */
 @keyframes pageOut {
-  to { opacity: 0; transform: translateY(-12px); }
+  to {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
 }
 @keyframes pageIn {
-  from { opacity: 0; transform: translateY(22px); filter: blur(6px); }
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+    filter: blur(6px);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(*),
-  ::view-transition-new(*) { animation: none !important; }
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
 }
 
 /* 자(눈금자) 모양 구분선: 1칸·5칸·10칸 눈금 */
@@ -358,7 +481,8 @@ body::before {
   height: 14px;
   background:
     linear-gradient(#c49654, #c49654) left bottom / 100% 1px no-repeat,
-    repeating-linear-gradient(90deg, rgb(196 150 84 / 0.9) 0 1px, transparent 1px 60px) left bottom / 100% 14px no-repeat,
+    repeating-linear-gradient(90deg, rgb(196 150 84 / 0.9) 0 1px, transparent 1px 60px) left bottom / 100% 14px
+      no-repeat,
     repeating-linear-gradient(90deg, rgb(196 150 84 / 0.7) 0 1px, transparent 1px 30px) left bottom / 100% 9px no-repeat,
     repeating-linear-gradient(90deg, rgb(196 150 84 / 0.45) 0 1px, transparent 1px 6px) left bottom / 100% 5px no-repeat;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
@@ -376,8 +500,13 @@ body::before {
     repeating-linear-gradient(90deg, rgb(196 150 84 / 0.6) 0 1px, transparent 1px 50px) left top / 100% 10px no-repeat,
     repeating-linear-gradient(90deg, rgb(196 150 84 / 0.35) 0 1px, transparent 1px 10px) left top / 100% 5px no-repeat;
 }
-.ruler-frame::before { top: 0; }
-.ruler-frame::after { bottom: 0; transform: scaleY(-1); }
+.ruler-frame::before {
+  top: 0;
+}
+.ruler-frame::after {
+  bottom: 0;
+  transform: scaleY(-1);
+}
 
 /* 작업 과정: 단계들을 잇는 황동선이 화면에 들어오면 그어짐 */
 .process-line {
@@ -391,11 +520,18 @@ body::before {
   transform-origin: left;
   transition: transform 1.6s cubic-bezier(0.6, 0, 0.2, 1) 0.2s;
 }
-.process-line:not([no-intersect]) { transform: scaleX(1); }
+.process-line:not([no-intersect]) {
+  transform: scaleX(1);
+}
 
 /* 사진이 화면에 들어올 때 커튼 걷히듯 드러남 */
-.reveal-wipe { clip-path: inset(0 0 0 0); transition: clip-path 1.2s cubic-bezier(0.7, 0, 0.2, 1); }
-.reveal-wipe[no-intersect] { clip-path: inset(0 100% 0 0); }
+.reveal-wipe {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 1.2s cubic-bezier(0.7, 0, 0.2, 1);
+}
+.reveal-wipe[no-intersect] {
+  clip-path: inset(0 100% 0 0);
+}
 
 /* 스크롤할 때 배경 사진이 천천히 움직이는 효과 (지원하는 브라우저만) */
 @supports (animation-timeline: view()) {
@@ -405,13 +541,26 @@ body::before {
     animation-range: cover;
   }
   @keyframes parallaxY {
-    from { transform: translateY(-8%) scale(1.15); }
-    to { transform: translateY(8%) scale(1.15); }
+    from {
+      transform: translateY(-8%) scale(1.15);
+    }
+    to {
+      transform: translateY(8%) scale(1.15);
+    }
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .process-line { transition: none; transform: none; }
-  .reveal-wipe, .reveal-wipe[no-intersect] { clip-path: none; transition: none; }
-  .parallax-img { animation: none; }
+  .process-line {
+    transition: none;
+    transform: none;
+  }
+  .reveal-wipe,
+  .reveal-wipe[no-intersect] {
+    clip-path: none;
+    transition: none;
+  }
+  .parallax-img {
+    animation: none;
+  }
 }

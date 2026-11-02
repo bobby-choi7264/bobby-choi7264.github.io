@@ -33,11 +33,7 @@ export const footerData = {
     },
     {
       title: '오시는 길',
-      links: [
-        { text: SHOP.addressShort, href: MAP_LINKS.naver },
-        { text: SHOP.hours },
-        { text: SHOP.closed },
-      ],
+      links: [{ text: SHOP.addressShort, href: MAP_LINKS.naver }, { text: SHOP.hours }, { text: SHOP.closed }],
     },
   ],
   secondaryLinks: [],

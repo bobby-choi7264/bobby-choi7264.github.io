@@ -11,16 +11,28 @@ import { SHOP } from '~/data/shop';
   try {
     if (sessionStorage.getItem('sc-intro-seen')) document.documentElement.classList.add('intro-done');
     else document.documentElement.classList.add('intro-active');
-  } catch (e) {
+  } catch {
     document.documentElement.classList.add('intro-active');
   }
 </script>
-<noscript><style>#intro { display: none; } .hero-reveal > * { opacity: 1 !important; transform: none !important; }</style></noscript>
+<noscript
+  ><style>
+    #intro {
+      display: none;
+    }
+    .hero-reveal > * {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  </style></noscript
+>
 
 <div id="intro" class="wood-grain" role="presentation" aria-hidden="true">
   <div class="flex flex-col items-center text-center px-6">
     <div class="intro-line gold-rule mb-8"></div>
-    <p class="intro-title font-heading text-4xl md:text-6xl font-bold pl-[0.35em]"><span class="gold-text">{SHOP.name}</span></p>
+    <p class="intro-title font-heading text-4xl md:text-6xl font-bold pl-[0.35em]">
+      <span class="gold-text">{SHOP.name}</span>
+    </p>
     <p class="intro-sub mt-6 text-xs md:text-sm tracking-[0.5em] text-[#c49654]/80 pl-[0.5em]">{SHOP.nameEn}</p>
     <p class="intro-sub mt-3 text-sm md:text-base text-[#e2d6c4]/70">55년, 나무를 돌려 깎아 쓰임을 만듭니다</p>
     <Seal class="intro-seal mt-8 text-lg md:text-xl" />
@@ -47,7 +59,7 @@ import { SHOP } from '~/data/shop';
       finished = true;
       try {
         sessionStorage.setItem('sc-intro-seen', '1');
-      } catch (e) {
+      } catch {
         /* storage unavailable */
       }
       root.classList.remove('intro-active');
@@ -78,8 +90,12 @@ import { SHOP } from '~/data/shop';
       setTimeout(finish, END_MS + 900);
     };
     const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
-    Promise.race([fontsReady, new Promise((r) => setTimeout(r, FONT_WAIT_MS))]).then(() =>
-      requestAnimationFrame(start)
-    );
+    Promise.race([fontsReady, new Promise((r) => setTimeout(r, FONT_WAIT_MS))]).then(() => {
+      requestAnimationFrame(start);
+      // 화면 그리기가 늦는 브라우저(일부 앱 안 브라우저 등)에서도 반드시 시작되도록
+      setTimeout(start, 400);
+    });
+    // 어떤 경우에도 입장 화면에 갇히지 않도록 마지막 안전장치
+    setTimeout(finish, FONT_WAIT_MS + 400 + END_MS + 900 + 1500);
   })();
 </script>

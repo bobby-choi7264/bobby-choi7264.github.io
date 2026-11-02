@@ -34,8 +34,7 @@ const breadcrumbs = [
 
 const metadata = {
   title: `소식${currentPage > 1 ? ` — ${currentPage}페이지` : ''}`,
-  description:
-    '성창공예의 새 작업과 공지, 목공예 이야기.',
+  description: '성창공예의 새 작업과 공지, 목공예 이야기.',
   robots: {
     index: blogListRobots?.index && currentPage === 1,
     follow: blogListRobots?.follow,
@@ -53,11 +52,7 @@ const metadata = {
   </Fragment>
   <Breadcrumbs bar items={breadcrumbs} />
   <section class="px-6 sm:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-4xl">
-    <Headline
-      subtitle="새 작업, 공지, 목공예 이야기를 전합니다."
-    >
-      성창공예 소식
-    </Headline>
+    <Headline subtitle="새 작업, 공지, 목공예 이야기를 전합니다."> 성창공예 소식 </Headline>
     <BlogList posts={page.data} />
     <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
     <!--
@@ -65,5 +60,4 @@ const metadata = {
       <PostTags tags={allTags}  title="Search by Tags:" />
     -->
   </section>
-
 </Layout>

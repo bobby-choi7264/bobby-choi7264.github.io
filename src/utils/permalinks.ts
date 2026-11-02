@@ -18,7 +18,8 @@ const BASE_PATHNAME = SITE.base || '/';
 export const cleanSlug = (text = '') =>
   trimSlash(text)
     .split('/')
-    .map((slug) => slugify(slug))
+    // limax는 한글을 지워 버리므로, 결과가 비면 원래 글자를 그대로 씁니다 (예: 공지, 작업-이야기)
+    .map((slug) => slugify(slug) || slug.trim().toLowerCase().replace(/\s+/g, '-'))
     .join('/');
 
 export const BLOG_BASE = cleanSlug(APP_BLOG?.list?.pathname);

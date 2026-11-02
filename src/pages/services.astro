@@ -8,7 +8,8 @@ import { getPermalink } from '~/utils/permalinks';
 
 const metadata = {
   title: '작업 분야',
-  description: '55년 경력 장인의 로구로(목선반) 목기 전문, 대량 생산·방송국 납품, 몰딩·재단, 학생 작품, 공예품 일절 — 성창공예의 작업 분야와 주문 진행 과정.',
+  description:
+    '55년 경력 장인의 로구로(목선반) 목기 전문, 대량 생산·방송국 납품, 몰딩·재단, 학생 작품, 공예품 일절 — 성창공예의 작업 분야와 주문 진행 과정.',
 };
 
 const details: Record<string, { points: string[]; photos: CategoryKey }> = {
@@ -72,7 +73,12 @@ const steps = [
             </div>
             <div class="grid grid-cols-3 gap-3">
               {photos.map((photo, i) => (
-                <div class:list={['overflow-hidden rounded-lg border border-primary/20', { 'col-span-3 aspect-[16/10]': i === 0, 'aspect-square': i > 0, 'col-span-1': i > 0 }]}>
+                <div
+                  class:list={[
+                    'overflow-hidden rounded-lg border border-primary/20',
+                    { 'col-span-3 aspect-[16/10]': i === 0, 'aspect-square': i > 0, 'col-span-1': i > 0 },
+                  ]}
+                >
                   <Image
                     src={photo.src}
                     alt={photo.alt}

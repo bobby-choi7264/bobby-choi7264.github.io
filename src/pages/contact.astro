@@ -18,24 +18,31 @@ const field =
     <p class="text-sm tracking-[0.3em] text-primary mb-3">주문 · 문의</p>
     <h1 class="font-heading text-4xl md:text-6xl font-bold text-heading">주문 · 문의</h1>
     <div class="ruler mx-auto my-6 max-w-md"></div>
-    <p class="text-muted max-w-2xl mx-auto">
-      가장 빠른 방법은 전화입니다. 사진이나 도면이 있으면 문자로 보내 주세요.
-    </p>
+    <p class="text-muted max-w-2xl mx-auto">가장 빠른 방법은 전화입니다. 사진이나 도면이 있으면 문자로 보내 주세요.</p>
   </section>
 
   <section class="px-4 py-12">
     <div class="max-w-6xl mx-auto grid gap-4 sm:grid-cols-3">
-      <a href={SHOP.tel.href} class="rounded-xl border border-primary/40 p-6 text-center hover:bg-primary/10 transition">
+      <a
+        href={SHOP.tel.href}
+        class="rounded-xl border border-primary/40 p-6 text-center hover:bg-primary/10 transition"
+      >
         <Icon name="tabler:phone-call" class="w-10 h-10 mx-auto text-primary" />
         <p class="mt-3 text-muted text-sm">가게 전화</p>
         <p class="font-heading text-2xl font-bold text-heading">{SHOP.tel.label}</p>
       </a>
-      <a href={SHOP.mobile.href} class="rounded-xl border border-primary/40 p-6 text-center hover:bg-primary/10 transition">
+      <a
+        href={SHOP.mobile.href}
+        class="rounded-xl border border-primary/40 p-6 text-center hover:bg-primary/10 transition"
+      >
         <Icon name="tabler:device-mobile" class="w-10 h-10 mx-auto text-primary" />
         <p class="mt-3 text-muted text-sm">휴대폰</p>
         <p class="font-heading text-2xl font-bold text-heading">{SHOP.mobile.label}</p>
       </a>
-      <a href={SHOP.mobile.sms} class="rounded-xl border border-primary/40 p-6 text-center hover:bg-primary/10 transition">
+      <a
+        href={SHOP.mobile.sms}
+        class="rounded-xl border border-primary/40 p-6 text-center hover:bg-primary/10 transition"
+      >
         <Icon name="tabler:photo-up" class="w-10 h-10 mx-auto text-primary" />
         <p class="mt-3 text-muted text-sm">사진·도면 보내기</p>
         <p class="font-heading text-2xl font-bold text-heading">문자 보내기</p>
@@ -116,7 +123,7 @@ const field =
   <VisitInfo />
 </Layout>
 
-<script define:vars={{ smsNumber: SHOP.mobile.label.replace(/-/g, ''), shopName: SHOP.name }}>
+<script is:inline define:vars={{ smsNumber: SHOP.mobile.label.replace(/-/g, ''), shopName: SHOP.name }}>
   const setup = () => {
     const form = document.getElementById('order-form');
     if (!form || form.dataset.ready) return;

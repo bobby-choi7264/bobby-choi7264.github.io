@@ -2,7 +2,7 @@ site:
   name: 성창공예
   site: 'https://bobby-choi7264.github.io'
   base: '/'
-  trailingSlash: false
+  trailingSlash: true
 
   googleSiteVerificationId: null
 

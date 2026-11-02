@@ -27,7 +27,13 @@ const { language, textDirection } = I18N;
 
 // 페이지를 옮길 때 내용이 바뀌는 모양 (keyframes는 tailwind.css의 pageOut / pageIn)
 const pageOut = { name: 'pageOut', duration: '0.3s', easing: 'cubic-bezier(0.4, 0, 1, 1)', fillMode: 'both' };
-const pageIn = { name: 'pageIn', duration: '0.6s', delay: '0.12s', easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', fillMode: 'both' };
+const pageIn = {
+  name: 'pageIn',
+  duration: '0.6s',
+  delay: '0.12s',
+  easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)',
+  fillMode: 'both',
+};
 const pageAnimation = {
   forwards: { old: pageOut, new: pageIn },
   backwards: { old: pageOut, new: pageIn },
@@ -35,7 +41,7 @@ const pageAnimation = {
 ---
 
 <!doctype html>
-<html lang={language} dir={textDirection} class="2xl:text-[20px]" transition:animation={pageAnimation}>
+<html lang={language} dir={textDirection} class="2xl:text-[20px]" transition:animate={pageAnimation}>
   <head>
     <CommonMeta />
     <Favicons />

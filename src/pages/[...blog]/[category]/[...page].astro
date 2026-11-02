@@ -25,13 +25,13 @@ const breadcrumbs = [
   { text: '홈', href: getPermalink('/') },
   { text: '소식', href: getBlogPermalink() },
   ...(currentPage > 1
-    ? [{ text: category.title, href: getPermalink(category.slug, 'category') }, { text: `Page ${currentPage}` }]
+    ? [{ text: category.title, href: getPermalink(category.slug, 'category') }, { text: `${currentPage}페이지` }]
     : [{ text: category.title }]),
 ];
 
 const metadata = {
   title: `소식 분류: ${category.title}${currentPage > 1 ? ` — ${currentPage}페이지` : ''}`,
-  description: `Articles in the ${category.title} category of the AstroWind blog.`,
+  description: `성창공예 소식 — ${category.title}`,
   robots: {
     index: blogCategoryRobots?.index,
     follow: blogCategoryRobots?.follow,
