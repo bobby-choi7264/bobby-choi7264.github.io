@@ -2,6 +2,7 @@
 // 화면 전체를 채우는 작업 사진 슬라이드쇼 + 가게 소개 문구.
 import { Icon } from 'astro-icon/components';
 import Image from '~/components/common/Image.astro';
+import Seal from '~/components/common/Seal.astro';
 import { HERO_SLIDES, pick } from '~/data/works';
 import { SHOP } from '~/data/shop';
 import { getPermalink } from '~/utils/permalinks';
@@ -38,14 +39,16 @@ const seconds = 36 / slides.length;
   <div class="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
     <div class="hero-reveal flex flex-col items-center">
       <p class="mb-5 text-xs md:text-sm tracking-[0.45em] text-primary pl-[0.45em]">
-        {SHOP.nameEn} · 을지로 목공예
+        55년 장인 · 을지로 목선반 공방<span class="hidden sm:inline"> · {SHOP.nameEn}</span>
       </p>
       <h1 class="font-heading text-4xl sm:text-5xl md:text-7xl font-bold leading-tight text-heading">
-        한 치의 오차 없이,<br /><span class="gold-text">나무를 깎는 기술</span>
+        나뭇결을 읽고,<br /><span class="gold-text">손으로 깎습니다</span><Seal
+          class="ml-3 align-top text-sm sm:text-base md:text-xl"
+        />
       </h1>
       <p class="mt-6 max-w-xl text-base md:text-lg text-default/90">
-        로구로(목선반) 전문 · 몰딩 · 재단 · 학생 작품 · 공예품 일절 <br class="hidden sm:inline" />
-        견본 하나부터 수백 개 수량 생산까지 직접 깎아 만듭니다.
+        55년 동안 로구로(목선반)를 돌려 온 장인이 직접 깎습니다. <br class="hidden sm:inline" />
+        목기 전문 · 몰딩·재단 · 대량 생산 · 방송국 납품 · 학생 작품
       </p>
       <div class="mt-10 flex flex-wrap justify-center gap-3">
         <a href={getPermalink('/contact')} class="btn-primary"

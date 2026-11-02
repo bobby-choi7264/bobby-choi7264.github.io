@@ -254,3 +254,54 @@
   .hero-reveal > * { animation: none; opacity: 1; transform: none; }
 }
 .intro-done #intro { display: none; }
+
+/* 장인 느낌: 붉은 낙관(도장) */
+.seal {
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.05em 0.1em;
+  padding: 0.22em;
+  border-radius: 0.12em;
+  color: #f8ecdc;
+  background: #b8322a;
+  box-shadow: inset 0 0 0 0.07em #f8ecdc, 0 0 0 0.05em #b8322a;
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 900;
+  line-height: 1;
+  transform: rotate(-4deg);
+  /* 인주가 고르게 묻지 않은 듯한 질감 */
+  -webkit-mask-image: radial-gradient(circle at 30% 20%, #000 55%, rgb(0 0 0 / 0.75) 80%);
+  mask-image: radial-gradient(circle at 30% 20%, #000 55%, rgb(0 0 0 / 0.75) 80%);
+}
+
+/* 종이·나무 표면 같은 아주 옅은 알갱이 */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* 배경에 크게 깔리는 한자 */
+.hanja-mark {
+  position: absolute;
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 900;
+  line-height: 1;
+  color: rgb(196 150 84 / 0.06);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* 입장 화면에서 도장이 '쿵' 찍히는 움직임 */
+#intro .intro-seal {
+  opacity: 0;
+  animation: sealStamp 0.45s cubic-bezier(0.3, 0, 0.3, 1.4) 2.3s forwards;
+}
+@keyframes sealStamp {
+  0% { opacity: 0; transform: scale(2.2) rotate(-4deg); }
+  100% { opacity: 1; transform: scale(1) rotate(-4deg); }
+}

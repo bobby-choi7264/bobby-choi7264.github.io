@@ -2,6 +2,7 @@
 // 첫 방문 때만 나오는 입장 화면. CSS 애니메이션만으로 3.4초 뒤 스스로 걷히고,
 // 같은 방문(세션) 안에서 홈으로 돌아오면 다시 나오지 않습니다.
 // 클릭하거나 아무 키나 누르면 바로 넘어갑니다.
+import Seal from '~/components/common/Seal.astro';
 import { SHOP } from '~/data/shop';
 ---
 
@@ -19,7 +20,8 @@ import { SHOP } from '~/data/shop';
     <div class="intro-line gold-rule mb-8"></div>
     <p class="intro-title font-heading text-4xl md:text-6xl font-bold pl-[0.35em]"><span class="gold-text">{SHOP.name}</span></p>
     <p class="intro-sub mt-6 text-xs md:text-sm tracking-[0.5em] text-[#c49654]/80 pl-[0.5em]">{SHOP.nameEn}</p>
-    <p class="intro-sub mt-3 text-sm md:text-base text-[#e2d6c4]/70">나무를 돌려 깎아, 쓰임을 만듭니다</p>
+    <p class="intro-sub mt-3 text-sm md:text-base text-[#e2d6c4]/70">55년, 나무를 돌려 깎아 쓰임을 만듭니다</p>
+    <Seal class="intro-seal mt-8 text-lg md:text-xl" />
   </div>
 </div>
 

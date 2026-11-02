@@ -14,7 +14,7 @@ import { FEATURED, WORKS, pick } from '~/data/works';
 import { getPermalink } from '~/utils/permalinks';
 
 const metadata = {
-  title: '성창공예 — 로구로·몰딩·목공예 주문제작 | 서울 을지로',
+  title: '성창공예 — 55년 장인의 로구로 목기·몰딩 주문제작 | 서울 을지로',
   ignoreTitleTemplate: true,
 };
 
@@ -60,7 +60,7 @@ const structuredData = {
   <section id="services" class="px-4 py-20 md:py-28">
     <div class="max-w-6xl mx-auto">
       <div class="text-center mb-14">
-        <p class="text-sm tracking-[0.3em] text-primary mb-3">CRAFTSMANSHIP</p>
+        <p class="text-sm tracking-[0.3em] text-primary mb-3">장인의 기술</p>
         <h2 class="font-heading text-3xl md:text-5xl font-bold text-heading">손끝으로 완성하는 네 가지 기술</h2>
         <div class="gold-rule mx-auto my-6 max-w-xs"></div>
         <p class="text-muted max-w-2xl mx-auto">
@@ -99,30 +99,91 @@ const structuredData = {
     </div>
   </section>
 
-  <!-- 강점 -->
-  <section class="px-4 py-16 md:py-20 border-y border-primary/15 bg-dark">
-    <div class="max-w-6xl mx-auto grid gap-10 md:grid-cols-3 text-center">
-      <div>
-        <Icon name="tabler:target" class="w-10 h-10 mx-auto text-primary" />
-        <h3 class="mt-4 font-heading text-xl font-bold text-heading">견본 그대로, 정밀하게</h3>
-        <p class="mt-2 text-muted">견본이나 도면의 치수와 곡선을 그대로 살려 깎습니다.</p>
+  <!-- 장인의 작업대 -->
+  <section class="relative px-4 py-20 md:py-28 border-y border-primary/15 bg-dark overflow-hidden">
+    <span class="hanja-mark -right-8 -top-10 text-[16rem] md:text-[26rem]" aria-hidden="true">匠</span>
+    <div class="relative max-w-6xl mx-auto grid gap-12 lg:grid-cols-2 items-center">
+      <div class="grid grid-cols-2 gap-3">
+        <div class="col-span-2 overflow-hidden rounded-lg border border-primary/20 aspect-[16/10]">
+          <Image
+            src="~/assets/images/works/column-14.jpg"
+            alt="로구로에 걸어 깎고 있는 나무 기둥"
+            widths={[480, 800]}
+            sizes="(max-width: 1023px) 100vw, 560px"
+            width={800}
+            height={500}
+            layout="cover"
+            format="webp"
+            class="h-full w-full object-cover"
+          />
+        </div>
+        <div class="overflow-hidden rounded-lg border border-primary/20 aspect-square">
+          <Image
+            src="~/assets/images/works/workshop-08.jpg"
+            alt="작업장의 선반 공구"
+            widths={[320, 480]}
+            sizes="(max-width: 1023px) 50vw, 280px"
+            width={480}
+            height={480}
+            layout="cover"
+            format="webp"
+            class="h-full w-full object-cover"
+          />
+        </div>
+        <div class="overflow-hidden rounded-lg border border-primary/20 aspect-square">
+          <Image
+            src="~/assets/images/works/lathe-27.jpg"
+            alt="로구로로 깎은 원목 접시와 볼"
+            widths={[320, 480]}
+            sizes="(max-width: 1023px) 50vw, 280px"
+            width={480}
+            height={480}
+            layout="cover"
+            format="webp"
+            class="h-full w-full object-cover"
+          />
+        </div>
       </div>
+
       <div>
-        <Icon name="tabler:stack-2" class="w-10 h-10 mx-auto text-primary" />
-        <h3 class="mt-4 font-heading text-xl font-bold text-heading">한 개부터 대량까지</h3>
-        <p class="mt-2 text-muted">작품 하나도, 난간 동자 수백 개도 같은 정성으로 만듭니다.</p>
-      </div>
-      <div>
-        <Icon name="tabler:messages" class="w-10 h-10 mx-auto text-primary" />
-        <h3 class="mt-4 font-heading text-xl font-bold text-heading">상담부터 함께</h3>
-        <p class="mt-2 text-muted">어떻게 만들지 막막해도 괜찮습니다. 방법부터 같이 찾습니다.</p>
+        <p class="font-heading font-bold leading-none mb-2">
+          <span class="gold-text text-7xl md:text-8xl">55</span><span class="text-3xl md:text-4xl text-primary ml-1">년</span>
+        </p>
+        <p class="text-sm tracking-[0.3em] text-primary mb-8">나무만 깎아 온 장인의 손</p>
+        <blockquote class="font-heading text-2xl md:text-4xl font-bold leading-snug text-heading">
+          “기계는 나무를 돌릴 뿐,<br /><span class="gold-text">모양을 만드는 건 손입니다.”</span>
+        </blockquote>
+        <div class="gold-rule my-8 max-w-xs"></div>
+        <ol class="space-y-6">
+          <li class="flex gap-5">
+            <span class="font-heading text-3xl font-bold text-primary/70 leading-none">一</span>
+            <div>
+              <h3 class="font-heading text-xl font-bold text-heading">목기는 성창공예</h3>
+              <p class="mt-1 text-muted">그릇·접시·합처럼 손에 닿는 목기를 가장 잘 깎습니다. 나뭇결과 두께를 손으로 읽어 가며 다듬습니다.</p>
+            </div>
+          </li>
+          <li class="flex gap-5">
+            <span class="font-heading text-3xl font-bold text-primary/70 leading-none">二</span>
+            <div>
+              <h3 class="font-heading text-xl font-bold text-heading">대량 생산, 방송국 납품까지</h3>
+              <p class="mt-1 text-muted">견본 하나를 수백 개로 똑같이 옮겨 냅니다. 방송국에 납품할 만큼 수량과 품질을 함께 지킵니다.</p>
+            </div>
+          </li>
+          <li class="flex gap-5">
+            <span class="font-heading text-3xl font-bold text-primary/70 leading-none">三</span>
+            <div>
+              <h3 class="font-heading text-xl font-bold text-heading">막막한 주문도 함께</h3>
+              <p class="mt-1 text-muted">어떻게 만들어야 할지 모르겠다면, 깎는 방법부터 같이 찾습니다.</p>
+            </div>
+          </li>
+        </ol>
       </div>
     </div>
   </section>
 
   <!-- 대표 작업 -->
   <Gallery id="works" columns={4} images={pick(FEATURED)}>
-    <Fragment slot="tagline">SELECTED WORKS</Fragment>
+    <Fragment slot="tagline">손으로 깎은 것들</Fragment>
     <Fragment slot="title">대표 작업</Fragment>
     <Fragment slot="subtitle">사진을 누르면 크게 볼 수 있습니다.</Fragment>
   </Gallery>
@@ -149,7 +210,7 @@ const structuredData = {
       <div class="absolute inset-0 bg-black/75"></div>
     </div>
     <div class="relative max-w-3xl mx-auto text-center">
-      <p class="text-sm tracking-[0.3em] text-primary mb-3">ORDER</p>
+      <p class="text-sm tracking-[0.3em] text-primary mb-3">주문</p>
       <h2 class="font-heading text-3xl md:text-5xl font-bold text-heading">만들고 싶은 것이 있으신가요?</h2>
       <p class="mt-6 text-lg text-default/90">
         사진이나 도면, 대략적인 크기만 알려 주시면 제작 방법과 견적을 안내해 드립니다.

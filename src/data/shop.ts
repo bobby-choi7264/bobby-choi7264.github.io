@@ -25,13 +25,13 @@ export const SERVICES = [
     key: 'lathe',
     title: '로구로 전문',
     icon: 'tabler:rotate-clockwise-2',
-    description: '목선반(로구로)으로 나무를 돌려 깎아 기둥, 다리, 그릇, 받침, 손잡이 등 둥근 형태를 정밀하게 만듭니다.',
+    description: '목선반(로구로)으로 나무를 돌려 깎습니다. 그릇·접시·합 같은 목기가 특히 자신 있는 분야이고, 기둥·다리·손잡이도 정밀하게 만듭니다.',
   },
   {
     key: 'column',
     title: '몰딩 · 재단',
     icon: 'tabler:ruler-measure',
-    description: '난간 기둥, 계단 동자, 가구 다리, 몰딩까지 도면과 견본에 맞춰 같은 모양으로 수량 제작합니다.',
+    description: '난간 기둥, 계단 동자, 가구 다리, 몰딩까지 도면과 견본에 맞춰 같은 모양으로 대량 생산합니다. 방송국 납품도 합니다.',
   },
   {
     key: 'custom',

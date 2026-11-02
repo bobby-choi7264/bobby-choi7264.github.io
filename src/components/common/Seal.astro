@@ -1,0 +1,11 @@
+---
+// 붉은 낙관(도장). 오른쪽 줄부터 위→아래로 읽습니다: 성창 / 공예
+export interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<span class={`seal ${className}`} aria-hidden="true">
+  <span>공</span><span>성</span><span>예</span><span>창</span>
+</span>
