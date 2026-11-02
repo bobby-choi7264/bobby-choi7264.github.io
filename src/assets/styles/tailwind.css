@@ -200,59 +200,75 @@
   100% { transform: scale(1.12); }
 }
 
-/* 입장 화면 */
+/* 입장 화면 — 글꼴이 준비되면 Intro.astro가 .play를 붙여서 시작 */
 #intro {
   position: fixed;
   inset: 0;
   z-index: 100;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   background: #0e0a07;
-  animation: introOut 0.9s cubic-bezier(0.7, 0, 0.2, 1) 3.4s forwards;
+  touch-action: none;
+  overscroll-behavior: none;
 }
-#intro.skip { display: none; }
-#intro .intro-line {
-  width: 0;
-  animation: introLine 1.2s cubic-bezier(0.6, 0, 0.2, 1) 0.2s forwards;
-}
+.intro-active #intro { display: flex; }
+.intro-active,
+.intro-active body { overflow: hidden; }
+#intro.play { animation: introOut 0.9s cubic-bezier(0.7, 0, 0.2, 1) 3.4s forwards; }
+#intro .intro-line { width: 0; }
 #intro .intro-title {
   opacity: 0;
   letter-spacing: 0.9em;
   filter: blur(8px);
-  animation: introTitle 1.6s cubic-bezier(0.2, 0.6, 0.2, 1) 0.7s forwards;
 }
 #intro .intro-sub {
   opacity: 0;
   transform: translateY(10px);
-  animation: introSub 1s ease 1.8s forwards;
 }
-#intro .gold-text { animation: goldShine 3s linear 0.7s infinite; }
+#intro .intro-seal { opacity: 0; }
+#intro.play .intro-line { animation: introLine 1.2s cubic-bezier(0.6, 0, 0.2, 1) 0.2s forwards; }
+#intro.play .intro-title { animation: introTitle 1.6s cubic-bezier(0.2, 0.6, 0.2, 1) 0.4s forwards; }
+#intro.play .intro-sub { animation: introSub 1s ease 1.4s forwards; }
+#intro.play .intro-seal { animation: sealStamp 0.45s cubic-bezier(0.3, 0, 0.3, 1.4) 2s forwards; }
+#intro.play .gold-text { animation: goldShine 3s linear 0.4s infinite; }
 @keyframes introLine { to { width: min(320px, 70vw); } }
 @keyframes introTitle { to { opacity: 1; letter-spacing: 0.35em; filter: blur(0); } }
 @keyframes introSub { to { opacity: 1; transform: translateY(0); } }
 @keyframes introOut { to { transform: translateY(-100%); visibility: hidden; } }
 @keyframes goldShine { to { background-position: -200% 0; } }
+@keyframes sealStamp {
+  0% { opacity: 0; transform: scale(2.2) rotate(-4deg); }
+  100% { opacity: 1; transform: scale(1) rotate(-4deg); }
+}
 
-/* 첫 화면 글자 등장 */
+/* 첫 화면 글자: 입장 화면이 걷힐 때(.intro-reveal) 차례로 올라옴 */
 .hero-reveal > * {
   opacity: 0;
   transform: translateY(24px);
-  animation: heroReveal 1s cubic-bezier(0.2, 0.6, 0.2, 1) forwards;
 }
-.hero-reveal > *:nth-child(1) { animation-delay: 3.7s; }
-.hero-reveal > *:nth-child(2) { animation-delay: 3.9s; }
-.hero-reveal > *:nth-child(3) { animation-delay: 4.1s; }
-.hero-reveal > *:nth-child(4) { animation-delay: 4.3s; }
-.intro-done .hero-reveal > * { animation-delay: 0.1s; }
+.intro-reveal .hero-reveal > *,
+.intro-done .hero-reveal > * { animation: heroReveal 1s cubic-bezier(0.2, 0.6, 0.2, 1) forwards; }
+.hero-reveal > *:nth-child(2) { animation-delay: 0.15s; }
+.hero-reveal > *:nth-child(3) { animation-delay: 0.3s; }
+.hero-reveal > *:nth-child(4) { animation-delay: 0.45s; }
 @keyframes heroReveal { to { opacity: 1; transform: translateY(0); } }
 
+/* 움직임 줄이기 설정: 입장 화면은 움직임 없이 보여 주고 사라짐 */
 @media (prefers-reduced-motion: reduce) {
-  #intro { display: none; }
+  #intro.play { animation: introFade 0.4s ease 3.4s forwards; }
+  #intro.play .intro-line { animation: none; width: min(320px, 70vw); }
+  #intro.play .intro-title,
+  #intro.play .intro-sub,
+  #intro.play .intro-seal { animation: none; opacity: 1; filter: none; letter-spacing: 0.35em; transform: none; }
+  #intro.play .intro-sub { letter-spacing: normal; }
+  #intro.play .intro-seal { transform: rotate(-4deg); }
+  #intro.play .gold-text { animation: none; }
   .hero-slide, .hero-slide img { animation: none; }
   .hero-slide:first-child { opacity: 1; }
-  .hero-reveal > * { animation: none; opacity: 1; transform: none; }
+  .hero-reveal > * { animation: none !important; opacity: 1; transform: none; }
 }
+@keyframes introFade { to { opacity: 0; visibility: hidden; } }
 .intro-done #intro { display: none; }
 
 /* 장인 느낌: 붉은 낙관(도장) */
@@ -294,14 +310,4 @@ body::before {
   color: rgb(196 150 84 / 0.06);
   pointer-events: none;
   user-select: none;
-}
-
-/* 입장 화면에서 도장이 '쿵' 찍히는 움직임 */
-#intro .intro-seal {
-  opacity: 0;
-  animation: sealStamp 0.45s cubic-bezier(0.3, 0, 0.3, 1.4) 2.3s forwards;
-}
-@keyframes sealStamp {
-  0% { opacity: 0; transform: scale(2.2) rotate(-4deg); }
-  100% { opacity: 1; transform: scale(1) rotate(-4deg); }
 }

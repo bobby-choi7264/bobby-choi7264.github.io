@@ -1,7 +1,8 @@
 ---
-// 첫 방문 때만 나오는 입장 화면. CSS 애니메이션만으로 3.4초 뒤 스스로 걷히고,
-// 같은 방문(세션) 안에서 홈으로 돌아오면 다시 나오지 않습니다.
-// 클릭하거나 아무 키나 누르면 바로 넘어갑니다.
+// 첫 방문 때만 나오는 입장 화면.
+// 글꼴이 준비된 뒤에 연출을 시작하고(휴대폰에서 글자가 늦게 자리 잡는 문제 방지),
+// 시작 후 2초 동안은 터치·스크롤·키 입력을 막습니다. 그 뒤에는 누르면 바로 넘어가고,
+// 가만히 두면 3.4초쯤 스스로 걷힙니다. 같은 방문(세션) 안에서는 다시 나오지 않습니다.
 import Seal from '~/components/common/Seal.astro';
 import { SHOP } from '~/data/shop';
 ---
@@ -9,11 +10,12 @@ import { SHOP } from '~/data/shop';
 <script is:inline data-astro-rerun>
   try {
     if (sessionStorage.getItem('sc-intro-seen')) document.documentElement.classList.add('intro-done');
-    else sessionStorage.setItem('sc-intro-seen', '1');
+    else document.documentElement.classList.add('intro-active');
   } catch (e) {
-    /* storage unavailable: just play the intro */
+    document.documentElement.classList.add('intro-active');
   }
 </script>
+<noscript><style>#intro { display: none; } .hero-reveal > * { opacity: 1 !important; transform: none !important; }</style></noscript>
 
 <div id="intro" class="wood-grain" role="presentation" aria-hidden="true">
   <div class="flex flex-col items-center text-center px-6">
@@ -27,14 +29,57 @@ import { SHOP } from '~/data/shop';
 
 <script is:inline data-astro-rerun>
   (() => {
+    const root = document.documentElement;
     const intro = document.getElementById('intro');
-    if (!intro) return;
-    const skip = () => {
-      intro.classList.add('skip');
-      document.documentElement.classList.add('intro-done');
+    if (!intro || !root.classList.contains('intro-active')) return;
+
+    const LOCK_MS = 2000; // 이 시간 동안은 넘길 수 없음
+    const END_MS = 3400; // 걷히기 시작하는 시점 (tailwind.css의 introOut과 맞춤)
+    const FONT_WAIT_MS = 2500; // 글꼴을 이보다 오래 기다리지는 않음
+    let startedAt = 0;
+    let finished = false;
+
+    const block = (e) => {
+      if (e.cancelable) e.preventDefault();
     };
-    intro.addEventListener('click', skip, { once: true });
-    window.addEventListener('keydown', skip, { once: true });
-    setTimeout(() => document.documentElement.classList.add('intro-done'), 4400);
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      try {
+        sessionStorage.setItem('sc-intro-seen', '1');
+      } catch (e) {
+        /* storage unavailable */
+      }
+      root.classList.remove('intro-active');
+      root.classList.add('intro-reveal', 'intro-done');
+      window.removeEventListener('touchmove', block);
+      window.removeEventListener('wheel', block);
+      window.removeEventListener('keydown', onKey, true);
+    };
+    const trySkip = () => {
+      if (startedAt && performance.now() - startedAt >= LOCK_MS) finish();
+    };
+    const onKey = (e) => {
+      block(e);
+      trySkip();
+    };
+
+    window.addEventListener('touchmove', block, { passive: false });
+    window.addEventListener('wheel', block, { passive: false });
+    window.addEventListener('keydown', onKey, true);
+    intro.addEventListener('click', trySkip);
+
+    const start = () => {
+      if (startedAt || finished) return;
+      startedAt = performance.now();
+      intro.classList.add('play');
+      // 입장 화면이 걷히기 시작하면 첫 화면 글자가 올라오기 시작
+      setTimeout(() => root.classList.add('intro-reveal'), END_MS);
+      setTimeout(finish, END_MS + 900);
+    };
+    const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
+    Promise.race([fontsReady, new Promise((r) => setTimeout(r, FONT_WAIT_MS))]).then(() =>
+      requestAnimationFrame(start)
+    );
   })();
 </script>
