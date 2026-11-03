@@ -16,6 +16,7 @@ import SoundSystem from '~/components/common/SoundSystem.astro';
 import CraftFX from '~/components/common/CraftFX.astro';
 import LangSuggest from '~/components/common/LangSuggest.astro';
 import CustomCursor from '~/components/common/CustomCursor.astro';
+import ShareFab from '~/components/common/ShareFab.astro';
 import { getCanonical } from '~/utils/permalinks';
 import { LANG_META, LOCALES, TRANSLATED_PAGES, langFromPath, localize, stripLang, useT, type Lang } from '~/i18n';
 
@@ -116,6 +117,7 @@ const pageAnimation = {
 
     <Intersect />
     <PageTransition />
+    <ShareFab lang={lang} />
     <SoundSystem lang={lang} />
     <CraftFX />
     <LangSuggest lang={lang} />

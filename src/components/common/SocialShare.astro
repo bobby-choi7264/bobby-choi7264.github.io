@@ -1,32 +1,43 @@
 ---
-// 글 공유 버튼. 휴대폰에서는 '공유하기'를 누르면 카카오톡·문자 등 휴대폰 공유 창이 열리고,
-// 공유 창이 없는 컴퓨터에서는 주소를 복사합니다.
+// 공유 버튼. 휴대폰에서는 '공유하기'를 누르면 카카오톡·문자 등 휴대폰 공유 창이 열리고,
+// 공유 창이 없는 컴퓨터에서는 주소를 복사합니다. url을 안 주면 지금 보고 있는 페이지 주소를 씁니다.
 import { Icon } from 'astro-icon/components';
+import { SITE } from 'astrowind:config';
+import { langFromPath, useT } from '~/i18n';
 
 export interface Props {
-  text: string;
-  url: string | URL;
+  text?: string;
+  url?: string | URL;
   class?: string;
 }
 
-const { text, url, class: className = 'inline-block' } = Astro.props;
+const t = useT(langFromPath(Astro.url.pathname)).share;
+const { text = '', url = new URL(Astro.url.pathname, SITE.site), class: className = 'inline-block' } = Astro.props;
 ---
 
-<aw-social-share class={className} data-aw-url={String(url)} data-aw-text={text}>
+<aw-social-share
+  class={className}
+  data-aw-url={String(url)}
+  data-aw-text={text}
+  data-label-copy={t.copy}
+  data-label-copied={t.copied}
+  data-label-prompt={t.prompt}
+>
   <div class="flex flex-wrap items-center gap-2">
     <button
       type="button"
       data-aw-share
       class="inline-flex min-h-11 items-center gap-2 rounded-full border border-primary/40 px-4 text-sm text-heading hover:bg-primary/15"
     >
-      <Icon name="tabler:share" class="h-5 w-5 text-primary" />공유하기
+      <Icon name="tabler:share" class="h-5 w-5 text-primary" />{t.share}
     </button>
     <button
       type="button"
       data-aw-copy
       class="inline-flex min-h-11 items-center gap-2 rounded-full border border-primary/40 px-4 text-sm text-heading hover:bg-primary/15"
     >
-      <Icon name="tabler:link" class="h-5 w-5 text-primary" /><span data-aw-copy-label>링크 복사</span>
+      <Icon name="tabler:link" class="h-5 w-5 text-primary" /><span data-aw-copy-label aria-live="polite">{t.copy}</span
+      >
     </button>
   </div>
 </aw-social-share>
@@ -34,19 +45,20 @@ const { text, url, class: className = 'inline-block' } = Astro.props;
 <script>
   class AwSocialShare extends HTMLElement {
     connectedCallback() {
-      const url = this.dataset.awUrl ?? location.href;
-      const text = this.dataset.awText ?? document.title;
+      const url = this.dataset.awUrl || location.href;
+      const text = this.dataset.awText || document.title;
       const label = this.querySelector<HTMLElement>('[data-aw-copy-label]');
+      const { labelCopy = '', labelCopied = '', labelPrompt = '' } = this.dataset;
 
       const copy = async () => {
         try {
           await navigator.clipboard.writeText(url);
-          if (label) label.textContent = '복사했습니다';
+          if (label) label.textContent = labelCopied;
         } catch {
-          window.prompt('아래 주소를 복사하세요', url);
+          window.prompt(labelPrompt, url);
           return;
         }
-        setTimeout(() => label && (label.textContent = '링크 복사'), 2000);
+        setTimeout(() => label && (label.textContent = labelCopy), 2000);
       };
 
       this.querySelector('[data-aw-copy]')?.addEventListener('click', copy);

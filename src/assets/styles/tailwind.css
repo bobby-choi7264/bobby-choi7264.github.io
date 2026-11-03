@@ -1341,3 +1341,86 @@ aw-gallery li {
     animation: none;
   }
 }
+
+/* 공유 단추 (ShareFab.astro) — 소리 단추 바로 위 */
+#share-fab {
+  position: fixed;
+  left: max(1rem, env(safe-area-inset-left));
+  bottom: calc(max(1rem, env(safe-area-inset-bottom)) + 3.6rem);
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.share-fab-btn {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  border: 1px solid rgb(196 150 84 / 0.45);
+  background: rgb(20 15 11 / 0.82);
+  color: #c49654;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 30px -12px rgb(0 0 0 / 0.9);
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    transform 0.2s ease;
+}
+.share-fab-btn:hover {
+  border-color: #e0ba78;
+  background: rgb(40 29 20 / 0.92);
+}
+.share-fab-btn:active {
+  transform: scale(0.94);
+}
+.share-fab-btn svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+.share-toast {
+  padding: 0.5rem 0.85rem;
+  border: 1px solid rgb(196 150 84 / 0.4);
+  border-radius: 0.75rem;
+  background: rgb(27 20 14 / 0.96);
+  color: var(--aw-color-text-default);
+  font-size: 0.85rem;
+  white-space: nowrap;
+  animation: dropIn 0.3s ease;
+}
+.share-toast[hidden] {
+  display: none;
+}
+
+/* 휴대폰에서는 왼쪽 아래 공유·소리 단추를 조금 작게 (내용을 덜 가리도록) */
+@media (max-width: 639px) {
+  .share-fab-btn,
+  .sound-btn {
+    width: 2.6rem;
+    height: 2.6rem;
+  }
+  #share-fab {
+    bottom: calc(max(0.75rem, env(safe-area-inset-bottom)) + 3.1rem);
+    left: max(0.75rem, env(safe-area-inset-left));
+  }
+  #sound-ui {
+    bottom: max(0.75rem, env(safe-area-inset-bottom));
+    left: max(0.75rem, env(safe-area-inset-left));
+  }
+}
+/* 가로로 눕힌 휴대폰(높이가 낮은 화면): 첫 화면이 너무 길지 않게 */
+@media (max-height: 500px) and (orientation: landscape) {
+  .share-fab-btn,
+  .sound-btn {
+    width: 2.4rem;
+    height: 2.4rem;
+  }
+  #share-fab {
+    bottom: calc(max(0.6rem, env(safe-area-inset-bottom)) + 2.9rem);
+  }
+}

@@ -3,6 +3,7 @@ import { Icon } from 'astro-icon/components';
 import { SITE } from 'astrowind:config';
 import { langFromPath, localize } from '~/i18n';
 import Seal from '~/components/common/Seal.astro';
+import SocialShare from '~/components/common/SocialShare.astro';
 
 interface Link {
   text?: string;
@@ -42,6 +43,7 @@ const home = localize(langFromPath(Astro.url.pathname), '/');
           <Seal class="text-xs" />
         </div>
         <p class="mb-3 text-sm text-muted">{tagline}</p>
+        <SocialShare class="mb-4 block" />
         <div class="text-sm text-muted flex gap-1">
           {
             secondaryLinks.map(({ text, href }, index) => (

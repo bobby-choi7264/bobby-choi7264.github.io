@@ -1,0 +1,51 @@
+---
+// 왼쪽 아래(소리 단추 위)의 작은 공유 단추. 지금 보고 있는 페이지 주소를 공유합니다.
+// 휴대폰에서는 카카오톡·문자 등 공유 창이 열리고, 공유 창이 없는 컴퓨터에서는 주소를 복사하고 알려 줍니다.
+import { useT, type Lang } from '~/i18n';
+
+export interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang).share;
+---
+
+<div id="share-fab" transition:persist={`share-fab-${lang}`} data-toast={t.toast} data-prompt={t.prompt}>
+  <button type="button" class="share-fab-btn" aria-label={t.page} title={t.page} data-share-fab>
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="17.5" cy="5.5" r="2.5"></circle>
+      <circle cx="6.5" cy="12" r="2.5"></circle>
+      <circle cx="17.5" cy="18.5" r="2.5"></circle>
+      <path d="M8.7 10.8l6.6-4M8.7 13.2l6.6 4"></path>
+    </svg>
+  </button>
+  <p class="share-toast" role="status" hidden></p>
+</div>
+
+<script>
+  let timer: number | undefined;
+  document.addEventListener('click', async (e) => {
+    if (!(e.target as HTMLElement).closest('[data-share-fab]')) return;
+    const box = document.getElementById('share-fab');
+    const url = location.href.split('#')[0];
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: document.title, url });
+      } catch {
+        /* 사용자가 공유 창을 닫음 */
+      }
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      const toast = box?.querySelector<HTMLElement>('.share-toast');
+      if (!toast) return;
+      toast.textContent = box?.dataset.toast ?? '';
+      toast.hidden = false;
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => (toast.hidden = true), 2200);
+    } catch {
+      window.prompt(box?.dataset.prompt ?? '', url);
+    }
+  });
+</script>

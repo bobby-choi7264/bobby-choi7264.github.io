@@ -310,6 +310,14 @@ const en: Dict = {
       },
     ],
   },
+  share: {
+    share: 'Share',
+    copy: 'Copy link',
+    copied: 'Copied',
+    prompt: 'Copy the link below',
+    page: 'Share this page',
+    toast: 'Link copied',
+  },
   sound: {
     on: 'Turn sound on',
     off: 'Turn sound off',
