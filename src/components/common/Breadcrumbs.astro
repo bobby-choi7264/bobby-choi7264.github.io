@@ -1,6 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
 import { getCanonical } from '~/utils/permalinks';
+import { langFromPath, useT } from '~/i18n';
 
 // Breadcrumb trail with matching BreadcrumbList structured data. The last
 // item is the current page, rendered without a link; with `hideCurrent` it is
@@ -32,7 +33,7 @@ const schema = {
 ---
 
 <nav
-  aria-label="Breadcrumb"
+  aria-label={useT(langFromPath(Astro.url.pathname)).nav.breadcrumb}
   class:list={[
     'text-sm text-muted',
     bar ? 'max-w-7xl mx-auto w-full px-3 lg:px-6 pt-4 [&>ol]:ml-2 rtl:[&>ol]:ml-0 rtl:[&>ol]:mr-2' : '',

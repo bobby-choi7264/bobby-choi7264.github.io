@@ -1,5 +1,5 @@
 ---
-import Layout from '~/layouts/Layout.astro';
+import Layout from '~/layouts/PageLayout.astro';
 import { getHomePermalink } from '~/utils/permalinks';
 import { FOREIGN_LOCALES, LANG_META, localize } from '~/i18n';
 
@@ -7,7 +7,7 @@ const title = `페이지를 찾을 수 없습니다`;
 ---
 
 <Layout metadata={{ title, robots: { index: false, follow: true } }}>
-  <section class="flex items-center h-full p-16">
+  <section class="flex items-center h-full px-4 py-16">
     <div class="container flex flex-col items-center justify-center px-5 mx-auto my-8">
       <div class="max-w-md text-center">
         <h1 class="mb-8 font-bold text-9xl">
