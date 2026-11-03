@@ -32,7 +32,11 @@ const en: Dict = {
     visit: 'Visit',
     rights: 'All rights reserved.',
   },
-  intro: { sub: 'Fifty-five years of turning wood into things of use' },
+  intro: {
+    sub: 'Fifty-five years of turning wood into things of use',
+    enterSound: 'Enter with Sound',
+    enterQuiet: 'Enter without sound',
+  },
   hero: {
     kicker: 'A 55-year master · Woodturning workshop in Euljiro',
     title1: 'We read the grain,',

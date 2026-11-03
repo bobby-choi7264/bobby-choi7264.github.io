@@ -1,8 +1,10 @@
 ---
 // 첫 방문 때만 나오는 입장 화면.
-// 글꼴이 준비된 뒤에 연출을 시작하고(휴대폰에서 글자가 늦게 자리 잡는 문제 방지),
-// 시작 후 2초 동안은 터치·스크롤·키 입력을 막습니다. 그 뒤에는 누르면 바로 넘어가고,
-// 가만히 두면 3.4초쯤 스스로 걷힙니다. 같은 방문(세션) 안에서는 다시 나오지 않습니다.
+// 먼저 도장과 '들어가기' 단추를 보여 줍니다. 브라우저는 사람이 한 번 누르기 전에는 소리를 막기 때문에,
+// 단추를 누르는 순간 소리(SoundSystem.astro)와 연출이 함께 시작됩니다. '소리 없이'를 누르면 조용히 시작.
+// 연출이 시작된 뒤 2초 동안은 넘길 수 없고, 그 뒤에는 누르면 바로 넘어가며, 가만히 두면 3.4초쯤 스스로 걷힙니다.
+// 소리와 맞추려고 연출 시점마다 신호를 보냅니다: sc:intro-start(시작), sc:intro-stamp(도장), sc:intro-out(걷힘)
+// 같은 방문(세션) 안에서는 다시 나오지 않습니다.
 import Seal from '~/components/common/Seal.astro';
 import { SHOP } from '~/data/shop';
 import { langFromPath, useT } from '~/i18n';
@@ -30,8 +32,24 @@ const t = useT(langFromPath(Astro.url.pathname));
   </style></noscript
 >
 
-<div id="intro" class="wood-grain" role="presentation" aria-hidden="true">
-  <div class="flex flex-col items-center text-center px-6">
+<div id="intro" class="wood-grain" role="dialog" aria-modal="true" aria-label={SHOP.name}>
+  <div class="intro-gate" aria-hidden="false">
+    <Seal class="intro-gate-seal text-3xl md:text-4xl" />
+    <p class="mt-6 font-heading text-xl md:text-2xl text-[#f5ecde]" translate="no">{SHOP.name}</p>
+    <p class="mt-2 text-[10px] md:text-xs tracking-[0.5em] pl-[0.5em] text-[#c49654]/80" translate="no">
+      {SHOP.nameEn}
+    </p>
+    <button type="button" class="intro-enter mt-10" data-intro-enter="sound">
+      <svg viewBox="0 0 24 24" aria-hidden="true"
+        ><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"></path><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"
+        ></path></svg
+      >
+      {t.intro.enterSound}
+    </button>
+    <button type="button" class="intro-quiet mt-4" data-intro-enter="quiet">{t.intro.enterQuiet}</button>
+  </div>
+
+  <div class="intro-stage flex flex-col items-center text-center px-6" aria-hidden="true">
     <div class="intro-line gold-rule mb-8"></div>
     <p class="intro-title font-heading text-4xl md:text-6xl font-bold pl-[0.35em]" translate="no">
       <span class="gold-text">{SHOP.name}</span>
@@ -48,18 +66,22 @@ const t = useT(langFromPath(Astro.url.pathname));
     const intro = document.getElementById('intro');
     if (!intro || !root.classList.contains('intro-active')) return;
 
-    const LOCK_MS = 2000; // 이 시간 동안은 넘길 수 없음
+    const LOCK_MS = 2000; // 연출이 시작된 뒤 이 시간 동안은 넘길 수 없음
+    const STAMP_MS = 2280; // 도장이 종이에 닿는 순간 (tailwind.css의 sealStamp와 맞춤)
     const END_MS = 3400; // 걷히기 시작하는 시점 (tailwind.css의 introOut과 맞춤)
     const FONT_WAIT_MS = 2500; // 글꼴을 이보다 오래 기다리지는 않음
     let startedAt = 0;
     let finished = false;
+    const timers = [];
+    const signal = (name, detail) => document.dispatchEvent(new CustomEvent(name, { detail }));
 
     const block = (e) => {
-      if (e.cancelable) e.preventDefault();
+      if (startedAt && e.cancelable) e.preventDefault();
     };
     const finish = () => {
       if (finished) return;
       finished = true;
+      timers.forEach(clearTimeout);
       try {
         sessionStorage.setItem('sc-intro-seen', '1');
       } catch {
@@ -70,11 +92,14 @@ const t = useT(langFromPath(Astro.url.pathname));
       window.removeEventListener('touchmove', block);
       window.removeEventListener('wheel', block);
       window.removeEventListener('keydown', onKey, true);
+      signal('sc:intro-out');
     };
     const trySkip = () => {
       if (startedAt && performance.now() - startedAt >= LOCK_MS) finish();
     };
+    // 단추를 고르는 동안에는 키보드(Tab·Enter)를 막지 않음
     const onKey = (e) => {
+      if (!startedAt) return;
       block(e);
       trySkip();
     };
@@ -84,21 +109,31 @@ const t = useT(langFromPath(Astro.url.pathname));
     window.addEventListener('keydown', onKey, true);
     intro.addEventListener('click', trySkip);
 
-    const start = () => {
+    const start = (withSound) => {
       if (startedAt || finished) return;
       startedAt = performance.now();
+      signal('sc:intro-start', { sound: withSound });
+      intro.classList.remove('gate');
       intro.classList.add('play');
+      timers.push(setTimeout(() => signal('sc:intro-stamp'), STAMP_MS));
       // 입장 화면이 걷히기 시작하면 첫 화면 글자가 올라오기 시작
-      setTimeout(() => root.classList.add('intro-reveal'), END_MS);
-      setTimeout(finish, END_MS + 900);
+      timers.push(setTimeout(() => root.classList.add('intro-reveal'), END_MS));
+      timers.push(setTimeout(finish, END_MS + 900));
     };
+
+    intro.querySelectorAll('[data-intro-enter]').forEach((button) =>
+      button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        start(button.dataset.introEnter === 'sound');
+      })
+    );
+
+    // 글꼴이 준비되면 입장 단추를 보여 줌
     const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
     Promise.race([fontsReady, new Promise((r) => setTimeout(r, FONT_WAIT_MS))]).then(() => {
-      requestAnimationFrame(start);
-      // 화면 그리기가 늦는 브라우저(일부 앱 안 브라우저 등)에서도 반드시 시작되도록
-      setTimeout(start, 400);
+      if (startedAt || finished) return;
+      intro.classList.add('gate');
+      intro.querySelector('[data-intro-enter="sound"]')?.focus({ preventScroll: true });
     });
-    // 어떤 경우에도 입장 화면에 갇히지 않도록 마지막 안전장치
-    setTimeout(finish, FONT_WAIT_MS + 400 + END_MS + 900 + 1500);
   })();
 </script>

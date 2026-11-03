@@ -32,7 +32,11 @@ const ko = {
     visit: '오시는 길',
     rights: 'All rights reserved.',
   },
-  intro: { sub: '55년, 나무를 돌려 깎아 쓰임을 만듭니다' },
+  intro: {
+    sub: '55년, 나무를 돌려 깎아 쓰임을 만듭니다',
+    enterSound: '소리와 함께 들어가기',
+    enterQuiet: '소리 없이 보기',
+  },
   hero: {
     kicker: '55년 장인 · 을지로 목선반 공방',
     title1: '나뭇결을 읽고,',

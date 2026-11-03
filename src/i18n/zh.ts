@@ -32,7 +32,7 @@ const zh: Dict = {
     visit: '交通指南',
     rights: 'All rights reserved.',
   },
-  intro: { sub: '55年，旋木成器，为生活所用' },
+  intro: { sub: '55年，旋木成器，为生活所用', enterSound: '开启声音进入', enterQuiet: '静音浏览' },
   hero: {
     kicker: '55年匠人 · 乙支路木工车床工坊',
     title1: '读懂木纹，',

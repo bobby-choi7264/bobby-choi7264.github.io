@@ -1056,3 +1056,135 @@ aw-gallery figcaption::before {
     transform: none !important;
   }
 }
+
+/* 사진 크게 보기: 새 사진을 받는 동안은 감추고, 가운데에 도는 표시 */
+aw-gallery dialog [data-aw-gallery-img] {
+  min-width: min(60vw, 320px);
+  min-height: min(50vh, 240px);
+  transition: opacity 0.25s ease;
+}
+aw-gallery dialog [data-aw-gallery-img].is-loading {
+  opacity: 0;
+  transition: none;
+}
+aw-gallery dialog:has([data-aw-gallery-img].is-loading)::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2.25rem;
+  height: 2.25rem;
+  margin: -1.125rem 0 0 -1.125rem;
+  border-radius: 999px;
+  border: 2px solid rgb(196 150 84 / 0.25);
+  border-top-color: #e0ba78;
+  animation: gallerySpin 0.8s linear infinite;
+}
+@keyframes gallerySpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 입장 화면의 '들어가기' 단추 화면 (Intro.astro) */
+#intro .intro-gate {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.7s ease,
+    visibility 0s linear 0.7s;
+}
+#intro.gate .intro-gate {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.9s ease;
+}
+#intro.play .intro-gate {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.35s ease,
+    visibility 0s linear 0.35s;
+}
+#intro .intro-gate-seal {
+  animation: sealBreath 3.2s ease-in-out infinite;
+}
+@keyframes sealBreath {
+  0%,
+  100% {
+    transform: rotate(-4deg) scale(1);
+    filter: drop-shadow(0 0 0 rgb(184 50 42 / 0));
+  }
+  50% {
+    transform: rotate(-4deg) scale(1.04);
+    filter: drop-shadow(0 0 18px rgb(184 50 42 / 0.45));
+  }
+}
+#intro .intro-enter {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 3.25rem;
+  padding: 0 1.8rem;
+  border-radius: 999px;
+  border: 1px solid rgb(224 186 120 / 0.7);
+  background: linear-gradient(180deg, rgb(196 150 84 / 0.22), rgb(196 150 84 / 0.08));
+  color: #f5ecde;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  overflow: hidden;
+  box-shadow: 0 0 0 0 rgb(224 186 120 / 0.4);
+  animation: enterPulse 2.4s ease-out infinite;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+#intro .intro-enter:hover {
+  border-color: #f3d9a4;
+  background: rgb(196 150 84 / 0.3);
+}
+#intro .intro-enter svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: #e0ba78;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+@keyframes enterPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgb(224 186 120 / 0.35);
+  }
+  80%,
+  100% {
+    box-shadow: 0 0 0 16px rgb(224 186 120 / 0);
+  }
+}
+#intro .intro-quiet {
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  color: rgb(226 214 196 / 0.6);
+  font-size: 0.875rem;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+#intro .intro-quiet:hover {
+  color: #e2d6c4;
+}
+@media (prefers-reduced-motion: reduce) {
+  #intro .intro-gate-seal,
+  #intro .intro-enter {
+    animation: none;
+  }
+}

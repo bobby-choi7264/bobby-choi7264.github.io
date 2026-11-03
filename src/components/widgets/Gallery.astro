@@ -146,11 +146,17 @@ const columnsClass =
           .split(',')
           .map((c) => c.trim().split(' ')[0])
           .filter(Boolean);
-        img.src =
+        const next =
           buttons[current].dataset.awGalleryFull ||
           candidates[candidates.length - 1] ||
           source.currentSrc ||
           source.src;
+        // 새 사진을 다 받을 때까지 이전 사진을 감춰서, 앞 사진이 잠깐 비치지 않게 함
+        if (img.getAttribute('src') !== next) {
+          img.classList.add('is-loading');
+          img.removeAttribute('src');
+          img.src = next;
+        }
         img.alt = source.alt;
         caption.textContent =
           buttons[current].closest('figure')?.querySelector('figcaption')?.textContent ?? source.alt;
@@ -166,6 +172,16 @@ const columnsClass =
       dialog.addEventListener('keydown', (event) => {
         if (event.key === 'ArrowLeft') show(current - 1);
         if (event.key === 'ArrowRight') show(current + 1);
+      });
+      const loaded = () => img.classList.remove('is-loading');
+      img.addEventListener('load', loaded);
+      img.addEventListener('error', loaded);
+      // 창을 닫으면 사진을 비워 둠 (다음에 열 때 이전 사진이 보이지 않게)
+      dialog.addEventListener('close', () => {
+        // 닫자마자 다른 사진을 열었으면(이미 다시 열려 있으면) 건드리지 않음
+        if (dialog.open) return;
+        img.removeAttribute('src');
+        img.classList.add('is-loading');
       });
       // Click on the backdrop closes the viewer.
       dialog.addEventListener('click', (event) => {

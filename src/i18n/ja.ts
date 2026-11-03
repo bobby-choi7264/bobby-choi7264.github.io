@@ -32,7 +32,7 @@ const ja: Dict = {
     visit: 'アクセス',
     rights: 'All rights reserved.',
   },
-  intro: { sub: '55年、木を挽き、暮らしの道具をつくる' },
+  intro: { sub: '55年、木を挽き、暮らしの道具をつくる', enterSound: '音と一緒に入る', enterQuiet: '音なしで見る' },
   hero: {
     kicker: '職人歴55年 · 乙支路のろくろ工房',
     title1: '木目を読み、',
