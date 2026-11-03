@@ -1,7 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
 import { SITE } from 'astrowind:config';
-import { getHomePermalink } from '~/utils/permalinks';
+import { langFromPath, localize } from '~/i18n';
 import Seal from '~/components/common/Seal.astro';
 
 interface Link {
@@ -21,10 +21,12 @@ export interface Props {
   secondaryLinks: Array<Link>;
   socialLinks: Array<Link>;
   footNote?: string;
+  tagline?: string;
   theme?: string;
 }
 
-const { socialLinks = [], secondaryLinks = [], links = [], footNote = '', theme = 'light' } = Astro.props;
+const { socialLinks = [], secondaryLinks = [], links = [], footNote = '', tagline = '', theme = 'light' } = Astro.props;
+const home = localize(langFromPath(Astro.url.pathname), '/');
 ---
 
 <footer class:list={[{ dark: theme === 'dark' }, 'relative border-t border-gray-200 dark:border-slate-800 not-prose']}>
@@ -36,10 +38,10 @@ const { socialLinks = [], secondaryLinks = [], links = [], footNote = '', theme 
     <div class="grid grid-cols-12 gap-4 gap-y-8 sm:gap-8 py-8 md:py-12">
       <div class="col-span-12 lg:col-span-4">
         <div class="mb-3 flex items-center gap-3">
-          <a class="inline-block font-heading font-bold text-2xl gold-text" href={getHomePermalink()}>{SITE?.name}</a>
+          <a class="inline-block font-heading font-bold text-2xl gold-text" href={home} translate="no">{SITE?.name}</a>
           <Seal class="text-xs" />
         </div>
-        <p class="mb-3 text-sm text-muted">55년, 을지로에서 나무를 돌려 깎습니다.</p>
+        <p class="mb-3 text-sm text-muted">{tagline}</p>
         <div class="text-sm text-muted flex gap-1">
           {
             secondaryLinks.map(({ text, href }, index) => (
@@ -104,5 +106,8 @@ const { socialLinks = [], secondaryLinks = [], links = [], footNote = '', theme 
         <Fragment set:html={footNote} />
       </div>
     </div>
+  </div>
+  <div class="relative overflow-hidden" aria-hidden="true">
+    <p class="footer-wordmark" translate="no">SEONGCHANG</p>
   </div>
 </footer>

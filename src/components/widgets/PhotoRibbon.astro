@@ -3,17 +3,19 @@
 // 마우스를 올리면 멈추고, 사진은 은은한 옛날 사진 색에서 제 색으로 돌아옵니다.
 import Image from '~/components/common/Image.astro';
 import { pick } from '~/data/works';
+import { langFromPath } from '~/i18n';
 
 export interface Props {
   rows: string[][];
 }
 const { rows } = Astro.props;
+const lang = langFromPath(Astro.url.pathname);
 ---
 
 <div class="ribbon ruler-frame" aria-hidden="true">
   {
     rows.map((files, rowIndex) => {
-      const items = pick(files);
+      const items = pick(files, lang);
       return (
         <div class:list={['ribbon-track', { 'ribbon-track--reverse': rowIndex % 2 === 1 }]}>
           {[0, 1].map(() =>
@@ -92,7 +94,9 @@ const { rows } = Astro.props;
     background: linear-gradient(transparent, rgb(0 0 0 / 0.75));
     opacity: 0;
     transform: translateY(6px);
-    transition: all 0.35s ease;
+    transition:
+      opacity 0.35s ease,
+      transform 0.35s ease;
   }
   .ribbon-item:hover figcaption {
     opacity: 1;

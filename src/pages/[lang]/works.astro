@@ -1,0 +1,9 @@
+---
+import WorksView from '~/components/views/WorksView.astro';
+import { foreignPaths, type Lang } from '~/i18n';
+
+export const getStaticPaths = foreignPaths;
+const lang = Astro.params.lang as Lang;
+---
+
+<WorksView lang={lang} />

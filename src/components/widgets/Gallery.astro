@@ -6,6 +6,9 @@ import WidgetWrapper from '~/components/ui/WidgetWrapper.astro';
 import type { Gallery as Props } from '~/types';
 import { getImage } from 'astro:assets';
 import { findImage } from '~/utils/images';
+import { langFromPath, useT } from '~/i18n';
+
+const g = useT(langFromPath(Astro.url.pathname)).gallery;
 
 // Image grid with an optional lightbox built on the native <dialog>: no
 // library, keyboard friendly (Escape closes, arrows navigate), works without
@@ -54,7 +57,7 @@ const columnsClass =
                 data-aw-gallery-open={lightbox ? index : undefined}
                 data-aw-gallery-full={fullImages[index]}
                 disabled={!lightbox}
-                aria-label={lightbox ? `크게 보기: ${alt || caption || index + 1}` : undefined}
+                aria-label={lightbox ? `${g.open}: ${alt || caption || index + 1}` : undefined}
               >
                 <Image
                   class="aspect-[4/3] w-full object-cover transition duration-700 sepia-[0.15] group-hover:sepia-0 group-hover:scale-[1.06]"
@@ -90,13 +93,13 @@ const columnsClass =
       lightbox && (
         <dialog
           class="m-auto max-h-[92vh] max-w-[92vw] rounded-lg bg-transparent p-0 backdrop:bg-black/80 backdrop:backdrop-blur-sm open:flex open:flex-col"
-          aria-label="사진 크게 보기"
+          aria-label={g.dialog}
         >
           <form method="dialog" class="absolute right-2 top-2 z-10">
             <button
               type="submit"
               class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80"
-              aria-label="닫기"
+              aria-label={g.close}
             >
               <Icon name="tabler:x" class="h-5 w-5" />
             </button>
@@ -105,7 +108,7 @@ const columnsClass =
             type="button"
             class="absolute left-2 top-1/2 z-10 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80"
             data-aw-gallery-prev
-            aria-label="이전 사진"
+            aria-label={g.prev}
           >
             <Icon name="tabler:chevron-left" class="h-5 w-5" />
           </button>
@@ -113,7 +116,7 @@ const columnsClass =
             type="button"
             class="absolute right-2 top-1/2 z-10 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80"
             data-aw-gallery-next
-            aria-label="다음 사진"
+            aria-label={g.next}
           >
             <Icon name="tabler:chevron-right" class="h-5 w-5" />
           </button>

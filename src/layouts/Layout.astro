@@ -12,6 +12,11 @@ import SiteVerification from '~/components/common/SiteVerification.astro';
 import Analytics from '~/components/common/Analytics.astro';
 import Intersect from '~/components/common/Intersect.astro';
 import PageTransition from '~/components/common/PageTransition.astro';
+import SoundSystem from '~/components/common/SoundSystem.astro';
+import CraftFX from '~/components/common/CraftFX.astro';
+import LangSuggest from '~/components/common/LangSuggest.astro';
+import { getCanonical } from '~/utils/permalinks';
+import { LANG_META, LOCALES, TRANSLATED_PAGES, langFromPath, localize, stripLang, useT, type Lang } from '~/i18n';
 
 // Comment the line below to disable View Transitions
 import { ClientRouter } from 'astro:transitions';
@@ -20,10 +25,33 @@ import type { MetaData as MetaDataType } from '~/types';
 
 export interface Props {
   metadata?: MetaDataType;
+  lang?: Lang;
 }
 
-const { metadata = {} } = Astro.props;
-const { language, textDirection } = I18N;
+const { metadata: pageMeta = {}, lang = langFromPath(Astro.url.pathname) } = Astro.props;
+const { textDirection } = I18N;
+const t = useT(lang);
+// 외국어 페이지는 제목 뒤에 그 나라 말 가게 이름을 붙임 (예: 作品 — ソンチャン工芸)
+const metadata =
+  lang !== 'ko' && pageMeta.title && !pageMeta.ignoreTitleTemplate
+    ? { ...pageMeta, title: `${pageMeta.title} — ${t.brand}`, ignoreTitleTemplate: true }
+    : pageMeta;
+
+// 같은 페이지의 다른 언어 주소 (검색엔진에 알려 줌)
+const page = stripLang(Astro.url.pathname);
+const alternates = TRANSLATED_PAGES.includes(page)
+  ? [
+      ...LOCALES.map((l) => ({ hreflang: LANG_META[l].html, href: String(getCanonical(localize(l, page))) })),
+      { hreflang: 'x-default', href: String(getCanonical(localize('ko', page))) },
+    ]
+  : [];
+
+// 언어마다 그 나라 글자 모양에 맞는 글꼴을 더 불러옵니다 (한국어 글꼴은 로고·도장 때문에 항상)
+const extraFonts: Partial<Record<Lang, string>> = {
+  ja: '&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;700;900',
+  zh: '&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@500;700;900',
+};
+const fontHref = `https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@500;700;900${extraFonts[lang] ?? ''}&display=swap`;
 
 // 페이지를 옮길 때 내용이 바뀌는 모양 (keyframes는 tailwind.css의 pageOut / pageIn)
 const pageOut = { name: 'pageOut', duration: '0.3s', easing: 'cubic-bezier(0.4, 0, 1, 1)', fillMode: 'both' };
@@ -41,19 +69,24 @@ const pageAnimation = {
 ---
 
 <!doctype html>
-<html lang={language} dir={textDirection} class="2xl:text-[20px]" transition:animate={pageAnimation}>
+<html
+  lang={LANG_META[lang].html}
+  dir={textDirection}
+  class="2xl:text-[20px]"
+  data-lang={lang}
+  transition:animate={pageAnimation}
+>
   <head>
     <CommonMeta />
+    <meta name="theme-color" content="#140f0b" />
     <Favicons />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@500;700;900&display=swap"
-    />
+    <link rel="stylesheet" href={fontHref} />
     <CustomStyles />
     <ApplyColorMode />
-    <Metadata {...metadata} />
+    <Metadata {...metadata} openGraph={{ locale: LANG_META[lang].og, ...metadata.openGraph }} />
+    {alternates.map((alt) => <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />)}
     <SiteVerification />
     <Analytics />
 
@@ -65,9 +98,13 @@ const pageAnimation = {
   </head>
 
   <body class="antialiased text-default bg-page tracking-tight min-h-screen flex flex-col">
+    <a href="#main" class="skip-link">{t.nav.skip}</a>
     <slot />
 
     <Intersect />
     <PageTransition />
+    <SoundSystem lang={lang} />
+    <CraftFX />
+    <LangSuggest lang={lang} />
   </body>
 </html>

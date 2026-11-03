@@ -1,0 +1,9 @@
+---
+import ServicesView from '~/components/views/ServicesView.astro';
+import { foreignPaths, type Lang } from '~/i18n';
+
+export const getStaticPaths = foreignPaths;
+const lang = Astro.params.lang as Lang;
+---
+
+<ServicesView lang={lang} />

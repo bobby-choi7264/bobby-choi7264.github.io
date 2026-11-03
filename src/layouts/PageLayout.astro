@@ -3,18 +3,20 @@ import Layout from '~/layouts/Layout.astro';
 import Header from '~/components/widgets/Header.astro';
 import Footer from '~/components/widgets/Footer.astro';
 
-import { headerData, footerData } from '~/navigation';
+import { getHeaderData, getFooterData } from '~/navigation';
+import { langFromPath, type Lang } from '~/i18n';
 
 import type { MetaData } from '~/types';
 
 export interface Props {
   metadata?: MetaData;
+  lang?: Lang;
 }
 
-const { metadata } = Astro.props;
+const { metadata, lang = langFromPath(Astro.url.pathname) } = Astro.props;
 ---
 
-<Layout metadata={metadata}>
+<Layout metadata={metadata} lang={lang}>
   <slot name="head" slot="head" />
   {
     /*
@@ -26,9 +28,9 @@ const { metadata } = Astro.props;
   */
   }
   {Astro.slots.has('announcement') && <slot name="announcement" />}
-  {Astro.slots.has('header') ? <slot name="header" /> : <Header {...headerData} isSticky />}
-  <main class="flex-1">
+  {Astro.slots.has('header') ? <slot name="header" /> : <Header {...getHeaderData(lang)} lang={lang} isSticky />}
+  <main id="main" class="flex-1" tabindex="-1">
     <slot />
   </main>
-  {Astro.slots.has('footer') ? <slot name="footer" /> : <Footer {...footerData} />}
+  {Astro.slots.has('footer') ? <slot name="footer" /> : <Footer {...getFooterData(lang)} />}
 </Layout>

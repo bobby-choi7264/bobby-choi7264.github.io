@@ -1,0 +1,199 @@
+---
+// 주문·문의 페이지. 한국어(/contact)와 다른 언어 페이지가 함께 씁니다.
+import { Icon } from 'astro-icon/components';
+import Layout from '~/layouts/PageLayout.astro';
+import VisitInfo from '~/components/widgets/VisitInfo.astro';
+import { SERVICES, shopFor } from '~/data/shop';
+import { useT, type Lang } from '~/i18n';
+
+export interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+const c = t.contact;
+const ko = useT('ko').contact;
+const shop = shopFor(lang);
+
+const metadata = {
+  title: c.metaTitle,
+  description: c.metaDescription,
+};
+
+const field =
+  'w-full rounded-lg border border-primary/30 bg-[#1b140e] px-4 py-3 text-heading placeholder:text-muted/70 transition-colors focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40';
+
+// 문자 내용의 항목 이름: 사장님이 읽기 쉽게 한국어로, 외국어 페이지면 그 언어를 함께 적습니다.
+const label = (key: 'name' | 'phone' | 'type' | 'qty' | 'size' | 'due' | 'message') =>
+  lang === 'ko' ? ko[key] : `${ko[key]} / ${c[key]}`;
+const labels = {
+  header: lang === 'ko' ? `[${shop.name} ${ko.msgHeader}]` : `[${shop.name} ${ko.msgHeader} · ${c.msgHeader}]`,
+  name: label('name'),
+  phone: label('phone'),
+  type: label('type'),
+  qty: label('qty'),
+  size: label('size'),
+  due: label('due'),
+  message: label('message'),
+  prompt: c.copyPrompt,
+};
+
+const cards = [
+  { href: shop.tel.href, icon: 'tabler:phone-call', small: c.shopPhone, big: shop.tel.label },
+  { href: shop.mobile.href, icon: 'tabler:device-mobile', small: c.mobilePhone, big: shop.mobile.label },
+  { href: shop.mobile.sms, icon: 'tabler:photo-up', small: c.sendFiles, big: c.sendSms },
+];
+---
+
+<Layout metadata={metadata} lang={lang}>
+  <section class="px-4 pt-16 pb-10 md:pt-24 text-center wood-grain">
+    <h1 class="font-heading text-4xl md:text-6xl font-bold text-heading" data-split>{c.title}</h1>
+    <div class="ruler mx-auto my-6 max-w-md"></div>
+    <p class="text-muted max-w-2xl mx-auto text-pretty">{c.lead}</p>
+  </section>
+
+  <section class="px-4 py-12">
+    <div class="max-w-6xl mx-auto grid gap-4 sm:grid-cols-3">
+      {
+        cards.map((card) => (
+          <a
+            href={card.href}
+            class="contact-card group relative overflow-hidden rounded-xl border border-primary/40 p-6 text-center transition-colors hover:bg-primary/10"
+          >
+            <Icon
+              name={card.icon}
+              class="w-10 h-10 mx-auto text-primary transition-transform duration-300 group-hover:-translate-y-1"
+            />
+            <p class="mt-3 text-muted text-sm">{card.small}</p>
+            <p class="font-heading text-2xl font-bold text-heading tabular-nums">{card.big}</p>
+          </a>
+        ))
+      }
+    </div>
+    <p class="text-center text-sm text-muted mt-4">{shop.hours} · {shop.closed}</p>
+    {c.intlNote && <p class="text-center text-sm text-primary/90 mt-2 text-pretty">{c.intlNote}</p>}
+  </section>
+
+  <!-- 주문서: 서버 없이 작성 내용을 문자 메시지로 만들어 보냅니다 -->
+  <section id="order" class="px-4 py-14 md:py-20 bg-dark border-y border-primary/15 scroll-mt-16">
+    <div class="order-sheet max-w-3xl mx-auto">
+      <div class="text-center mb-10">
+        <h2 class="font-heading text-3xl md:text-4xl font-bold text-heading">{c.formTitle}</h2>
+        <p class="mt-3 text-muted text-pretty" set:html={c.formLead} />
+      </div>
+
+      <form id="order-form" class="grid gap-5 sm:grid-cols-2" novalidate>
+        <label class="block">
+          <span class="text-sm text-muted">{c.name} <span class="text-primary" aria-label={c.required}>*</span></span>
+          <input name="name" required autocomplete="name" class={field} placeholder={c.namePh} />
+        </label>
+        <label class="block">
+          <span class="text-sm text-muted">{c.phone} <span class="text-primary" aria-label={c.required}>*</span></span>
+          <input
+            name="phone"
+            type="tel"
+            required
+            autocomplete="tel"
+            inputmode="tel"
+            class={field}
+            placeholder={c.phonePh}
+          />
+        </label>
+        <label class="block">
+          <span class="text-sm text-muted">{c.type}</span>
+          <select name="type" class={field}>
+            {SERVICES.map((service) => <option>{t.services[service.key].title}</option>)}
+            <option>{c.unsure}</option>
+          </select>
+        </label>
+        <label class="block">
+          <span class="text-sm text-muted">{c.qty}</span>
+          <input name="qty" autocomplete="off" class={field} placeholder={c.qtyPh} />
+        </label>
+        <label class="block">
+          <span class="text-sm text-muted">{c.size}</span>
+          <input name="size" autocomplete="off" class={field} placeholder={c.sizePh} />
+        </label>
+        <label class="block">
+          <span class="text-sm text-muted">{c.due}</span>
+          <input name="due" autocomplete="off" class={field} placeholder={c.duePh} />
+        </label>
+        <label class="block sm:col-span-2">
+          <span class="text-sm text-muted">{c.message} <span class="text-primary" aria-label={c.required}>*</span></span
+          >
+          <textarea name="message" required rows="5" autocomplete="off" class={field} placeholder={c.messagePh}
+          ></textarea>
+        </label>
+
+        <p id="order-error" class="sm:col-span-2 hidden text-sm text-red-400" role="alert">{c.error}</p>
+
+        <div class="sm:col-span-2 flex flex-wrap gap-3 justify-center">
+          <button type="submit" data-action="sms" class="btn-primary">
+            <Icon name="tabler:message" class="w-5 h-5 mr-2" />{c.sms}
+          </button>
+          <button type="submit" data-action="copy" class="btn border-primary/60 text-heading hover:bg-primary/15">
+            <Icon name="tabler:copy" class="w-5 h-5 mr-2" />{c.copy}
+          </button>
+        </div>
+        <p id="order-copied" class="sm:col-span-2 hidden text-center text-sm text-primary" role="status">
+          {c.copied(shop.mobile.label)}
+        </p>
+      </form>
+    </div>
+  </section>
+
+  <VisitInfo />
+</Layout>
+
+<script is:inline define:vars={{ smsNumber: shop.mobile.sms.replace('sms:', ''), labels }}>
+  const setup = () => {
+    const form = document.getElementById('order-form');
+    if (!form || form.dataset.ready) return;
+    form.dataset.ready = '1';
+    const error = document.getElementById('order-error');
+    const copied = document.getElementById('order-copied');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const action = event.submitter?.dataset.action ?? 'sms';
+      const data = new FormData(form);
+      const get = (key) => String(data.get(key) ?? '').trim();
+      const missing = ['name', 'phone', 'message'].filter((key) => !get(key));
+      form
+        .querySelectorAll('[required]')
+        .forEach((el) => el.setAttribute('aria-invalid', String(missing.includes(el.name))));
+      if (missing.length) {
+        error.classList.remove('hidden');
+        form.querySelector(`[name="${missing[0]}"]`)?.focus();
+        return;
+      }
+      error.classList.add('hidden');
+
+      const lines = [
+        labels.header,
+        `${labels.name}: ${get('name')}`,
+        `${labels.phone}: ${get('phone')}`,
+        `${labels.type}: ${get('type')}`,
+        get('qty') && `${labels.qty}: ${get('qty')}`,
+        get('size') && `${labels.size}: ${get('size')}`,
+        get('due') && `${labels.due}: ${get('due')}`,
+        `${labels.message}: ${get('message')}`,
+      ].filter(Boolean);
+      const text = lines.join('\n');
+
+      if (action === 'copy') {
+        try {
+          await navigator.clipboard.writeText(text);
+          copied.classList.remove('hidden');
+        } catch {
+          window.prompt(labels.prompt, text);
+        }
+        return;
+      }
+      const isApple = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
+      window.location.href = `sms:${smsNumber}${isApple ? '&' : '?'}body=${encodeURIComponent(text)}`;
+    });
+  };
+  setup();
+  document.addEventListener('astro:page-load', setup);
+</script>

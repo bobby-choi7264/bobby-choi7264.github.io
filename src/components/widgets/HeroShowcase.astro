@@ -5,10 +5,13 @@ import Image from '~/components/common/Image.astro';
 import Seal from '~/components/common/Seal.astro';
 import WorkshopLight from '~/components/widgets/WorkshopLight.astro';
 import { HERO_SLIDES, pick } from '~/data/works';
-import { SHOP } from '~/data/shop';
-import { getPermalink } from '~/utils/permalinks';
+import { shopFor } from '~/data/shop';
+import { langFromPath, localize, useT } from '~/i18n';
 
-const slides = pick(HERO_SLIDES);
+const lang = langFromPath(Astro.url.pathname);
+const t = useT(lang).hero;
+const shop = shopFor(lang);
+const slides = pick(HERO_SLIDES, lang);
 const seconds = 36 / slides.length;
 ---
 
@@ -40,27 +43,40 @@ const seconds = 36 / slides.length;
 
   <div class="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
     <div class="hero-reveal flex flex-col items-center">
-      <p class="mb-5 text-xs md:text-sm tracking-[0.45em] text-primary pl-[0.45em]">
-        55년 장인 · 을지로 목선반 공방<span class="hidden sm:inline"> · {SHOP.nameEn}</span>
+      <p
+        class:list={[
+          'mb-5 text-xs md:text-sm text-primary text-balance',
+          lang === 'en' ? 'tracking-[0.2em] uppercase' : 'tracking-[0.45em] pl-[0.45em]',
+        ]}
+      >
+        {t.kicker}{
+          lang !== 'en' && (
+            <span class="hidden sm:inline" translate="no">
+              {' '}
+              · {shop.nameEn}
+            </span>
+          )
+        }
       </p>
       <h1 class="font-heading text-4xl sm:text-5xl md:text-7xl font-bold leading-tight text-heading">
-        나뭇결을 읽고,<br /><span class="gold-text">손으로 깎습니다</span><Seal
+        <span class="hero-line">{t.title1}</span><br /><span class="hero-line gold-text">{t.title2}</span><Seal
           class="ml-3 align-top text-sm sm:text-base md:text-xl"
         />
       </h1>
       <p class="mt-6 max-w-xl text-base md:text-lg text-default/90">
-        55년 동안 로구로(목선반)를 돌려 온 장인이 직접 깎습니다. <br class="hidden sm:inline" />
-        목기 전문 · 몰딩·재단 · 대량 생산 · 방송국 납품 · 학생 작품
+        {t.lead}
+        <br class="hidden sm:inline" />
+        <span class="text-primary/90">{t.tags}</span>
       </p>
       <div class="mt-10 flex flex-wrap justify-center gap-3">
-        <a href={getPermalink('/contact')} class="btn-primary"
-          ><Icon name="tabler:clipboard-text" class="w-5 h-5 mr-2" />주문 문의</a
+        <a href={localize(lang, '/contact')} class="btn-primary"
+          ><Icon name="tabler:clipboard-text" class="w-5 h-5 mr-2" />{t.order}</a
         >
-        <a href={SHOP.tel.href} class="btn border-primary/60 text-heading hover:bg-primary/15"
-          ><Icon name="tabler:phone" class="w-5 h-5 mr-2" />전화하기</a
+        <a href={shop.tel.href} class="btn border-primary/60 text-heading hover:bg-primary/15"
+          ><Icon name="tabler:phone" class="w-5 h-5 mr-2" />{t.call}</a
         >
-        <a href={getPermalink('/works')} class="btn border-white/30 text-heading hover:bg-white/10"
-          ><Icon name="tabler:photo" class="w-5 h-5 mr-2" />작업물 보기</a
+        <a href={localize(lang, '/works')} class="btn border-white/30 text-heading hover:bg-white/10"
+          ><Icon name="tabler:photo" class="w-5 h-5 mr-2" />{t.works}</a
         >
       </div>
     </div>
@@ -69,7 +85,7 @@ const seconds = 36 / slides.length;
   <a
     href="#services"
     class="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 text-primary/80 hover:text-primary motion-safe:animate-bounce"
-    aria-label="아래로 스크롤"
+    aria-label={t.scroll}
   >
     <Icon name="tabler:chevrons-down" class="w-8 h-8" />
   </a>

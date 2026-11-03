@@ -5,6 +5,9 @@
 // 가만히 두면 3.4초쯤 스스로 걷힙니다. 같은 방문(세션) 안에서는 다시 나오지 않습니다.
 import Seal from '~/components/common/Seal.astro';
 import { SHOP } from '~/data/shop';
+import { langFromPath, useT } from '~/i18n';
+
+const t = useT(langFromPath(Astro.url.pathname));
 ---
 
 <script is:inline data-astro-rerun>
@@ -30,11 +33,11 @@ import { SHOP } from '~/data/shop';
 <div id="intro" class="wood-grain" role="presentation" aria-hidden="true">
   <div class="flex flex-col items-center text-center px-6">
     <div class="intro-line gold-rule mb-8"></div>
-    <p class="intro-title font-heading text-4xl md:text-6xl font-bold pl-[0.35em]">
+    <p class="intro-title font-heading text-4xl md:text-6xl font-bold pl-[0.35em]" translate="no">
       <span class="gold-text">{SHOP.name}</span>
     </p>
     <p class="intro-sub mt-6 text-xs md:text-sm tracking-[0.5em] text-[#c49654]/80 pl-[0.5em]">{SHOP.nameEn}</p>
-    <p class="intro-sub mt-3 text-sm md:text-base text-[#e2d6c4]/70">55년, 나무를 돌려 깎아 쓰임을 만듭니다</p>
+    <p class="intro-sub mt-3 text-sm md:text-base text-[#e2d6c4]/70">{t.intro.sub}</p>
     <Seal class="intro-seal mt-8 text-lg md:text-xl" />
   </div>
 </div>

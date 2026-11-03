@@ -1,0 +1,99 @@
+---
+// 언어 선택 단추. 누르면 한국어·English·日本語·简体中文 목록이 열립니다.
+// 상단 메뉴는 페이지를 옮겨도 그대로 남아 있으므로(transition:persist),
+// 각 언어 링크 주소는 페이지가 바뀔 때마다 Header.astro의 스크립트가 새로 맞춥니다.
+import { Icon } from 'astro-icon/components';
+import { LANG_META, LOCALES, switchPath, useT, type Lang } from '~/i18n';
+
+export interface Props {
+  lang: Lang;
+  class?: string;
+}
+const { lang, class: className = '' } = Astro.props;
+const path = Astro.url.pathname;
+---
+
+<details class={`lang-switch relative ${className}`} data-lang-switch>
+  <summary
+    class="flex min-h-11 cursor-pointer list-none items-center gap-1.5 rounded-full border border-primary/30 px-3 text-sm text-heading transition-colors hover:border-primary hover:bg-primary/10 [&::-webkit-details-marker]:hidden"
+    aria-label={useT(lang).nav.language}
+  >
+    <Icon name="tabler:world" class="h-4.5 w-4.5 text-primary" aria-hidden="true" />
+    <span translate="no">{LANG_META[lang].short}</span>
+    <Icon name="tabler:chevron-down" class="lang-switch-chevron h-3.5 w-3.5 text-primary/80" aria-hidden="true" />
+  </summary>
+  <ul
+    class="absolute right-0 top-full z-50 mt-2 min-w-[11rem] overflow-hidden rounded-xl border border-primary/30 bg-[#1b140e]/95 py-1.5 shadow-2xl shadow-black/60 backdrop-blur-md"
+  >
+    {
+      LOCALES.map((l) => (
+        <li>
+          <a
+            href={switchPath(path, l)}
+            hreflang={LANG_META[l].html}
+            lang={LANG_META[l].html}
+            data-lang-link={l}
+            aria-current={l === lang ? 'true' : undefined}
+            class:list={[
+              'flex items-center justify-between gap-4 px-4 py-2.5 text-[0.95rem] transition-colors hover:bg-primary/15 focus-visible:bg-primary/15 focus-visible:outline-none',
+              l === lang ? 'text-primary' : 'text-heading',
+            ]}
+            translate="no"
+          >
+            {LANG_META[l].label}
+            {l === lang && <Icon name="tabler:check" class="h-4 w-4" aria-hidden="true" />}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</details>
+
+<script>
+  // 주소 규칙은 src/i18n/index.ts 와 같습니다 (번역이 없는 페이지면 그 언어의 홈으로).
+  const LOCALES = ['ko', 'en', 'ja', 'zh'];
+  const PAGES = ['/', '/about', '/services', '/works', '/contact'];
+
+  const switchPath = (pathname: string, to: string) => {
+    const parts = pathname.split('/').filter(Boolean);
+    if (LOCALES.includes(parts[0])) parts.shift();
+    const page = '/' + parts.join('/');
+    const target = PAGES.includes(page) ? page : '/';
+    const prefix = to === 'ko' ? '' : `/${to}`;
+    return (prefix + (target === '/' ? '/' : `${target}/`)).replace(/\/+/g, '/');
+  };
+
+  const update = () => {
+    document.querySelectorAll<HTMLAnchorElement>('[data-lang-link]').forEach((a) => {
+      a.href =
+        switchPath(window.location.pathname, a.dataset.langLink!) + window.location.hash.replace(/^#(main)?$/, '');
+    });
+    document.querySelectorAll<HTMLDetailsElement>('[data-lang-switch]').forEach((d) => (d.open = false));
+  };
+  document.addEventListener('astro:page-load', update);
+
+  // 목록 밖을 누르거나 Esc를 누르면 닫기
+  document.addEventListener('click', (e) => {
+    document.querySelectorAll<HTMLDetailsElement>('[data-lang-switch][open]').forEach((d) => {
+      if (!d.contains(e.target as Node)) d.open = false;
+    });
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll<HTMLDetailsElement>('[data-lang-switch][open]').forEach((d) => {
+      d.open = false;
+      d.querySelector('summary')?.focus();
+    });
+  });
+
+  // 고른 언어를 기억 (다음 방문 때 언어 안내를 다시 띄우지 않음)
+  document.addEventListener('click', (e) => {
+    const link = (e.target as HTMLElement).closest<HTMLAnchorElement>('[data-lang-link]');
+    if (!link) return;
+    try {
+      localStorage.setItem('sc-lang', link.dataset.langLink!);
+    } catch {
+      /* storage unavailable */
+    }
+  });
+</script>

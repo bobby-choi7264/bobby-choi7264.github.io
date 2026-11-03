@@ -1,0 +1,71 @@
+---
+// 한국어 페이지에 외국 브라우저로 들어온 분께, 그 나라 말 페이지가 있다고 한 번 알려 줍니다.
+// 저절로 넘기지는 않습니다(검색엔진과 한국 손님을 위해). 닫거나 언어를 고르면 다시 띄우지 않습니다.
+import { FOREIGN_LOCALES, switchPath, useT, type Lang } from '~/i18n';
+
+export interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const path = Astro.url.pathname;
+const offers = FOREIGN_LOCALES.map((l) => ({ lang: l, href: switchPath(path, l), ...useT(l).suggest }));
+---
+
+{
+  lang === 'ko' && (
+    <div class="lang-suggest" aria-live="polite" hidden data-lang-suggest>
+      {offers.map((o) => (
+        <div data-offer={o.lang} lang={o.lang === 'zh' ? 'zh-CN' : o.lang} hidden>
+          <p class="text-sm text-heading">{o.text}</p>
+          <div class="mt-3 flex gap-2">
+            <a href={o.href} class="btn-primary !px-4 !py-2 text-sm" data-lang-link={o.lang}>
+              {o.go}
+            </a>
+            <button type="button" class="btn border-primary/40 !px-4 !py-2 text-sm text-heading" data-suggest-close>
+              {o.close}
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+<script>
+  const SEEN = 'sc-lang';
+  const setup = () => {
+    const box = document.querySelector<HTMLElement>('[data-lang-suggest]');
+    if (!box) return;
+    try {
+      if (localStorage.getItem(SEEN) ?? sessionStorage.getItem('sc-lang-suggested')) return;
+    } catch {
+      return;
+    }
+    const wanted = (navigator.languages ?? [navigator.language])
+      .map((l) => l.toLowerCase().slice(0, 2))
+      .find((l) => ['ko', 'en', 'ja', 'zh'].includes(l));
+    if (!wanted || wanted === 'ko') return;
+    const offer = box.querySelector<HTMLElement>(`[data-offer="${wanted}"]`);
+    if (!offer) return;
+    offer.hidden = false;
+    const show = () => {
+      if (document.documentElement.classList.contains('intro-active')) return window.setTimeout(show, 500);
+      box.hidden = false;
+      try {
+        sessionStorage.setItem('sc-lang-suggested', '1');
+      } catch {
+        /* storage unavailable */
+      }
+    };
+    show();
+    offer.querySelector('[data-suggest-close]')?.addEventListener('click', () => {
+      box.hidden = true;
+      try {
+        localStorage.setItem(SEEN, 'ko');
+      } catch {
+        /* storage unavailable */
+      }
+    });
+  };
+  document.addEventListener('astro:page-load', setup);
+</script>

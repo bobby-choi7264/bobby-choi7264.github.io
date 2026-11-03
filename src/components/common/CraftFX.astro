@@ -1,0 +1,136 @@
+---
+// 공방 느낌 연출 모음
+// 1) 누른 자리에서 대팻밥(얇게 말린 나무 부스러기)이 튀어 흩날림
+// 2) data-split 이 붙은 제목은 화면에 들어올 때 글자가 하나씩 떠오름
+// 3) data-tilt 이 붙은 카드는 마우스를 따라 살짝 기울고, 황동빛이 비침
+// 움직임 줄이기 설정이면 모두 꺼집니다.
+---
+
+<div id="craft-fx" transition:persist aria-hidden="true"></div>
+
+<script>
+  const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = () => window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  // ---------- 1) 대팻밥 ----------
+  const COLORS = ['#e8c48a', '#d4a866', '#c49654', '#f3d9a4', '#b98a4f'];
+  const SHAPES = [
+    'M2 10c3-7 11-9 15-3s-1 11-6 8',
+    'M2 8c4-6 12-6 14 0s-6 8-9 4',
+    'M3 12c2-8 13-10 15-2',
+    'M2 6c6 0 10 4 9 9',
+  ];
+
+  const burst = (x: number, y: number) => {
+    const layer = document.getElementById('craft-fx');
+    if (!layer) return;
+    const count = 7 + Math.floor(Math.random() * 4);
+    for (let i = 0; i < count; i++) {
+      const el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      el.setAttribute('viewBox', '0 0 20 20');
+      el.setAttribute('class', 'shaving');
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', SHAPES[i % SHAPES.length]);
+      path.setAttribute('stroke', COLORS[Math.floor(Math.random() * COLORS.length)]);
+      el.appendChild(path);
+      const size = 10 + Math.random() * 12;
+      el.style.cssText = `left:${x - size / 2}px;top:${y - size / 2}px;width:${size}px;height:${size}px`;
+      layer.appendChild(el);
+      const angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.3;
+      const dist = 40 + Math.random() * 70;
+      const dx = Math.cos(angle) * dist;
+      const dy = Math.sin(angle) * dist;
+      const spin = (Math.random() < 0.5 ? -1 : 1) * (180 + Math.random() * 360);
+      el.animate(
+        [
+          { transform: 'translate(0,0) rotate(0deg) scale(0.4)', opacity: 1 },
+          { transform: `translate(${dx}px,${dy}px) rotate(${spin * 0.6}deg) scale(1)`, opacity: 1, offset: 0.35 },
+          { transform: `translate(${dx * 1.3}px,${dy + 90}px) rotate(${spin}deg) scale(0.9)`, opacity: 0 },
+        ],
+        { duration: 900 + Math.random() * 500, easing: 'cubic-bezier(0.2, 0.6, 0.4, 1)' }
+      ).onfinish = () => el.remove();
+    }
+  };
+
+  document.addEventListener('pointerdown', (e) => {
+    if (reduced() || e.button !== 0) return;
+    const target = e.target as HTMLElement;
+    // 글자를 입력하는 칸에서는 튀지 않게
+    if (target.closest('input, textarea, select, [contenteditable], dialog')) return;
+    if (!target.closest('a, button, summary, [data-tilt], .seal')) return;
+    burst(e.clientX, e.clientY);
+  });
+
+  // ---------- 2) 글자가 하나씩 떠오르는 제목 ----------
+  const splitHeadings = () => {
+    const cjk = /^(ja|zh)/.test(document.documentElement.lang);
+    const targets = document.querySelectorAll<HTMLElement>('[data-split]:not([data-split-done])');
+    targets.forEach((el) => {
+      el.dataset.splitDone = '';
+      if (reduced()) return;
+      const text = el.textContent?.trim() ?? '';
+      if (!text) return;
+      el.setAttribute('aria-label', text);
+      let i = 0;
+      const pieces = cjk ? Array.from(text) : text.split(/(\s+)/);
+      el.innerHTML = '';
+      pieces.forEach((piece) => {
+        if (/^\s+$/.test(piece)) {
+          el.appendChild(document.createTextNode(' '));
+          return;
+        }
+        const word = document.createElement('span');
+        word.className = 'split-word';
+        word.setAttribute('aria-hidden', 'true');
+        Array.from(piece).forEach((ch) => {
+          const span = document.createElement('span');
+          span.className = 'split-char';
+          span.style.setProperty('--i', String(i++));
+          span.textContent = ch;
+          word.appendChild(span);
+        });
+        el.appendChild(word);
+      });
+      el.classList.add('split-ready');
+      const io = new IntersectionObserver(
+        (entries) =>
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            io.disconnect();
+            el.classList.add('split-in');
+          }),
+        { threshold: 0.3 }
+      );
+      io.observe(el);
+    });
+  };
+
+  // ---------- 3) 기울어지는 카드 ----------
+  const tilt = () => {
+    if (reduced() || !finePointer()) return;
+    document.querySelectorAll<HTMLElement>('[data-tilt]:not([data-tilt-ready])').forEach((card) => {
+      card.dataset.tiltReady = '';
+      let frame = 0;
+      card.addEventListener('pointermove', (e) => {
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(() => {
+          const r = card.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width;
+          const py = (e.clientY - r.top) / r.height;
+          card.style.transform = `perspective(900px) rotateX(${(0.5 - py) * 5}deg) rotateY(${(px - 0.5) * 6}deg)`;
+          card.style.setProperty('--gx', `${px * 100}%`);
+          card.style.setProperty('--gy', `${py * 100}%`);
+        });
+      });
+      card.addEventListener('pointerleave', () => {
+        cancelAnimationFrame(frame);
+        card.style.transform = '';
+      });
+    });
+  };
+
+  document.addEventListener('astro:page-load', () => {
+    splitHeadings();
+    tilt();
+  });
+</script>
