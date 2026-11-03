@@ -75,7 +75,6 @@ const zh: Dict = {
     servicesTag: '匠人技艺',
     servicesTitle: '以手完成的四门手艺',
     servicesLead: '一张图纸、一个样品就够了。按您想要的形状，精确车削出您需要的数量。',
-    marquee: ['木纹', '车床', '木器', '线条', '乙支路', '55年', '手作'],
     ribbonTag: '亲手车制',
     ribbonTitle: '出自乙支路工坊的作品',
     yearsUnit: '年',

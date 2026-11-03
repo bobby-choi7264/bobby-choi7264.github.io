@@ -10,7 +10,6 @@ import BlogLatestPosts from '~/components/widgets/BlogLatestPosts.astro';
 import StructuredData from '~/components/common/StructuredData.astro';
 import PhotoRibbon from '~/components/widgets/PhotoRibbon.astro';
 import CraftProcess from '~/components/widgets/CraftProcess.astro';
-import Marquee from '~/components/widgets/Marquee.astro';
 import Seal from '~/components/common/Seal.astro';
 import Image from '~/components/common/Image.astro';
 import { SITE } from 'astrowind:config';
@@ -135,8 +134,6 @@ const PRINCIPLE_NUMS = ['一', '二', '三'];
       </div>
     </div>
   </section>
-
-  <Marquee words={h.marquee} />
 
   <!-- 흘러가는 작업 사진 -->
   <section class="py-16 md:py-20">

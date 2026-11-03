@@ -1072,8 +1072,6 @@ aw-gallery figcaption::before {
 
 /* 사진 크게 보기: 새 사진을 받는 동안은 감추고, 가운데에 도는 표시 */
 aw-gallery dialog [data-aw-gallery-img] {
-  min-width: min(60vw, 320px);
-  min-height: min(50vh, 240px);
   transition: opacity 0.25s ease;
 }
 aw-gallery dialog [data-aw-gallery-img].is-loading {

@@ -80,7 +80,6 @@ const ja: Dict = {
     servicesTag: '職人の技',
     servicesTitle: '手で仕上げる、四つの技',
     servicesLead: '図面一枚、見本ひとつあれば十分です。思いどおりの形を、必要な数だけ正確に挽きます。',
-    marquee: ['木目', 'ろくろ', '木の器', 'モールディング', '乙支路', '55年', '手仕事'],
     ribbonTag: '手で挽いたもの',
     ribbonTitle: '乙支路の工房から生まれたもの',
     yearsUnit: '年',

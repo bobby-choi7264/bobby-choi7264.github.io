@@ -79,7 +79,6 @@ const ko = {
     servicesTag: '장인의 기술',
     servicesTitle: '손끝으로 완성하는 네 가지 기술',
     servicesLead: '도면 한 장, 견본 하나만 있으면 됩니다. 원하는 모양을 정확히, 원하는 수량만큼 깎아 드립니다.',
-    marquee: ['나뭇결', '로구로', '목기', '몰딩', '을지로', '55년', '손끝'],
     ribbonTag: '손으로 깎은 것들',
     ribbonTitle: '을지로 작업장에서 나온 물건들',
     yearsUnit: '년',

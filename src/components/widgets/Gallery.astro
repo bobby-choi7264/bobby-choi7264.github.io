@@ -118,13 +118,13 @@ const columnsClass =
     {
       lightbox && (
         <dialog
-          class="m-auto max-h-[92vh] max-w-[92vw] rounded-lg bg-transparent p-0 backdrop:bg-black/80 backdrop:backdrop-blur-sm open:flex open:flex-col"
+          class="m-0 h-dvh max-h-none w-screen max-w-none bg-transparent p-0 backdrop:bg-black/85 backdrop:backdrop-blur-sm open:flex open:flex-col"
           aria-label={g.dialog}
         >
-          <form method="dialog" class="absolute right-2 top-2 z-10">
+          <form method="dialog" class="absolute right-3 top-3 z-10">
             <button
               type="submit"
-              class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80"
+              class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80"
               aria-label={g.close}
             >
               <Icon name="tabler:x" class="h-5 w-5" />
@@ -132,7 +132,7 @@ const columnsClass =
           </form>
           <button
             type="button"
-            class="absolute left-2 top-1/2 z-10 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80"
+            class="absolute left-2 sm:left-4 top-1/2 z-10 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80"
             data-aw-gallery-prev
             aria-label={g.prev}
           >
@@ -140,15 +140,20 @@ const columnsClass =
           </button>
           <button
             type="button"
-            class="absolute right-2 top-1/2 z-10 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80"
+            class="absolute right-2 sm:right-4 top-1/2 z-10 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80"
             data-aw-gallery-next
             aria-label={g.next}
           >
             <Icon name="tabler:chevron-right" class="h-5 w-5" />
           </button>
-          <img data-aw-gallery-img class="max-h-[78vh] w-auto rounded-lg object-contain" alt="" />
-          <p data-aw-gallery-caption class="mt-2 text-center text-sm text-white/90" aria-live="polite" />
-          <div data-aw-gallery-thumbs class="mt-2 flex justify-center gap-1.5" aria-hidden="true" />
+          {/* 창은 화면 크기로 고정하고 사진만 그 안에 맞춰 넣음 → 가로·세로 사진이 바뀌어도 화살표·닫기 위치가 그대로 */}
+          <div data-aw-gallery-stage class="flex min-h-0 flex-1 items-center justify-center px-3 pt-16 pb-2 sm:px-20">
+            <img data-aw-gallery-img class="h-full w-full object-contain" alt="" />
+          </div>
+          <div class="flex h-16 shrink-0 flex-col items-center justify-start gap-2 px-4">
+            <p data-aw-gallery-caption class="text-center text-sm text-white/90" aria-live="polite" />
+            <div data-aw-gallery-thumbs class="flex justify-center gap-1.5" aria-hidden="true" />
+          </div>
         </dialog>
       )
     }
@@ -219,7 +224,9 @@ const columnsClass =
       });
       // Click on the backdrop closes the viewer.
       dialog.addEventListener('click', (event) => {
-        if (event.target === dialog) dialog.close();
+        // 사진 바깥의 빈 곳을 누르면 닫기
+        const target = event.target as HTMLElement;
+        if (target === dialog || target.hasAttribute('data-aw-gallery-stage')) dialog.close();
       });
     }
   }

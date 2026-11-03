@@ -93,7 +93,6 @@ const en: Dict = {
     servicesTitle: 'Four Skills, Finished by Hand',
     servicesLead:
       'One drawing or one sample is all we need. We turn exactly the shape you want, in exactly the quantity you need.',
-    marquee: ['Wood Grain', 'Lathe', 'Tableware', 'Moldings', 'Euljiro', '55 Years', 'Handmade'],
     ribbonTag: 'Made by Hand',
     ribbonTitle: 'From Our Euljiro Workshop',
     yearsUnit: ' yrs',
