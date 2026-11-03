@@ -15,6 +15,7 @@ import PageTransition from '~/components/common/PageTransition.astro';
 import SoundSystem from '~/components/common/SoundSystem.astro';
 import CraftFX from '~/components/common/CraftFX.astro';
 import LangSuggest from '~/components/common/LangSuggest.astro';
+import CustomCursor from '~/components/common/CustomCursor.astro';
 import { getCanonical } from '~/utils/permalinks';
 import { LANG_META, LOCALES, TRANSLATED_PAGES, langFromPath, localize, stripLang, useT, type Lang } from '~/i18n';
 
@@ -106,5 +107,6 @@ const pageAnimation = {
     <SoundSystem lang={lang} />
     <CraftFX />
     <LangSuggest lang={lang} />
+    <CustomCursor lang={lang} />
   </body>
 </html>

@@ -1,6 +1,7 @@
 ---
 // 로구로(목선반)가 돌아가며 나무 기둥을 깎는 모습을 그린 SVG.
 // 나뭇결 줄무늬가 위에서 아래로 흘러 '돌아가는' 것처럼 보이고, 날 끝에서 대팻밥이 튑니다.
+// 스크롤을 내리면 날이 왼쪽에서 오른쪽으로 지나가며 둥근 원목 토막이 실제 기둥 모양으로 깎여 나갑니다.
 export interface Props {
   class?: string;
 }
@@ -63,10 +64,17 @@ const grain = Array.from({ length: 16 }, (_, i) => ({
 }));
 ---
 
-<figure class={`lathe ${className}`} aria-hidden="true">
+<figure
+  class={`lathe ${className}`}
+  aria-hidden="true"
+  data-profile={JSON.stringify(PROFILE)}
+  data-x0={X0}
+  data-cx={CX}
+  data-s={S}
+>
   <svg viewBox="0 0 760 240" class="w-full h-auto" role="presentation">
     <defs>
-      <clipPath id="lathe-clip"><path d={path}></path></clipPath>
+      <clipPath id="lathe-clip"><path d={path} data-lathe-shape></path></clipPath>
       <linearGradient id="lathe-wood" x1="0" x2="1" y1="0" y2="0">
         <stop offset="0" stop-color="#b98450"></stop>
         <stop offset="0.35" stop-color="#d4a36a"></stop>
@@ -123,34 +131,117 @@ const grain = Array.from({ length: 16 }, (_, i) => ({
       </g>
       <rect x="80" y="30" width="600" height="140" fill="url(#lathe-shade)"></rect>
     </g>
-    <path d={path} fill="none" stroke="#2a170b" stroke-opacity="0.6" stroke-width="1"></path>
+    <path d={path} fill="none" stroke="#2a170b" stroke-opacity="0.6" stroke-width="1" data-lathe-shape></path>
 
-    <!-- 날(끌) -->
-    <g class="lathe-tool">
-      <path d="M384,135 L400,131 L452,212 L436,220 Z" fill="url(#lathe-steel)"></path>
-      <path d="M436,220 L452,212 L500,290 L478,300 Z" fill="#7a4a24" stroke="#3a2210" stroke-width="1"></path>
-      <rect x="440" y="214" width="14" height="10" transform="rotate(-28 447 219)" fill="#c49654"></rect>
-    </g>
-    <circle class="lathe-spark" cx="388" cy="134" r="16" fill="url(#lathe-spark)"></circle>
+    <!-- 날(끌)·불꽃·대팻밥: 스크롤에 따라 함께 움직임 -->
+    <g data-lathe-head>
+      <g class="lathe-tool">
+        <path d="M384,135 L400,131 L452,212 L436,220 Z" fill="url(#lathe-steel)"></path>
+        <path d="M436,220 L452,212 L500,290 L478,300 Z" fill="#7a4a24" stroke="#3a2210" stroke-width="1"></path>
+        <rect x="440" y="214" width="14" height="10" transform="rotate(-28 447 219)" fill="#c49654"></rect>
+      </g>
+      <circle class="lathe-spark" cx="388" cy="134" r="16" fill="url(#lathe-spark)"></circle>
 
-    <!-- 대팻밥 -->
-    <g class="lathe-chips">
-      {
-        Array.from({ length: 7 }, (_, i) => (
-          <path
-            d="M0,0 q6,-7 12,-1 q-5,2 -9,-5"
-            fill="none"
-            stroke="#e3bd84"
-            stroke-width="1.6"
-            stroke-linecap="round"
-            style={`--i:${i}`}
-            transform="translate(386 132)"
-          />
-        ))
-      }
+      <!-- 대팻밥 -->
+      <g class="lathe-chips">
+        {
+          Array.from({ length: 7 }, (_, i) => (
+            <path
+              d="M0,0 q6,-7 12,-1 q-5,2 -9,-5"
+              fill="none"
+              stroke="#e3bd84"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              style={`--i:${i}`}
+              transform="translate(386 132)"
+            />
+          ))
+        }
+      </g>
     </g>
   </svg>
 </figure>
+
+<script>
+  // 스크롤 위치에 따라 '깎인 정도'를 계산해서 나무 모양과 날의 위치를 바꿉니다.
+  const smooth = (pts: number[][]) =>
+    pts
+      .slice(0, -1)
+      .map((p1, i) => {
+        const p0 = pts[i - 1] ?? p1;
+        const p2 = pts[i + 1];
+        const p3 = pts[i + 2] ?? p2;
+        const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+        const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+        return `C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${p2[0]},${p2[1].toFixed(1)}`;
+      })
+      .join(' ');
+
+  const setup = () => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.querySelectorAll<HTMLElement>('.lathe[data-profile]:not([data-carving])').forEach((fig) => {
+      fig.dataset.carving = '';
+      const profile: number[][] = JSON.parse(fig.dataset.profile!);
+      const X0 = Number(fig.dataset.x0);
+      const CX = Number(fig.dataset.cx);
+      const S = Number(fig.dataset.s);
+      const BLANK = 46; // 깎기 전 원목 토막의 반지름
+      const shapes = fig.querySelectorAll<SVGPathElement>('[data-lathe-shape]');
+      const head = fig.querySelector<SVGGElement>('[data-lathe-head]');
+      const len = profile[profile.length - 1][0];
+      const radiusAt = (x: number, front: number) => {
+        const i = profile.findIndex((p) => p[0] >= x);
+        const a = profile[Math.max(0, i - 1)];
+        const b = profile[Math.max(0, i)];
+        const r = a === b ? a[1] : a[1] + ((b[1] - a[1]) * (x - a[0])) / (b[0] - a[0]);
+        // 날이 지나간 곳(front 왼쪽)은 완성 모양, 아직 안 간 곳은 원목 그대로, 그 사이는 부드럽게
+        const k = Math.min(1, Math.max(0, (front - x) / 28));
+        return BLANK + (r - BLANK) * k;
+      };
+      let last = -1;
+      const draw = (t: number) => {
+        if (Math.abs(t - last) < 0.002) return;
+        last = t;
+        const front = -30 + t * (len + 60);
+        // 원래 꼭짓점 사이를 촘촘하게 나눠 날 자국이 매끄럽게 보이도록
+        const xs: number[] = [];
+        for (let x = 0; x <= len; x += 12) xs.push(x);
+        profile.forEach((p) => xs.push(p[0]));
+        const sorted = [...new Set(xs)].sort((a, b) => a - b);
+        const top = sorted.map((x) => [X0 + x, CX - radiusAt(x, front) * S]);
+        const bottom = sorted.map((x) => [X0 + x, CX + radiusAt(x, front) * S]).reverse();
+        const d = `M${top[0][0]},${top[0][1]} ${smooth(top)} L${bottom[0][0]},${bottom[0][1]} ${smooth(bottom)} Z`;
+        shapes.forEach((el) => el.setAttribute('d', d));
+        if (head) {
+          const fx = Math.min(len, Math.max(0, front));
+          const y = CX + radiusAt(fx, fx + 14) * S;
+          head.setAttribute('transform', `translate(${(X0 + fx - 386).toFixed(1)} ${(y - 134).toFixed(1)})`);
+          head.style.opacity = t <= 0 || t >= 1 ? '0.35' : '1';
+        }
+      };
+      let ticking = false;
+      const onScroll = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          ticking = false;
+          const r = fig.getBoundingClientRect();
+          const vh = window.innerHeight;
+          // 그림 아래쪽이 화면에 들어올 때 시작해서, 그림이 화면 위쪽 1/4쯤 갈 때 다 깎임
+          const t = Math.min(1, Math.max(0, (vh - r.top) / (vh * 0.75 + r.height * 0.2) - 0.15));
+          draw(t);
+        });
+      };
+      draw(0);
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+      document.addEventListener('astro:before-swap', () => window.removeEventListener('scroll', onScroll), {
+        once: true,
+      });
+    });
+  };
+  document.addEventListener('astro:page-load', setup);
+</script>
 
 <style>
   .lathe-grain {

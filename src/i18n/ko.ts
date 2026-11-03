@@ -34,8 +34,7 @@ const ko = {
   },
   intro: {
     sub: '55년, 나무를 돌려 깎아 쓰임을 만듭니다',
-    enterSound: '소리와 함께 들어가기',
-    enterQuiet: '소리 없이 보기',
+    enter: '화면을 누르면 입장합니다',
   },
   hero: {
     kicker: '55년 장인 · 을지로 목선반 공방',
@@ -142,7 +141,9 @@ const ko = {
     note: '',
   },
   gallery: {
+    view: '보기',
     open: '크게 보기',
+    photos: (n: number) => `사진 ${n}장`,
     dialog: '사진 크게 보기',
     close: '닫기',
     prev: '이전 사진',
@@ -188,7 +189,7 @@ const ko = {
     metaDescription: (n: number) =>
       `성창공예가 직접 깎아 만든 로구로 공예품, 기둥·난간, 가구, 주문 제작 작업물 ${n}점.`,
     title: '작업물',
-    lead: (n: number) => `직접 깎아 만든 작업 ${n}점 · 사진을 누르면 크게 볼 수 있습니다.`,
+    lead: (n: number, p: number) => `직접 깎아 만든 작업 ${n}점 · 사진 ${p}장 · 사진을 누르면 크게 볼 수 있습니다.`,
     navLabel: '작업 분류',
     categories: {
       lathe: { title: '로구로 공예품', description: '목선반으로 돌려 깎은 그릇·받침·생활 소품' },

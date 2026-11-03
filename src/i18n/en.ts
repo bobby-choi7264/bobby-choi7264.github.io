@@ -34,8 +34,7 @@ const en: Dict = {
   },
   intro: {
     sub: 'Fifty-five years of turning wood into things of use',
-    enterSound: 'Enter with Sound',
-    enterQuiet: 'Enter without sound',
+    enter: 'Tap anywhere to enter',
   },
   hero: {
     kicker: 'A 55-year master · Woodturning workshop in Euljiro',
@@ -169,7 +168,9 @@ const en: Dict = {
     note: 'We speak Korean. A short text message or photo with a translation app works well.',
   },
   gallery: {
+    view: 'View',
     open: 'View larger',
+    photos: (n: number) => `${n} photos`,
     dialog: 'Photo viewer',
     close: 'Close',
     prev: 'Previous photo',
@@ -216,7 +217,7 @@ const en: Dict = {
     metaDescription: (n: number) =>
       `${n} pieces made by Seongchang Craft: turned woodcraft, columns and balusters, furniture and custom work.`,
     title: 'Works',
-    lead: (n: number) => `${n} pieces, all made by hand · Tap a photo to see it larger.`,
+    lead: (n: number, p: number) => `${n} works, ${p} photos, all made by hand · Tap a photo to see it larger.`,
     navLabel: 'Categories',
     categories: {
       lathe: { title: 'Turned Woodcraft', description: 'Bowls, stands and homeware turned on the lathe' },

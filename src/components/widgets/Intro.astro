@@ -1,7 +1,8 @@
 ---
 // 첫 방문 때만 나오는 입장 화면.
-// 먼저 도장과 '들어가기' 단추를 보여 줍니다. 브라우저는 사람이 한 번 누르기 전에는 소리를 막기 때문에,
-// 단추를 누르는 순간 소리(SoundSystem.astro)와 연출이 함께 시작됩니다. '소리 없이'를 누르면 조용히 시작.
+// 먼저 도장과 '화면을 누르면 입장합니다'를 보여 줍니다. 브라우저는 사람이 한 번 누르기 전에는 소리를 막기 때문에,
+// 화면을 누르는(또는 키를 누르는) 순간 소리(SoundSystem.astro)와 연출이 함께 시작됩니다.
+// 전에 소리를 꺼 둔 방문자는 소리 없이 시작합니다.
 // 연출이 시작된 뒤 2초 동안은 넘길 수 없고, 그 뒤에는 누르면 바로 넘어가며, 가만히 두면 3.4초쯤 스스로 걷힙니다.
 // 소리와 맞추려고 연출 시점마다 신호를 보냅니다: sc:intro-start(시작), sc:intro-stamp(도장), sc:intro-out(걷힘)
 // 같은 방문(세션) 안에서는 다시 나오지 않습니다.
@@ -33,20 +34,15 @@ const t = useT(langFromPath(Astro.url.pathname));
 >
 
 <div id="intro" class="wood-grain" role="dialog" aria-modal="true" aria-label={SHOP.name}>
-  <div class="intro-gate" aria-hidden="false">
+  <div class="intro-gate">
     <Seal class="intro-gate-seal text-3xl md:text-4xl" />
     <p class="mt-6 font-heading text-xl md:text-2xl text-[#f5ecde]" translate="no">{SHOP.name}</p>
     <p class="mt-2 text-[10px] md:text-xs tracking-[0.5em] pl-[0.5em] text-[#c49654]/80" translate="no">
       {SHOP.nameEn}
     </p>
-    <button type="button" class="intro-enter mt-10" data-intro-enter="sound">
-      <svg viewBox="0 0 24 24" aria-hidden="true"
-        ><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"></path><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"
-        ></path></svg
-      >
-      {t.intro.enterSound}
-    </button>
-    <button type="button" class="intro-quiet mt-4" data-intro-enter="quiet">{t.intro.enterQuiet}</button>
+    <p class="intro-tap mt-12 text-sm md:text-base text-[#e2d6c4]/80">
+      <span class="intro-tap-ring" aria-hidden="true"></span>{t.intro.enter}
+    </p>
   </div>
 
   <div class="intro-stage flex flex-col items-center text-center px-6" aria-hidden="true">
@@ -92,6 +88,7 @@ const t = useT(langFromPath(Astro.url.pathname));
       window.removeEventListener('touchmove', block);
       window.removeEventListener('wheel', block);
       window.removeEventListener('keydown', onKey, true);
+      window.removeEventListener('keydown', enter, true);
       signal('sc:intro-out');
     };
     const trySkip = () => {
@@ -121,19 +118,28 @@ const t = useT(langFromPath(Astro.url.pathname));
       timers.push(setTimeout(finish, END_MS + 900));
     };
 
-    intro.querySelectorAll('[data-intro-enter]').forEach((button) =>
-      button.addEventListener('click', (e) => {
-        e.stopPropagation();
-        start(button.dataset.introEnter === 'sound');
-      })
-    );
+    // 입장: 화면 아무 곳이나 누르거나 키를 누르면 시작 (전에 소리를 꺼 둔 분은 조용히)
+    const enter = (e) => {
+      if (startedAt || finished || !intro.classList.contains('gate')) return;
+      if (e.type === 'keydown' && ['Tab', 'Shift', 'Alt', 'Control', 'Meta'].includes(e.key)) return;
+      if (e.cancelable) e.preventDefault();
+      e.stopPropagation();
+      let soundOff = false;
+      try {
+        soundOff = localStorage.getItem('sc-sound') === 'off';
+      } catch {
+        /* storage unavailable */
+      }
+      start(!soundOff);
+    };
+    intro.addEventListener('click', enter);
+    window.addEventListener('keydown', enter, true);
 
     // 글꼴이 준비되면 입장 단추를 보여 줌
     const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
     Promise.race([fontsReady, new Promise((r) => setTimeout(r, FONT_WAIT_MS))]).then(() => {
       if (startedAt || finished) return;
       intro.classList.add('gate');
-      intro.querySelector('[data-intro-enter="sound"]')?.focus({ preventScroll: true });
     });
   })();
 </script>

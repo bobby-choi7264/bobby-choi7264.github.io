@@ -1,0 +1,91 @@
+---
+// 마우스 커서: 황동색 점(정확한 위치)과 그 뒤를 살짝 늦게 따라오는 고리.
+// 링크·단추 위에서는 고리가 커지고, 사진 위에서는 '보기'가 쓰인 돋보기 원이 됩니다. 누르면 고리가 꾹 줄어듭니다.
+// 마우스가 있는 컴퓨터에서만 켜지고(휴대폰·태블릿은 그대로), 움직임 줄이기 설정이면 꺼집니다.
+// 글자를 입력하는 칸 위에서는 원래 커서로 돌아갑니다.
+import { useT, type Lang } from '~/i18n';
+
+export interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+---
+
+<div id="cursor" transition:persist={`cursor-${lang}`} aria-hidden="true">
+  <div class="cursor-ring"><span class="cursor-label">{useT(lang).gallery.view}</span></div>
+  <div class="cursor-dot"></div>
+</div>
+
+<script>
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const root = document.documentElement;
+  const el = () => document.getElementById('cursor');
+
+  let x = -100,
+    y = -100,
+    rx = -100,
+    ry = -100,
+    running = false,
+    visible = false;
+
+  const loop = () => {
+    const box = el();
+    if (!box) {
+      running = false;
+      return;
+    }
+    // 고리는 점을 부드럽게 따라감 (끈에 매달린 추처럼)
+    rx += (x - rx) * 0.2;
+    ry += (y - ry) * 0.2;
+    box.style.setProperty('--x', `${x}px`);
+    box.style.setProperty('--y', `${y}px`);
+    box.style.setProperty('--rx', `${rx}px`);
+    box.style.setProperty('--ry', `${ry}px`);
+    if (Math.abs(x - rx) + Math.abs(y - ry) > 0.1) requestAnimationFrame(loop);
+    else running = false;
+  };
+  const kick = () => {
+    if (!running) {
+      running = true;
+      requestAnimationFrame(loop);
+    }
+  };
+
+  const enabled = () => fine.matches && !reduced.matches;
+  const sync = () => root.classList.toggle('has-cursor', enabled());
+  sync();
+  fine.addEventListener('change', sync);
+  reduced.addEventListener('change', sync);
+
+  document.addEventListener('pointermove', (e) => {
+    if (e.pointerType !== 'mouse' || !enabled()) return;
+    x = e.clientX;
+    y = e.clientY;
+    if (!visible) {
+      visible = true;
+      rx = x;
+      ry = y;
+      el()?.classList.add('is-visible');
+    }
+    const target = e.target as HTMLElement;
+    const box = el();
+    if (box) {
+      const typing = target.closest('input, textarea, select, [contenteditable]');
+      const view = !typing && target.closest('[data-aw-gallery-open], [data-cursor="view"]');
+      const link = !typing && !view && target.closest('a, button, summary, label, [role="button"], [data-tilt]');
+      box.classList.toggle('is-typing', !!typing);
+      box.classList.toggle('is-view', !!view);
+      box.classList.toggle('is-link', !!link);
+    }
+    kick();
+  });
+  document.addEventListener('pointerdown', () => el()?.classList.add('is-down'));
+  document.addEventListener('pointerup', () => el()?.classList.remove('is-down'));
+  document.documentElement.addEventListener('mouseleave', () => {
+    visible = false;
+    el()?.classList.remove('is-visible');
+  });
+  // 페이지를 옮기면 커서 모양을 처음 상태로
+  document.addEventListener('astro:after-swap', () => el()?.classList.remove('is-view', 'is-link', 'is-down'));
+</script>

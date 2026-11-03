@@ -2,7 +2,7 @@
 // 작업물 페이지. 한국어(/works)와 다른 언어 페이지가 함께 씁니다.
 import Layout from '~/layouts/PageLayout.astro';
 import Gallery from '~/components/widgets/Gallery.astro';
-import { CATEGORY_KEYS, WORKS_COUNT, worksBy } from '~/data/works';
+import { CATEGORY_KEYS, GALLERY_COUNT, WORKS_COUNT, galleryBy } from '~/data/works';
 import { useT, type Lang } from '~/i18n';
 
 export interface Props {
@@ -13,7 +13,7 @@ const w = useT(lang).worksPage;
 
 const metadata = {
   title: w.metaTitle,
-  description: w.metaDescription(WORKS_COUNT),
+  description: w.metaDescription(GALLERY_COUNT),
 };
 ---
 
@@ -21,7 +21,7 @@ const metadata = {
   <section class="px-4 pt-16 pb-6 md:pt-24 text-center wood-grain">
     <h1 class="font-heading text-4xl md:text-6xl font-bold text-heading" data-split>{w.title}</h1>
     <div class="ruler mx-auto my-6 max-w-md"></div>
-    <p class="text-muted">{w.lead(WORKS_COUNT)}</p>
+    <p class="text-muted">{w.lead(GALLERY_COUNT, WORKS_COUNT)}</p>
 
     <nav class="mt-10 flex flex-wrap justify-center gap-2" aria-label={w.navLabel}>
       {
@@ -30,7 +30,7 @@ const metadata = {
             href={`#${key}`}
             class="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-primary/40 px-4 text-sm text-heading transition-colors hover:bg-primary hover:text-[#140f0b]"
           >
-            {w.categories[key].title} <span class="text-primary/80 tabular-nums">{worksBy(key).length}</span>
+            {w.categories[key].title} <span class="text-primary/80 tabular-nums">{galleryBy(key).length}</span>
           </a>
         ))
       }
@@ -39,7 +39,7 @@ const metadata = {
 
   {
     CATEGORY_KEYS.map((key) => (
-      <Gallery id={key} columns={4} images={worksBy(key, lang)}>
+      <Gallery id={key} columns={4} images={galleryBy(key, lang)}>
         <Fragment slot="title">{w.categories[key].title}</Fragment>
         <Fragment slot="subtitle">{w.categories[key].description}</Fragment>
       </Gallery>

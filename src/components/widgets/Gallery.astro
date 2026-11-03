@@ -29,12 +29,17 @@ const {
 } = Astro.props;
 
 // 크게 보기 창에 쓸, 잘리지 않은 큰 사진 (목록의 사진은 4:3으로 잘려 있음)
-const fullImages = await Promise.all(
-  images.map(async ({ src }) => {
-    const image = await findImage(src);
-    if (!image || typeof image === 'string') return undefined;
-    const result = await getImage({ src: image, width: Math.min(1600, image.width), format: 'webp' });
-    return result.src;
+const fullOf = async (src: unknown) => {
+  const image = await findImage(src as string);
+  if (!image || typeof image === 'string') return undefined;
+  const result = await getImage({ src: image, width: Math.min(1600, image.width), format: 'webp' });
+  return result.src;
+};
+// 비슷한 사진 묶음(photos)이 있으면 묶음 사진 전부, 없으면 그 사진 한 장
+const viewerPhotos = await Promise.all(
+  images.map(async (item) => {
+    const photos = (item as { photos?: { src: unknown; alt: string }[] }).photos ?? [{ src: item.src, alt: item.alt }];
+    return Promise.all(photos.map(async (photo) => ({ src: await fullOf(photo.src), alt: photo.alt })));
   })
 );
 
@@ -46,18 +51,33 @@ const columnsClass =
   <Headline title={title} subtitle={subtitle} tagline={tagline} classes={classes?.headline as Record<string, string>} />
 
   <aw-gallery>
-    <ul class:list={['grid grid-cols-1 gap-4 md:gap-6 list-none', columnsClass]}>
+    <ul
+      class:list={[
+        'grid gap-x-3 gap-y-6 md:gap-6 list-none',
+        images.length > 1 ? 'grid-cols-2' : 'grid-cols-1',
+        columnsClass,
+      ]}
+    >
       {
         images.map(({ src, alt, caption, href }, index) => (
-          <li class="intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade">
+          <li
+            class:list={[
+              { 'is-stack': viewerPhotos[index].length > 1 },
+              'intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade',
+            ]}
+          >
             <figure>
               <button
                 type="button"
                 class="group relative block w-full overflow-hidden rounded-lg bg-gray-100 dark:bg-slate-800 ring-1 ring-primary/15 hover:ring-primary/60 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 data-aw-gallery-open={lightbox ? index : undefined}
-                data-aw-gallery-full={fullImages[index]}
+                data-aw-gallery-photos={JSON.stringify(viewerPhotos[index])}
                 disabled={!lightbox}
-                aria-label={lightbox ? `${g.open}: ${alt || caption || index + 1}` : undefined}
+                aria-label={
+                  lightbox
+                    ? `${g.open}: ${alt || caption || index + 1}${viewerPhotos[index].length > 1 ? ` (${g.photos(viewerPhotos[index].length)})` : ''}`
+                    : undefined
+                }
               >
                 <Image
                   class="aspect-[4/3] w-full object-cover transition duration-700 sepia-[0.15] group-hover:sepia-0 group-hover:scale-[1.06]"
@@ -70,6 +90,12 @@ const columnsClass =
                   src={src}
                   alt={alt || ''}
                 />
+                {viewerPhotos[index].length > 1 && (
+                  <span class="stack-badge" aria-hidden="true">
+                    <Icon name="tabler:photo" class="h-3.5 w-3.5" />
+                    {viewerPhotos[index].length}
+                  </span>
+                )}
               </button>
               {caption && (
                 <figcaption class="mt-2 text-sm text-muted">
@@ -120,8 +146,9 @@ const columnsClass =
           >
             <Icon name="tabler:chevron-right" class="h-5 w-5" />
           </button>
-          <img data-aw-gallery-img class="max-h-[85vh] w-auto rounded-lg object-contain" alt="" />
-          <p data-aw-gallery-caption class="mt-2 text-center text-sm text-white/90" />
+          <img data-aw-gallery-img class="max-h-[78vh] w-auto rounded-lg object-contain" alt="" />
+          <p data-aw-gallery-caption class="mt-2 text-center text-sm text-white/90" aria-live="polite" />
+          <div data-aw-gallery-thumbs class="mt-2 flex justify-center gap-1.5" aria-hidden="true" />
         </dialog>
       )
     }
@@ -136,34 +163,41 @@ const columnsClass =
       const buttons = [...this.querySelectorAll<HTMLButtonElement>('[data-aw-gallery-open]')];
       const img = dialog.querySelector<HTMLImageElement>('[data-aw-gallery-img]')!;
       const caption = dialog.querySelector<HTMLElement>('[data-aw-gallery-caption]')!;
+      const thumbs = dialog.querySelector<HTMLElement>('[data-aw-gallery-thumbs]')!;
+      // 모든 사진을 한 줄로: 묶음은 그 안의 사진들이 이어서 나옴
+      type Photo = { src?: string; alt: string };
+      const flat = buttons.flatMap((button, item) => {
+        const photos: Photo[] = JSON.parse(button.dataset.awGalleryPhotos || '[]');
+        const label = button.closest('figure')?.querySelector('figcaption')?.textContent?.trim() ?? '';
+        return photos.map((photo, n) => ({ ...photo, item, n, total: photos.length, label }));
+      });
       let current = 0;
       const show = (index: number) => {
-        current = (index + buttons.length) % buttons.length;
-        const source = buttons[current].querySelector('img');
-        if (!source) return;
-        // Use the largest candidate of the responsive image for the viewer.
-        const candidates = (source.srcset || '')
-          .split(',')
-          .map((c) => c.trim().split(' ')[0])
-          .filter(Boolean);
-        const next =
-          buttons[current].dataset.awGalleryFull ||
-          candidates[candidates.length - 1] ||
-          source.currentSrc ||
-          source.src;
+        current = (index + flat.length) % flat.length;
+        const photo = flat[current];
+        const next = photo.src || buttons[photo.item].querySelector('img')?.currentSrc || '';
         // 새 사진을 다 받을 때까지 이전 사진을 감춰서, 앞 사진이 잠깐 비치지 않게 함
         if (img.getAttribute('src') !== next) {
           img.classList.add('is-loading');
           img.removeAttribute('src');
           img.src = next;
         }
-        img.alt = source.alt;
-        caption.textContent =
-          buttons[current].closest('figure')?.querySelector('figcaption')?.textContent ?? source.alt;
+        img.alt = photo.alt;
+        caption.textContent = photo.total > 1 ? `${photo.label} · ${photo.n + 1} / ${photo.total}` : photo.label;
+        // 묶음이면 아래에 점으로 몇 번째 사진인지 표시
+        thumbs.replaceChildren(
+          ...(photo.total > 1
+            ? Array.from({ length: photo.total }, (_, n) => {
+                const dot = document.createElement('span');
+                dot.className = 'viewer-dot' + (n === photo.n ? ' is-current' : '');
+                return dot;
+              })
+            : [])
+        );
       };
       buttons.forEach((button, index) =>
         button.addEventListener('click', () => {
-          show(index);
+          show(flat.findIndex((p) => p.item === index));
           dialog.showModal();
         })
       );

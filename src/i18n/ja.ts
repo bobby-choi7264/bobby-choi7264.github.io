@@ -32,7 +32,7 @@ const ja: Dict = {
     visit: 'アクセス',
     rights: 'All rights reserved.',
   },
-  intro: { sub: '55年、木を挽き、暮らしの道具をつくる', enterSound: '音と一緒に入る', enterQuiet: '音なしで見る' },
+  intro: { sub: '55年、木を挽き、暮らしの道具をつくる', enter: '画面をタップして入る' },
   hero: {
     kicker: '職人歴55年 · 乙支路のろくろ工房',
     title1: '木目を読み、',
@@ -142,7 +142,9 @@ const ja: Dict = {
     note: '対応は韓国語です。翻訳アプリを使った短いメッセージや写真で十分伝わります。',
   },
   gallery: {
+    view: '見る',
     open: '拡大表示',
+    photos: (n: number) => `写真${n}枚`,
     dialog: '写真の拡大表示',
     close: '閉じる',
     prev: '前の写真',
@@ -188,7 +190,7 @@ const ja: Dict = {
     metaDescription: (n: number) =>
       `ソンチャン工芸が自ら挽いてつくったろくろ工芸品、柱・手すり子、家具、オーダーメイド作品${n}点。`,
     title: '作品',
-    lead: (n: number) => `手でつくった作品${n}点 · 写真を押すと大きく表示されます。`,
+    lead: (n: number, p: number) => `手でつくった作品${n}点・写真${p}枚 · 写真を押すと大きく表示されます。`,
     navLabel: '作品の分類',
     categories: {
       lathe: { title: 'ろくろ工芸品', description: 'ろくろで挽いた器・台・生活雑貨' },

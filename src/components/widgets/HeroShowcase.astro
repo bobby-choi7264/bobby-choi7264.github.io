@@ -15,7 +15,7 @@ const slides = pick(HERO_SLIDES, lang);
 const seconds = 36 / slides.length;
 ---
 
-<section class="relative -mt-[72px] h-[100svh] min-h-[560px] w-full overflow-hidden bg-[#0e0a07]">
+<section class="relative -mt-[72px] h-[100svh] min-h-[560px] w-full overflow-hidden bg-[#0e0a07]" data-spotlight>
   <div class="absolute inset-0" aria-hidden="true">
     {
       slides.map((slide, index) => (
@@ -39,6 +39,7 @@ const seconds = 36 / slides.length;
     <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/45 to-[#140f0b]"></div>
     <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(0,0,0,0.55)_100%)]"></div>
     <WorkshopLight />
+    <div class="hero-spot" aria-hidden="true"></div>
   </div>
 
   <div class="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
@@ -66,7 +67,7 @@ const seconds = 36 / slides.length;
       <p class="mt-6 max-w-xl text-base md:text-lg text-default/90">
         {t.lead}
         <br class="hidden sm:inline" />
-        <span class="text-primary/90">{t.tags}</span>
+        <span class="mt-2 block text-primary/90 text-balance">{t.tags}</span>
       </p>
       <div class="mt-10 flex flex-wrap justify-center gap-3">
         <a href={localize(lang, '/contact')} class="btn-primary"
@@ -84,9 +85,31 @@ const seconds = 36 / slides.length;
 
   <a
     href="#services"
-    class="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 text-primary/80 hover:text-primary motion-safe:animate-bounce"
+    class="absolute bottom-6 left-1/2 z-10 inline-flex h-12 w-12 -translate-x-1/2 items-center justify-center text-primary/80 hover:text-primary motion-safe:animate-bounce"
     aria-label={t.scroll}
   >
     <Icon name="tabler:chevrons-down" class="w-8 h-8" />
   </a>
 </section>
+
+<script>
+  // 작업등: 마우스를 움직이면 따뜻한 빛이 그쪽을 비춤 (마우스가 있는 컴퓨터에서만)
+  const setup = () => {
+    const hero = document.querySelector<HTMLElement>('[data-spotlight]:not([data-spot-ready])');
+    if (!hero || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    hero.dataset.spotReady = '';
+    let frame = 0;
+    hero.addEventListener('pointermove', (e) => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const r = hero.getBoundingClientRect();
+        hero.style.setProperty('--mx', `${((e.clientX - r.left) / r.width) * 100}%`);
+        hero.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`);
+        hero.classList.add('spot-on');
+      });
+    });
+    hero.addEventListener('pointerleave', () => hero.classList.remove('spot-on'));
+  };
+  document.addEventListener('astro:page-load', setup);
+</script>

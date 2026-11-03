@@ -4,7 +4,7 @@ import { Icon } from 'astro-icon/components';
 import Layout from '~/layouts/PageLayout.astro';
 import Image from '~/components/common/Image.astro';
 import { SERVICES, shopFor } from '~/data/shop';
-import { worksBy } from '~/data/works';
+import { galleryBy } from '~/data/works';
 import { localize, useT, type Lang } from '~/i18n';
 
 export interface Props {
@@ -48,7 +48,7 @@ const NUMS = ['壹', '貳', '參', '肆'];
   {
     SERVICES.map((service, index) => {
       const s = t.services[service.key];
-      const photos = worksBy(service.key, lang).slice(0, 3);
+      const photos = galleryBy(service.key, lang).slice(0, 3);
       return (
         <section id={service.key} class="relative px-4 py-14 md:py-20 scroll-mt-20 overflow-hidden">
           <span

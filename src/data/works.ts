@@ -354,3 +354,55 @@ export const FEATURED = [
 ];
 export const pick = (files: string[], lang: Lang = 'ko') =>
   files.map((file) => worksIn(lang).find((item) => item.file === file)!).filter(Boolean);
+
+// 같은 물건을 구도만 바꿔 찍은 사진 묶음. 갤러리에는 맨 앞 사진 하나만 보이고,
+// 누르면 묶음 안의 사진을 넘겨 볼 수 있습니다. 설명도 맨 앞 사진의 것을 씁니다.
+export const GROUPS: string[][] = [
+  ['lathe-70', 'lathe-71', 'lathe-72', 'lathe-73', 'lathe-74', 'lathe-75', 'lathe-77'],
+  ['lathe-83', 'lathe-80', 'lathe-81', 'lathe-82', 'lathe-84'],
+  ['lathe-05', 'lathe-01'],
+  ['lathe-03', 'lathe-02'],
+  ['lathe-25', 'lathe-24'],
+  ['lathe-88', 'lathe-89'],
+  ['lathe-103', 'lathe-104'],
+  ['column-14', 'column-16', 'column-111', 'column-112', 'column-115', 'column-116', 'column-122', 'column-123'],
+  ['column-13', 'column-12', 'column-119', 'column-37'],
+  ['column-29', 'column-06', 'column-15', 'column-49', 'column-110'],
+  ['column-19', 'column-30', 'column-26', 'column-32'],
+  ['column-125', 'column-126', 'column-17'],
+  ['column-09', 'column-11', 'column-35', 'column-120'],
+  ['column-36', 'column-43'],
+  ['custom-40', 'custom-41'],
+  ['custom-38', 'custom-39'],
+  ['custom-87', 'custom-86'],
+  ['custom-53', 'custom-34'],
+  ['furniture-45', 'furniture-44', 'furniture-48'],
+  ['workshop-46', 'workshop-47'],
+];
+
+export type GalleryWork = Work & { photos: { src: string; alt: string }[] };
+
+/** 갤러리용 목록: 묶음은 하나로 합치고(photos에 묶음 사진 전체), 나머지는 사진 한 장씩 */
+export const galleryIn = (lang: Lang = 'ko'): GalleryWork[] => {
+  const works = worksIn(lang);
+  const byFile = new Map(works.map((w) => [w.file, w]));
+  const member = new Map(GROUPS.flatMap((files) => files.map((f) => [f, files] as const)));
+  const items: GalleryWork[] = [];
+  for (const work of works) {
+    const group = member.get(work.file);
+    if (!group) {
+      items.push({ ...work, photos: [{ src: work.src, alt: work.alt }] });
+      continue;
+    }
+    if (items.some((item) => item.file === group[0])) continue;
+    const lead = byFile.get(group[0])!;
+    items.push({
+      ...lead,
+      photos: group.map((f) => byFile.get(f)!).map((w) => ({ src: w.src, alt: w.alt })),
+    });
+  }
+  return items;
+};
+export const galleryBy = (key: CategoryKey, lang: Lang = 'ko') =>
+  galleryIn(lang).filter((item) => item.category === key);
+export const GALLERY_COUNT = galleryIn().length;

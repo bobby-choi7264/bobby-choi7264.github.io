@@ -32,7 +32,7 @@ const zh: Dict = {
     visit: '交通指南',
     rights: 'All rights reserved.',
   },
-  intro: { sub: '55年，旋木成器，为生活所用', enterSound: '开启声音进入', enterQuiet: '静音浏览' },
+  intro: { sub: '55年，旋木成器，为生活所用', enter: '轻触屏幕进入' },
   hero: {
     kicker: '55年匠人 · 乙支路木工车床工坊',
     title1: '读懂木纹，',
@@ -134,7 +134,9 @@ const zh: Dict = {
     note: '我们使用韩语交流。用翻译软件发简短的信息或照片就可以。',
   },
   gallery: {
+    view: '查看',
     open: '放大查看',
+    photos: (n: number) => `${n}张照片`,
     dialog: '照片放大查看',
     close: '关闭',
     prev: '上一张',
@@ -179,7 +181,7 @@ const zh: Dict = {
     metaTitle: '作品',
     metaDescription: (n: number) => `Seongchang 工艺亲手车制的车床工艺品、柱与栏杆、家具及定制作品，共${n}件。`,
     title: '作品',
-    lead: (n: number) => `亲手制作的作品${n}件 · 点击照片可放大查看。`,
+    lead: (n: number, p: number) => `亲手制作的作品${n}件 · 照片${p}张 · 点击照片可放大查看。`,
     navLabel: '作品分类',
     categories: {
       lathe: { title: '车床工艺品', description: '用木工车床旋制的碗、底座与生活用品' },
