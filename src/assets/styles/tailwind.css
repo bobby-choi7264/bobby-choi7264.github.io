@@ -1292,3 +1292,52 @@ aw-gallery li {
 .spot-on .hero-spot {
   opacity: 1;
 }
+
+/* 자주 묻는 질문 (ShopFAQ.astro) */
+.faq-list {
+  border-top: 1px solid rgb(196 150 84 / 0.25);
+}
+.faq-item {
+  border-bottom: 1px solid rgb(196 150 84 / 0.25);
+}
+.faq-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 3.5rem;
+  padding: 0.9rem 0.25rem;
+  cursor: pointer;
+  list-style: none;
+  color: var(--aw-color-text-heading);
+  font-weight: 500;
+  font-size: 1.05rem;
+  transition: color 0.2s ease;
+}
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+.faq-item summary:hover {
+  color: #e0ba78;
+}
+.faq-item .faq-icon {
+  transition: transform 0.3s ease;
+}
+.faq-item[open] .faq-icon {
+  transform: rotate(45deg);
+}
+.faq-item .faq-a {
+  padding: 0 2.5rem 1.25rem 0.25rem;
+  color: var(--aw-color-text-default);
+  line-height: 1.75;
+}
+.faq-item[open] .faq-a {
+  animation: dropIn 0.3s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .faq-item .faq-icon,
+  .faq-item[open] .faq-a {
+    transition: none;
+    animation: none;
+  }
+}

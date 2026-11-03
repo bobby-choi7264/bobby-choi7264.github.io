@@ -4,6 +4,7 @@ import { Icon } from 'astro-icon/components';
 import Layout from '~/layouts/PageLayout.astro';
 import VisitInfo from '~/components/widgets/VisitInfo.astro';
 import OrderSteps from '~/components/widgets/OrderSteps.astro';
+import ShopFAQ from '~/components/widgets/ShopFAQ.astro';
 import { SERVICES, shopFor } from '~/data/shop';
 import { useT, type Lang } from '~/i18n';
 
@@ -144,6 +145,8 @@ const cards = [
       </form>
     </div>
   </section>
+
+  <ShopFAQ />
 
   <VisitInfo />
 </Layout>

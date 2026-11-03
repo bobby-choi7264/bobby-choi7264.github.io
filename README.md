@@ -5,12 +5,12 @@
 
 ## 자주 고치는 곳
 
-| 바꾸고 싶은 것 | 파일 |
-| --- | --- |
-| 전화번호·주소·영업시간·작업 분야 | `src/data/shop.ts` |
-| 작업물 사진 목록·설명 | `src/data/works.ts` (사진은 `src/assets/images/works/`) |
-| 소식(블로그) 글 | `src/data/post/` 에 `.md` 파일 추가 |
-| 색상·글꼴 | `src/components/CustomStyles.astro` |
+| 바꾸고 싶은 것                   | 파일                                                    |
+| -------------------------------- | ------------------------------------------------------- |
+| 전화번호·주소·영업시간·작업 분야 | `src/data/shop.ts`                                      |
+| 작업물 사진 목록·설명            | `src/data/works.ts` (사진은 `src/assets/images/works/`) |
+| 소식(블로그) 글                  | `src/data/post/` 에 `.md` 파일 추가                     |
+| 색상·글꼴                        | `src/components/CustomStyles.astro`                     |
 
 ## 실행
 

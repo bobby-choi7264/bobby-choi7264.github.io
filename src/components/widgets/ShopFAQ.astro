@@ -1,0 +1,47 @@
+---
+// 자주 묻는 질문. 누르면 답이 펼쳐지는 목록(details)이라 자바스크립트 없이도 동작합니다.
+// 검색엔진용 FAQPage 정보도 함께 넣어서, 구글 검색 결과에 질문·답이 펼쳐져 보일 수 있습니다.
+// 문구는 src/i18n/ 의 각 언어 파일 faq 부분에 있습니다.
+import { Icon } from 'astro-icon/components';
+import { langFromPath, useT } from '~/i18n';
+
+export interface Props {
+  id?: string;
+}
+const { id = 'faq' } = Astro.props;
+const f = useT(langFromPath(Astro.url.pathname)).faq;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: f.items.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
+---
+
+<section id={id} class="px-4 py-16 md:py-24 scroll-mt-16">
+  <div class="max-w-3xl mx-auto">
+    <div class="text-center mb-10">
+      <h2 class="font-heading text-3xl md:text-4xl font-bold text-heading" data-split>{f.title}</h2>
+      <div class="ruler mx-auto my-6 max-w-md"></div>
+      <p class="text-muted text-pretty">{f.lead}</p>
+    </div>
+    <div class="faq-list">
+      {
+        f.items.map((item, index) => (
+          <details class="faq-item" open={index === 0}>
+            <summary>
+              <span class="faq-q">{item.q}</span>
+              <Icon name="tabler:plus" class="faq-icon h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
+            </summary>
+            <p class="faq-a text-pretty">{item.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+</section>

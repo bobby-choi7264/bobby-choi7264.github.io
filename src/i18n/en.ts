@@ -271,6 +271,45 @@ const en: Dict = {
     copyPrompt: 'Please copy the text below',
     msgHeader: 'Order inquiry (English)',
   },
+  faq: {
+    title: 'Frequently Asked Questions',
+    lead: 'The questions we hear most before an order. Anything else — just call or text us.',
+    items: [
+      {
+        q: 'Can I order just one piece?',
+        a: 'Yes. We take orders from a single piece to hundreds. With one sample or drawing, we can turn as many identical pieces as you need.',
+      },
+      {
+        q: 'How is the price decided?',
+        a: "It depends on the wood, the size, how complex the shape is, and the quantity. Send us photos, a drawing, rough dimensions and the quantity, and we'll tell you the cost and lead time.",
+      },
+      {
+        q: 'Can I order without a drawing?',
+        a: "Yes. A photo or rough dimensions are enough. If you're not sure how it should be made, we'll work out how to turn it together.",
+      },
+      {
+        q: 'How long does it take?',
+        a: "It depends on size and quantity. We'll tell you the lead time along with the quote. If you have a deadline, add it under 'Preferred date' in the order form.",
+      },
+      {
+        q: 'Do you make student graduation pieces?',
+        a: "Yes. We work with design and craft students on graduation pieces and assignments. Bring a drawing or sketch and we'll decide together how to make it in real wood.",
+      },
+      {
+        q: 'Can I choose the type of wood?',
+        a: 'We pick wood and grain to suit the piece. If you have a wood in mind, just let us know.',
+      },
+      {
+        q: 'Do you finish and coat the pieces?',
+        a: 'Yes. We sand the grain smooth and apply a finish. Show us a photo if you have a color or look in mind.',
+      },
+      { q: 'How do I receive my order?', a: "Pick it up at our Euljiro workshop, or let's arrange shipping." },
+      {
+        q: 'Do you speak English?',
+        a: 'We communicate in Korean. Short text messages and photos — with a translation app — work well.',
+      },
+    ],
+  },
   sound: {
     on: 'Turn sound on',
     off: 'Turn sound off',

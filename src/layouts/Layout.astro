@@ -47,6 +47,15 @@ const alternates = TRANSLATED_PAGES.includes(page)
     ]
   : [];
 
+// 카톡·SNS에 주소를 공유할 때 보이는 미리보기 이미지 (언어별). 소식 글은 글마다 대표 사진을 씁니다.
+// 이미지를 다시 만들려면 HANDOFF.md의 '공유 이미지' 부분을 보세요.
+const OG_IMAGES: Record<Lang, { url: string; width: number; height: number }[]> = {
+  ko: [{ url: '~/assets/images/og/og-ko.jpg', width: 1200, height: 630 }],
+  en: [{ url: '~/assets/images/og/og-en.jpg', width: 1200, height: 630 }],
+  ja: [{ url: '~/assets/images/og/og-ja.jpg', width: 1200, height: 630 }],
+  zh: [{ url: '~/assets/images/og/og-zh.jpg', width: 1200, height: 630 }],
+};
+
 // 언어마다 그 나라 글자 모양에 맞는 글꼴을 더 불러옵니다 (한국어 글꼴은 로고·도장 때문에 항상)
 const extraFonts: Partial<Record<Lang, string>> = {
   ja: '&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;700;900',
@@ -86,7 +95,10 @@ const pageAnimation = {
     <link rel="stylesheet" href={fontHref} />
     <CustomStyles />
     <ApplyColorMode />
-    <Metadata {...metadata} openGraph={{ locale: LANG_META[lang].og, ...metadata.openGraph }} />
+    <Metadata
+      {...metadata}
+      openGraph={{ locale: LANG_META[lang].og, images: OG_IMAGES[lang], ...metadata.openGraph }}
+    />
     {alternates.map((alt) => <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />)}
     <SiteVerification />
     <Analytics />
