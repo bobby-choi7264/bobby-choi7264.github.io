@@ -1,91 +1,88 @@
 ---
-// 마우스 커서: 황동색 점(정확한 위치)과 그 뒤를 살짝 늦게 따라오는 고리.
-// 링크·단추 위에서는 고리가 커지고, 사진 위에서는 '보기'가 쓰인 돋보기 원이 됩니다. 누르면 고리가 꾹 줄어듭니다.
-// 마우스가 있는 컴퓨터에서만 켜지고(휴대폰·태블릿은 그대로), 움직임 줄이기 설정이면 꺼집니다.
-// 글자를 입력하는 칸 위에서는 원래 커서로 돌아갑니다.
-import { useT, type Lang } from '~/i18n';
-
-export interface Props {
-  lang: Lang;
-}
-const { lang } = Astro.props;
+// 마우스 효과: 커서는 원래 모양 그대로 두고, 움직일 때 지나간 자리에 아주 작은 톱밥 가루(황동빛 입자)가
+// 흩날리다 사라집니다. 마우스가 있는 컴퓨터에서만 켜지고, 움직임 줄이기 설정이면 꺼집니다.
 ---
 
-<div id="cursor" transition:persist={`cursor-${lang}`} aria-hidden="true">
-  <div class="cursor-ring"><span class="cursor-label">{useT(lang).gallery.view}</span></div>
-  <div class="cursor-dot"></div>
-</div>
+<canvas id="cursor-dust" transition:persist aria-hidden="true"></canvas>
 
 <script>
+  type Speck = { x: number; y: number; vx: number; vy: number; life: number; max: number; size: number; hue: number };
+
   const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const root = document.documentElement;
-  const el = () => document.getElementById('cursor');
+  const specks: Speck[] = [];
+  let running = false;
+  let lastX = -1;
+  let lastY = -1;
+  let ctx: CanvasRenderingContext2D | null = null;
+  let dpr = 1;
 
-  let x = -100,
-    y = -100,
-    rx = -100,
-    ry = -100,
-    running = false,
-    visible = false;
+  const canvas = () => document.getElementById('cursor-dust') as HTMLCanvasElement | null;
 
-  const loop = () => {
-    const box = el();
-    if (!box) {
-      running = false;
-      return;
+  const resize = () => {
+    const c = canvas();
+    if (!c) return;
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    c.width = innerWidth * dpr;
+    c.height = innerHeight * dpr;
+    ctx = c.getContext('2d');
+    ctx?.setTransform(dpr, 0, 0, dpr, 0, 0);
+  };
+  window.addEventListener('resize', resize);
+
+  const frame = () => {
+    if (!ctx) resize();
+    if (!ctx) return;
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    for (let i = specks.length - 1; i >= 0; i--) {
+      const s = specks[i];
+      s.life++;
+      s.vy += 0.035; // 천천히 가라앉음
+      s.vx *= 0.97;
+      s.x += s.vx;
+      s.y += s.vy;
+      const t = s.life / s.max;
+      if (t >= 1) {
+        specks.splice(i, 1);
+        continue;
+      }
+      ctx.globalAlpha = (1 - t) * 0.85;
+      ctx.fillStyle = `hsl(${s.hue} 62% ${70 - t * 20}%)`;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.size * (1 - t * 0.5), 0, Math.PI * 2);
+      ctx.fill();
     }
-    // 고리는 점을 부드럽게 따라감 (끈에 매달린 추처럼)
-    rx += (x - rx) * 0.2;
-    ry += (y - ry) * 0.2;
-    box.style.setProperty('--x', `${x}px`);
-    box.style.setProperty('--y', `${y}px`);
-    box.style.setProperty('--rx', `${rx}px`);
-    box.style.setProperty('--ry', `${ry}px`);
-    if (Math.abs(x - rx) + Math.abs(y - ry) > 0.1) requestAnimationFrame(loop);
+    ctx.globalAlpha = 1;
+    if (specks.length) requestAnimationFrame(frame);
     else running = false;
   };
-  const kick = () => {
-    if (!running) {
-      running = true;
-      requestAnimationFrame(loop);
-    }
-  };
-
-  const enabled = () => fine.matches && !reduced.matches;
-  const sync = () => root.classList.toggle('has-cursor', enabled());
-  sync();
-  fine.addEventListener('change', sync);
-  reduced.addEventListener('change', sync);
 
   document.addEventListener('pointermove', (e) => {
-    if (e.pointerType !== 'mouse' || !enabled()) return;
-    x = e.clientX;
-    y = e.clientY;
-    if (!visible) {
-      visible = true;
-      rx = x;
-      ry = y;
-      el()?.classList.add('is-visible');
+    if (e.pointerType !== 'mouse' || !fine.matches || reduced.matches) return;
+    const dx = e.clientX - lastX;
+    const dy = e.clientY - lastY;
+    const dist = Math.hypot(dx, dy);
+    lastX = e.clientX;
+    lastY = e.clientY;
+    if (dist < 4 || dist > 300) return;
+    // 빨리 움직일수록 조금 더 많이, 그래도 한 번에 3개까지만
+    const count = Math.min(3, 1 + Math.floor(dist / 18));
+    for (let i = 0; i < count && specks.length < 90; i++) {
+      specks.push({
+        x: e.clientX + (Math.random() - 0.5) * 6,
+        y: e.clientY + (Math.random() - 0.5) * 6,
+        vx: (Math.random() - 0.5) * 0.8 - dx * 0.02,
+        vy: (Math.random() - 0.5) * 0.6 - 0.3,
+        life: 0,
+        max: 32 + Math.random() * 26,
+        size: 0.8 + Math.random() * 1.4,
+        hue: 30 + Math.random() * 12,
+      });
     }
-    const target = e.target as HTMLElement;
-    const box = el();
-    if (box) {
-      const typing = target.closest('input, textarea, select, [contenteditable]');
-      const view = !typing && target.closest('[data-aw-gallery-open], [data-cursor="view"]');
-      const link = !typing && !view && target.closest('a, button, summary, label, [role="button"], [data-tilt]');
-      box.classList.toggle('is-typing', !!typing);
-      box.classList.toggle('is-view', !!view);
-      box.classList.toggle('is-link', !!link);
+    if (!running) {
+      running = true;
+      requestAnimationFrame(frame);
     }
-    kick();
   });
-  document.addEventListener('pointerdown', () => el()?.classList.add('is-down'));
-  document.addEventListener('pointerup', () => el()?.classList.remove('is-down'));
-  document.documentElement.addEventListener('mouseleave', () => {
-    visible = false;
-    el()?.classList.remove('is-visible');
-  });
-  // 페이지를 옮기면 커서 모양을 처음 상태로
-  document.addEventListener('astro:after-swap', () => el()?.classList.remove('is-view', 'is-link', 'is-down'));
+  document.addEventListener('astro:page-load', resize);
 </script>

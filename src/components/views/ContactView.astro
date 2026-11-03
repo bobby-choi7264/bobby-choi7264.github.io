@@ -3,6 +3,7 @@
 import { Icon } from 'astro-icon/components';
 import Layout from '~/layouts/PageLayout.astro';
 import VisitInfo from '~/components/widgets/VisitInfo.astro';
+import OrderSteps from '~/components/widgets/OrderSteps.astro';
 import { SERVICES, shopFor } from '~/data/shop';
 import { useT, type Lang } from '~/i18n';
 
@@ -45,7 +46,7 @@ const cards = [
 ];
 ---
 
-<Layout metadata={metadata} lang={lang}>
+<Layout metadata={metadata} lang={lang} crumb={t.nav.contact}>
   <section class="px-4 pt-16 pb-10 md:pt-24 text-center wood-grain">
     <h1 class="font-heading text-4xl md:text-6xl font-bold text-heading" data-split>{c.title}</h1>
     <div class="ruler mx-auto my-6 max-w-md"></div>
@@ -73,6 +74,8 @@ const cards = [
     <p class="text-center text-sm text-muted mt-4">{shop.hours} · {shop.closed}</p>
     {c.intlNote && <p class="text-center text-sm text-primary/90 mt-2 text-pretty">{c.intlNote}</p>}
   </section>
+
+  <OrderSteps actions={false} />
 
   <!-- 주문서: 서버 없이 작성 내용을 문자 메시지로 만들어 보냅니다 -->
   <section id="order" class="px-4 py-14 md:py-20 bg-dark border-y border-primary/15 scroll-mt-16">

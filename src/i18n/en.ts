@@ -12,6 +12,7 @@ const en: Dict = {
     mobileLabel: '+82 10-8548-7264',
   },
   nav: {
+    home: 'Home',
     about: 'About',
     services: 'Services',
     works: 'Works',

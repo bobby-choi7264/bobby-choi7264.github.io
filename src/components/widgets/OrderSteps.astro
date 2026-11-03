@@ -1,0 +1,55 @@
+---
+// 주문 진행 4단계 (상담 → 견적 → 제작 → 전달). 작업 분야 페이지와 주문·문의 페이지에서 함께 씁니다.
+// actions를 켜면 아래에 '주문서 작성'·전화 단추가 붙습니다 (주문·문의 페이지에서는 바로 아래가 주문서라 끔).
+import { Icon } from 'astro-icon/components';
+import { shopFor } from '~/data/shop';
+import { langFromPath, localize, useT } from '~/i18n';
+
+export interface Props {
+  actions?: boolean;
+  class?: string;
+}
+const { actions = true, class: className = '' } = Astro.props;
+const lang = langFromPath(Astro.url.pathname);
+const p = useT(lang).servicesPage;
+const shop = shopFor(lang);
+const stepIcons = ['tabler:message-circle', 'tabler:calculator', 'tabler:tools', 'tabler:package'];
+---
+
+<section class={`px-4 py-20 bg-dark border-t border-primary/15 ${className}`}>
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-12">
+      <p class="text-sm tracking-[0.3em] text-primary mb-3">{p.stepsTag}</p>
+      <h2 class="font-heading text-3xl md:text-4xl font-bold text-heading" data-split>{p.stepsTitle}</h2>
+    </div>
+    <ol class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        p.steps.map((step, index) => (
+          <li
+            class="step-card relative rounded-xl border border-primary/20 p-6 intersect-once intersect-quarter motion-safe:opacity-0 motion-safe:intersect:animate-fade"
+            style={`animation-delay:${index * 0.12}s`}
+          >
+            <span class="text-primary font-heading text-sm tabular-nums">
+              {p.step} {index + 1}
+            </span>
+            <Icon name={stepIcons[index]} class="w-8 h-8 text-primary mt-3" />
+            <h3 class="mt-3 font-heading text-xl font-bold text-heading">{step.title}</h3>
+            <p class="mt-2 text-muted text-pretty">{step.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+    {
+      actions && (
+        <div class="mt-12 flex flex-wrap justify-center gap-3">
+          <a href={localize(lang, '/contact')} class="btn-primary">
+            {p.orderForm}
+          </a>
+          <a href={shop.tel.href} class="btn border-primary/60 text-heading hover:bg-primary/15">
+            {shop.tel.label}
+          </a>
+        </div>
+      )
+    }
+  </div>
+</section>

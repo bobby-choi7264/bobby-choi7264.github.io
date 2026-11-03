@@ -515,21 +515,30 @@ body::before {
   left: 12%;
   right: 12%;
   height: 1px;
+}
+/* 선은 안쪽에서 그어짐 (바깥 칸 크기가 0이면 화면 진입을 감지하지 못함) */
+.process-line::before {
+  content: '';
+  position: absolute;
+  inset: 0;
   background: linear-gradient(90deg, transparent, #c49654 10%, #f3d9a4 50%, #c49654 90%, transparent);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 1.6s cubic-bezier(0.6, 0, 0.2, 1) 0.2s;
 }
-.process-line:not([no-intersect]) {
+.process-line:not([no-intersect])::before {
   transform: scaleX(1);
 }
 
-/* 사진이 화면에 들어올 때 커튼 걷히듯 드러남 */
-.reveal-wipe {
+/* 사진이 화면에 들어올 때 커튼 걷히듯 드러남.
+   가리는 효과는 안쪽(사진)에만 줍니다. 바깥 칸까지 가리면 브라우저가 '화면에 안 보임'으로 판단해서
+   드러나는 순간이 오지 않습니다. */
+.reveal-wipe > * {
   clip-path: inset(0 0 0 0);
   transition: clip-path 1.2s cubic-bezier(0.7, 0, 0.2, 1);
+  transition-delay: inherit;
 }
-.reveal-wipe[no-intersect] {
+.reveal-wipe[no-intersect] > * {
   clip-path: inset(0 100% 0 0);
 }
 
@@ -555,10 +564,14 @@ body::before {
     transition: none;
     transform: none;
   }
-  .reveal-wipe,
-  .reveal-wipe[no-intersect] {
+  .reveal-wipe > *,
+  .reveal-wipe[no-intersect] > * {
     clip-path: none;
     transition: none;
+  }
+  .process-line::before {
+    transition: none;
+    transform: none;
   }
   .parallax-img {
     animation: none;
@@ -1253,103 +1266,14 @@ aw-gallery li {
   transform: scale(1.4);
 }
 
-/* 마우스 커서 (CustomCursor.astro) — 마우스가 있는 컴퓨터에서만 */
-#cursor {
-  display: none;
-}
-.has-cursor #cursor {
-  display: block;
-}
-.has-cursor,
-.has-cursor * {
-  cursor: none !important;
-}
-.has-cursor :is(input, textarea, select, [contenteditable]) {
-  cursor: text !important;
-}
-.has-cursor select {
-  cursor: pointer !important;
-}
-#cursor .cursor-dot,
-#cursor .cursor-ring {
+/* 마우스 효과: 지나간 자리에 흩날리는 작은 톱밥 가루 (CustomCursor.astro) */
+#cursor-dust {
   position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 130;
+  inset: 0;
+  z-index: 125;
+  width: 100vw;
+  height: 100vh;
   pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.25s ease;
-}
-#cursor.is-visible .cursor-dot,
-#cursor.is-visible .cursor-ring {
-  opacity: 1;
-}
-#cursor .cursor-dot {
-  width: 6px;
-  height: 6px;
-  margin: -3px 0 0 -3px;
-  border-radius: 999px;
-  background: #f3d9a4;
-  box-shadow: 0 0 10px rgb(243 217 164 / 0.7);
-  transform: translate3d(var(--x), var(--y), 0);
-}
-#cursor .cursor-ring {
-  display: grid;
-  place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  margin: -1.125rem 0 0 -1.125rem;
-  border-radius: 999px;
-  border: 1px solid rgb(224 186 120 / 0.65);
-  transform: translate3d(var(--rx), var(--ry), 0) scale(var(--s, 1));
-  transition:
-    opacity 0.25s ease,
-    width 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
-    height 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
-    margin 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
-    background-color 0.3s ease,
-    border-color 0.3s ease;
-  /* 자 눈금처럼 고리 둘레에 짧은 눈금 */
-  background: repeating-conic-gradient(from 0deg, rgb(224 186 120 / 0.35) 0 1.5deg, transparent 1.5deg 30deg);
-  -webkit-mask: radial-gradient(circle, transparent calc(50% - 5px), #000 calc(50% - 4px));
-  mask: radial-gradient(circle, transparent calc(50% - 5px), #000 calc(50% - 4px));
-}
-#cursor .cursor-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  color: #140f0b;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-#cursor.is-link .cursor-ring {
-  width: 3.25rem;
-  height: 3.25rem;
-  margin: -1.625rem 0 0 -1.625rem;
-  border-color: #f3d9a4;
-}
-#cursor.is-link .cursor-dot {
-  transform: translate3d(var(--x), var(--y), 0) scale(0.6);
-}
-#cursor.is-view .cursor-ring {
-  width: 4.75rem;
-  height: 4.75rem;
-  margin: -2.375rem 0 0 -2.375rem;
-  border-color: transparent;
-  background: rgb(224 186 120 / 0.92);
-  -webkit-mask: none;
-  mask: none;
-}
-#cursor.is-view .cursor-label {
-  opacity: 1;
-}
-#cursor.is-view .cursor-dot,
-#cursor.is-typing .cursor-dot,
-#cursor.is-typing .cursor-ring {
-  opacity: 0;
-}
-#cursor.is-down .cursor-ring {
-  --s: 0.82;
 }
 
 /* 첫 화면 작업등: 마우스 쪽을 따뜻하게 비춤 */

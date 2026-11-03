@@ -12,6 +12,7 @@ const ja: Dict = {
     mobileLabel: '+82 10-8548-7264',
   },
   nav: {
+    home: 'ホーム',
     about: '工房について',
     services: '仕事の分野',
     works: '作品',

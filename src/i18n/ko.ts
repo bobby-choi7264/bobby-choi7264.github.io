@@ -12,6 +12,7 @@ const ko = {
     mobileLabel: '010-8548-7264',
   },
   nav: {
+    home: '홈',
     about: '소개',
     services: '작업 분야',
     works: '작업물',

@@ -12,6 +12,7 @@ const zh: Dict = {
     mobileLabel: '+82 10-8548-7264',
   },
   nav: {
+    home: '首页',
     about: '工坊介绍',
     services: '业务范围',
     works: '作品',
