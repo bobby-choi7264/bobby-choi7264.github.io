@@ -1,6 +1,7 @@
 ---
 // 소개 페이지. 한국어(/about)와 다른 언어(/en/about 등) 페이지가 함께 씁니다.
 import Layout from '~/layouts/PageLayout.astro';
+import { YEARS } from '~/data/years';
 import Image from '~/components/common/Image.astro';
 import Mark from '~/components/common/Mark.astro';
 import VisitInfo from '~/components/widgets/VisitInfo.astro';
@@ -75,7 +76,7 @@ const mosaic = [
       </div>
       <div class="space-y-6 text-lg leading-relaxed">
         <p class="font-heading font-bold leading-none">
-          <span class="gold-text text-6xl md:text-7xl">55</span><span class="text-2xl text-primary ml-1"
+          <span class="gold-text text-6xl md:text-7xl">{YEARS}</span><span class="text-2xl text-primary ml-1"
             >{t.home.yearsUnit}</span
           >
           <span class="ml-3 align-middle text-sm tracking-[0.08em] text-primary">{a.yearsSide}</span>

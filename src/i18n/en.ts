@@ -1,5 +1,6 @@
 // English
 import type { Dict } from './index';
+import { YEARS } from '~/data/years';
 
 const en: Dict = {
   brand: 'Seongchang Craft',
@@ -27,7 +28,7 @@ const en: Dict = {
     menu: 'Open menu',
   },
   footer: {
-    tagline: 'Turning wood on the lathe in Euljiro, Seoul, for 55 years.',
+    tagline: `Turning wood on the lathe in Euljiro, Seoul, for ${YEARS} years.`,
     explore: 'Explore',
     order: 'Order & Contact',
     orderForm: 'Order Form',
@@ -44,8 +45,8 @@ const en: Dict = {
     kicker: 'Woodturning workshop · Made to order',
     title1: 'Fifty-five years',
     title2: 'turning wood in Euljiro',
-    lead: 'Every piece is turned by a master who has worked the wood lathe for 55 years.',
-    tags: 'Wooden tableware · Moldings & cutting · Mass production · Supplying broadcasters · Student projects',
+    lead: `Every piece is turned by a master who has worked the wood lathe for ${YEARS} years.`,
+    tags: 'Wooden tableware · Moldings & cutting · Mass production · TV props · Student projects',
     order: 'Request an Order',
     call: 'Call Us',
     works: 'See Our Work',
@@ -55,7 +56,7 @@ const en: Dict = {
     lathe: {
       title: 'Woodturning',
       description:
-        'We shape spinning wood on the lathe (known as “rokuro” in Korean workshops). Bowls, plates and lidded boxes are our specialty, and we turn columns, legs and handles with precision.',
+        'We shape spinning wood on the lathe (known as “rokuro” in Korean workshops). Bowls, plates and lidded boxes are our specialty, and we turn columns, legs and handles with precision. Traditional ottchil (Korean lacquer) finishing is also available.',
       points: [
         'Wooden tableware: bowls, plates, lidded boxes, stands',
         'Pepper & salt mills, teacups, mugs',
@@ -65,11 +66,11 @@ const en: Dict = {
     column: {
       title: 'Moldings & Cutting',
       description:
-        'Newel posts, stair balusters, furniture legs and moldings — matched to your drawing or sample and produced in volume. We also supply broadcasting studios.',
+        'Newel posts, stair balusters, furniture legs and moldings — matched to your drawing or sample and produced in volume. We also make props for TV broadcasters.',
       points: [
         'Stair balusters & decorative columns',
         'Table, chair and furniture legs',
-        'Mass production from a single sample; supplying broadcasters',
+        'Mass production from a single sample; props for TV broadcasters',
       ],
     },
     custom: {
@@ -89,9 +90,8 @@ const en: Dict = {
     },
   },
   home: {
-    metaTitle: 'Seongchang Craft — 55-Year Master Woodturner, Custom Woodwork | Euljiro, Seoul',
-    metaDescription:
-      'Seongchang Craft, Euljiro, Seoul: a 55-year master woodturner making wooden tableware, moldings, student projects and custom woodcraft. Mon–Sat 8 AM–6 PM.',
+    metaTitle: `Seongchang Craft — ${YEARS}-Year Master Woodturner, Custom Woodwork | Euljiro, Seoul`,
+    metaDescription: `Seongchang Craft, Euljiro, Seoul: a ${YEARS}-year master woodturner making wooden tableware, moldings, student projects and custom woodcraft. Mon–Sat 8 AM–6 PM.`,
     servicesTag: 'What We Do',
     servicesTitle: 'Here’s What We Make',
     servicesLead:
@@ -109,8 +109,8 @@ const en: Dict = {
         text: 'Bowls, plates and lidded boxes — things you hold every day — are what we turn best, reading the grain and thickness by hand.',
       },
       {
-        title: 'From volume runs to broadcasters',
-        text: 'We copy one sample into hundreds of identical pieces, keeping both quantity and quality to broadcast-studio standards.',
+        title: 'From volume runs to TV props',
+        text: 'We copy one sample into hundreds of identical pieces, made with the care TV broadcasters trust for their props.',
       },
       {
         title: 'Not sure how? Let’s figure it out',
@@ -193,16 +193,15 @@ const en: Dict = {
   },
   about: {
     metaTitle: 'About',
-    metaDescription:
-      'Meet Seongchang Craft, a woodturning workshop in Euljiro, Seoul, run by a master with 55 years of experience.',
+    metaDescription: `Meet Seongchang Craft, a woodturning workshop in Euljiro, Seoul, run by a master with ${YEARS} years of experience.`,
     tag: 'Our Workshop',
     lead: 'Fifty-five years of turning wood in Euljiro, Seoul',
     yearsSide: 'Hands that have shaped only wood',
     title1: 'How a block of wood',
     title2: 'becomes something useful',
     paragraphs: [
-      'Seongchang Craft is the workshop of <b>a master who has been carving wood for 55 years</b>. In Euljiro, Seoul, we turn wood on the lathe — known in Korean workshops by its Japanese name, <b>rokuro</b>. Setting a blade against fast-spinning wood, we shape round forms like columns, legs, bowls and stands. Above all, <b>wooden tableware</b> — bowls, plates and lidded boxes — is what we do best.',
-      'From <b>mass-produced moldings</b> such as stair balusters and furniture legs, and <b>supplies for broadcasting studios</b>, to <b>graduation pieces</b> for design students, shop signs and homeware — if it can be made of wood, we’re happy to talk.',
+      `Seongchang Craft is the workshop of <b>a master who has been carving wood for ${YEARS} years</b>. In Euljiro, Seoul, we turn wood on the lathe — known in Korean workshops by its Japanese name, <b>rokuro</b>. Setting a blade against fast-spinning wood, we shape round forms like columns, legs, bowls and stands. Above all, <b>wooden tableware</b> — bowls, plates and lidded boxes — is what we do best.`,
+      'From <b>mass-produced moldings</b> such as stair balusters and furniture legs, and <b>props for TV broadcasters</b>, to <b>graduation pieces</b> for design students, shop signs and homeware — if it can be made of wood, we’re happy to talk.',
       'The precision to copy one sample into hundreds of identical pieces, and fifty-five years of experience finding a way to make shapes we’ve never seen before. That is the craft of Seongchang.',
     ],
     shopAlt: 'The front of the Seongchang Craft workshop in Euljiro',
@@ -212,7 +211,7 @@ const en: Dict = {
     craftTitle1: 'Fifty-five years on,',
     craftTitle2: 'still at the lathe every day',
     craftParagraphs: [
-      'I have been turning wood in Euljiro for 55 years. Even now, my favorite moment is looking at a drawing or a photo a customer brings in and thinking, “Ah, this is how I can turn it.”',
+      `I have been turning wood in Euljiro for ${YEARS} years. Even now, my favorite moment is looking at a drawing or a photo a customer brings in and thinking, “Ah, this is how I can turn it.”`,
       'Whether it is one piece or several hundred, these are things people will hold in their hands, so I turn each one with the same care. If there is something you would like made, please give me a call. You will be welcomed with a smile.',
     ],
     craftSign: 'Master craftsman, Seongchang Craft',
@@ -223,12 +222,36 @@ const en: Dict = {
       'Zelkova, oak, walnut, ash, cherry, maple, pine and paulownia — the color, grain, hardness and best uses of woods for woodturning and woodcraft.',
     tag: 'About Wood',
     title: 'Which wood should we use?',
-    lead: 'The same shape changes in color, grain, weight and use depending on the wood. Here are the woods most often used in woodcraft.',
+    lead: 'The same shape changes in color, grain, weight and use depending on the wood. Here are eight woods we often use in woodcraft and turning — with their weight, hardness, how they turn and how to finish them.',
     hard: 'Hardness',
     hardLow: 'Soft',
     hardHigh: 'Very hard',
     look: 'Color & grain',
     uses: 'Good for',
+    density: 'Weight (air-dry density)',
+    densityUnit: 'water = 1',
+    turning: 'On the lathe',
+    care: 'Finish & care',
+    tipsTag: 'Good to Know',
+    tipsTitle: 'Before You Choose a Wood',
+    tips: [
+      {
+        title: 'Well-dried wood comes first',
+        text: 'Wood shrinks and warps as it dries. For indoor pieces, timber dried to about 10% moisture content is far less likely to crack.',
+      },
+      {
+        title: 'Large bowls may be turned twice',
+        text: 'A thick bowl is often rough-turned from partly dry wood, left to dry fully, then turned again to true its shape. It takes longer but warps less later.',
+      },
+      {
+        title: 'The finish changes how it lives',
+        text: 'Oil keeps the natural feel and just needs an occasional refresh. Urethane resists water and scratches. Ottchil (Korean lacquer) stands up to water and heat and lasts for decades, but takes more time and costs more. Bowls and spoons get a food-safe finish.',
+      },
+      {
+        title: 'Wood changes color',
+        text: 'Most woods shift in color with light: cherry darkens, walnut lightens a little, and pale woods turn slightly yellow. It helps to picture how a piece will look in a few years.',
+      },
+    ],
     picksTag: 'By use',
     picksTitle: 'Choose by what you are making',
     note: 'Availability and price vary by wood, and we can also work with woods not listed here. Tell us what you want to make and the feel you are after, and we will choose the right wood together.',
@@ -239,8 +262,7 @@ const en: Dict = {
   },
   servicesPage: {
     metaTitle: 'Services',
-    metaDescription:
-      'Woodturning, wooden tableware, moldings, mass production and student projects by a 55-year master — and how ordering works.',
+    metaDescription: `Woodturning, wooden tableware, moldings, mass production and student projects by a ${YEARS}-year master — and how ordering works.`,
     tag: 'What We Make',
     title: 'Services',
     lead: 'If it can be made of wood, just ask.',
@@ -369,7 +391,7 @@ const en: Dict = {
       },
       {
         q: 'Do you finish and coat the pieces?',
-        a: 'Yes. We sand the grain smooth and apply a finish. Show us a photo if you have a color or look in mind.',
+        a: 'Yes. We sand the grain smooth and apply a finish, including traditional ottchil (Korean lacquer). Show us a photo if you have a color or look in mind.',
       },
       { q: 'How do I receive my order?', a: "Pick it up at our Euljiro workshop, or let's arrange shipping." },
       {

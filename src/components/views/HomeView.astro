@@ -2,6 +2,7 @@
 // 홈 화면. 한국어(/)와 다른 언어(/en/ 등) 페이지가 함께 씁니다.
 import { Icon } from 'astro-icon/components';
 import Layout from '~/layouts/PageLayout.astro';
+import { YEARS } from '~/data/years';
 import Intro from '~/components/widgets/Intro.astro';
 import HeroShowcase from '~/components/widgets/HeroShowcase.astro';
 import Gallery from '~/components/widgets/Gallery.astro';
@@ -214,7 +215,7 @@ const PRINCIPLE_NUMS = ['一', '二', '三'];
 
       <div>
         <p class="font-heading font-bold leading-none mb-2">
-          <span class="gold-text text-7xl md:text-8xl tabular-nums" data-count-to="55">55</span><span
+          <span class="gold-text text-7xl md:text-8xl tabular-nums" data-count-to={YEARS}>{YEARS}</span><span
             class="text-3xl md:text-4xl text-primary ml-1">{h.yearsUnit}</span
           >
         </p>

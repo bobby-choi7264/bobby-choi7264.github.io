@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # 매년 1월 1일 0시(한국 시간)에 다시 만들어 장인 경력 연수(src/data/years.ts)를 올림
+  schedule:
+    - cron: '0 15 31 12 *'
 
 permissions:
   contents: read
