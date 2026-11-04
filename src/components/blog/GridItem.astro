@@ -20,17 +20,20 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
 <article
   class="mb-6 transition intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
 >
-  <div class="relative md:h-64 bg-gray-400 dark:bg-slate-700 rounded shadow-lg mb-6">
+  <div
+    class="group relative aspect-[16/10] overflow-hidden rounded-xl border border-primary/25 bg-[#1c150f] shadow-lg mb-6"
+  >
     {
       image &&
         (link ? (
           <a href={link}>
             <Image
               src={image}
-              class="w-full md:h-full object-cover rounded shadow-lg bg-gray-400 dark:bg-slate-700"
+              class="photo-tone absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+              layout="cover"
               widths={[400, 900]}
               width={900}
-              height={506}
+              height={563}
               sizes="(max-width: 900px) 400px, 900px"
               alt={post.title}
               format="webp"
@@ -41,10 +44,11 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
         ) : (
           <Image
             src={image}
-            class="w-full md:h-full object-cover rounded shadow-lg bg-gray-400 dark:bg-slate-700"
+            class="photo-tone absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+            layout="cover"
             widths={[400, 900]}
             width={900}
-            height={506}
+            height={563}
             sizes="(max-width: 900px) 400px, 900px"
             alt={post.title}
             format="webp"
