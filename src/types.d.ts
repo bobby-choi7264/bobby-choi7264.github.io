@@ -211,7 +211,7 @@ export interface Hero extends Omit<Headline, 'classes'>, Omit<Widget, 'isDark' |
 
 export interface Stats extends Omit<Headline, 'classes'>, Widget {
   stats?: Array<Stat>;
-  /** Animate numeric amounts from 0 when they scroll into view (off with reduced motion). */
+  /** Animate numeric amounts from 0 when they scroll into view. */
   countUp?: boolean;
 }
 
@@ -232,7 +232,7 @@ export interface Testimonials extends Omit<Headline, 'classes'>, Widget {
 export interface Brands extends Omit<Headline, 'classes'>, Widget {
   icons?: Array<string>;
   images?: Array<Image>;
-  /** Static row (`grid`) or an infinite scrolling row (`marquee`, pauses on hover and with reduced motion). */
+  /** Static row (`grid`) or an infinite scrolling row (`marquee`, pauses on hover). */
   variant?: 'grid' | 'marquee';
   /** Monochrome logos that reveal their colours on hover. */
   grayscale?: boolean;

@@ -97,7 +97,6 @@ const seconds = 36 / slides.length;
   const setup = () => {
     const hero = document.querySelector<HTMLElement>('[data-spotlight]:not([data-spot-ready])');
     if (!hero || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     hero.dataset.spotReady = '';
     let frame = 0;
     hero.addEventListener('pointermove', (e) => {

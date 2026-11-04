@@ -334,7 +334,6 @@ const PRINCIPLE_NUMS = ['一', '二', '三'];
   // 숫자가 0부터 올라가며 채워지는 효과 (예: 55년)
   const run = () => {
     const els = document.querySelectorAll<HTMLElement>('[data-count-to]');
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const io = new IntersectionObserver(
       (entries) =>
         entries.forEach((entry) => {

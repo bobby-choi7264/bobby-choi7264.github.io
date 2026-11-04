@@ -12,7 +12,6 @@
 
 <script>
   const root = () => document.getElementById('mukjul');
-  const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // 스크롤 진행 표시
   let ticking = false;
@@ -41,7 +40,7 @@
   document.addEventListener('astro:before-preparation', (event) => {
     if (event.to.pathname === event.from.pathname) return;
     const snap = root()?.querySelector<HTMLElement>('.mukjul-snap');
-    if (!snap || reduced()) return;
+    if (!snap) return;
     snap.getAnimations().forEach((a) => a.cancel());
     drawing = snap.animate(
       [

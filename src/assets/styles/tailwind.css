@@ -9,6 +9,11 @@
 
 @custom-variant intersect (&:not([no-intersect]));
 
+/* 휴대폰 절전 모드·'애니메이션 제거'·'동작 줄이기'에서 켜지는 '움직임 줄이기' 설정과 상관없이
+   모든 연출을 보여 줌 (사용자 결정, 2026-11-04). motion-safe:는 항상, motion-reduce:는 쓰지 않음 */
+@custom-variant motion-safe (&);
+@custom-variant motion-reduce (&:where(.never-reduce-motion));
+
 @theme {
   --color-primary: var(--aw-color-primary);
   --color-secondary: var(--aw-color-secondary);
@@ -333,67 +338,6 @@
   }
 }
 
-/* 움직임 줄이기 설정(휴대폰 절전 모드·'애니메이션 제거'·'동작 줄이기'에서도 켜짐):
-   입장 화면은 크게 움직이지 않되, 같은 시점에 차례로 흐릿하게 나타나서 소리와 맞게 연출함 */
-@media (prefers-reduced-motion: reduce) {
-  #intro.play {
-    animation: introFade 0.6s ease 3.4s forwards;
-  }
-  #intro.play .intro-title {
-    letter-spacing: 0.35em;
-    animation: introTitleFade 1.4s ease 0.4s forwards;
-  }
-  #intro.play .intro-sub {
-    transform: none;
-    animation: introFadeIn 1s ease 1.4s forwards;
-  }
-  #intro.play .intro-seal {
-    transform: rotate(-4deg);
-    animation: sealFadeIn 0.3s ease-out 2s forwards;
-  }
-  #intro.play .gold-text {
-    animation: none;
-  }
-  .hero-slide,
-  .hero-slide img {
-    animation: none;
-  }
-  .hero-slide:first-child {
-    opacity: 1;
-  }
-  .hero-reveal > * {
-    animation: none !important;
-    opacity: 1;
-    transform: none;
-  }
-}
-@keyframes introFade {
-  to {
-    opacity: 0;
-    visibility: hidden;
-  }
-}
-@keyframes introFadeIn {
-  to {
-    opacity: 1;
-  }
-}
-@keyframes introTitleFade {
-  to {
-    opacity: 1;
-    filter: blur(0);
-  }
-}
-@keyframes sealFadeIn {
-  0% {
-    opacity: 0;
-    filter: brightness(2);
-  }
-  100% {
-    opacity: 1;
-    filter: none;
-  }
-}
 .intro-done #intro {
   display: none;
 }
@@ -484,11 +428,13 @@ body::before {
     filter: blur(6px);
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation: none !important;
-  }
+/* Astro는 '움직임 줄이기' 설정이면 페이지 전환을 !important로 끔 → 같은 전환을 더 강한 규칙으로 다시 지정
+   (값은 Layout.astro의 pageOut·pageIn과 같게, 'page'는 Layout.astro의 transition:name) */
+html::view-transition-old(page) {
+  animation: pageOut 0.3s cubic-bezier(0.4, 0, 1, 1) both !important;
+}
+html::view-transition-new(page) {
+  animation: pageIn 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) 0.12s both !important;
 }
 
 /* 자(눈금자) 모양 구분선: 1칸·5칸·10칸 눈금 */
@@ -571,25 +517,6 @@ body::before {
     to {
       transform: translateY(8%) scale(1.15);
     }
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .process-line {
-    transition: none;
-    transform: none;
-  }
-  .reveal-wipe > *,
-  .reveal-wipe[no-intersect] > * {
-    clip-path: none;
-    transition: none;
-  }
-  .process-line::before {
-    transition: none;
-    transform: none;
-  }
-  .parallax-img {
-    animation: none;
   }
 }
 
@@ -1064,27 +991,6 @@ aw-gallery figcaption::before {
   background: rgb(196 150 84 / 0.15);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .btn-primary::after,
-  .sound-bars i,
-  .lang-switch ul,
-  .lang-suggest,
-  .sound-hint {
-    animation: none;
-    transition: none;
-  }
-  .stamp-in[no-intersect] {
-    opacity: 1;
-    transform: rotate(-4deg);
-  }
-  .service-card,
-  .step-card,
-  .contact-card {
-    transition: none;
-    transform: none !important;
-  }
-}
-
 /* 사진 크게 보기: 새 사진을 받는 동안은 감추고, 가운데에 도는 표시 */
 aw-gallery dialog [data-aw-gallery-img] {
   transition: opacity 0.25s ease;
@@ -1197,13 +1103,6 @@ aw-gallery dialog:has([data-aw-gallery-img].is-loading)::after {
   to {
     transform: scale(3.2);
     opacity: 0;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  #intro .intro-gate-seal,
-  #intro .intro-tap,
-  #intro .intro-tap-ring::after {
-    animation: none;
   }
 }
 
@@ -1348,13 +1247,6 @@ aw-gallery li {
 }
 .faq-item[open] .faq-a {
   animation: dropIn 0.3s ease;
-}
-@media (prefers-reduced-motion: reduce) {
-  .faq-item .faq-icon,
-  .faq-item[open] .faq-a {
-    transition: none;
-    animation: none;
-  }
 }
 
 /* 공유 단추 (ShareFab.astro) — 소리 단추 바로 위 */

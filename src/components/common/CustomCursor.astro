@@ -9,7 +9,6 @@
   type Speck = { x: number; y: number; vx: number; vy: number; life: number; max: number; size: number; hue: number };
 
   const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   const specks: Speck[] = [];
   let running = false;
   let lastX = -1;
@@ -58,7 +57,7 @@
   };
 
   document.addEventListener('pointermove', (e) => {
-    if (e.pointerType !== 'mouse' || !fine.matches || reduced.matches) return;
+    if (e.pointerType !== 'mouse' || !fine.matches) return;
     const dx = e.clientX - lastX;
     const dy = e.clientY - lastY;
     const dist = Math.hypot(dx, dy);

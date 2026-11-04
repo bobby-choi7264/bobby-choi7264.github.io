@@ -23,8 +23,7 @@ const {
 
 // `grayscale` renders the logos monochrome (white on dark) and reveals their
 // colours on hover; `boxed` keeps the light card behind each logo (the
-// original look). The marquee duplicates the row so the loop is seamless and
-// stops for people who prefer reduced motion.
+// original look). The marquee duplicates the row so the loop is seamless.
 const logoClass = [
   'max-h-12 transition',
   grayscale
@@ -112,24 +111,6 @@ const duration = `${Math.max(20, (icons.length + images.length) * 4)}s`;
   @keyframes aw-marquee {
     to {
       transform: translateX(-100%);
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .aw-marquee {
-      flex-wrap: wrap;
-      justify-content: center;
-      mask-image: none;
-    }
-    .aw-marquee-track {
-      animation: none;
-      flex-shrink: 1;
-      width: 100%;
-      flex-wrap: wrap;
-      justify-content: center;
-      padding-right: 0;
-    }
-    .aw-marquee-track[aria-hidden='true'] {
-      display: none;
     }
   }
 </style>

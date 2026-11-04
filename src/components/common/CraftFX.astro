@@ -9,7 +9,6 @@
 <div id="craft-fx" transition:persist aria-hidden="true"></div>
 
 <script>
-  const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const finePointer = () => window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   // ---------- 1) 대팻밥 ----------
@@ -53,7 +52,7 @@
   };
 
   document.addEventListener('pointerdown', (e) => {
-    if (reduced() || e.button !== 0) return;
+    if (e.button !== 0) return;
     const target = e.target as HTMLElement;
     // 글자를 입력하는 칸에서는 튀지 않게
     if (target.closest('input, textarea, select, [contenteditable], dialog')) return;
@@ -67,7 +66,6 @@
     const targets = document.querySelectorAll<HTMLElement>('[data-split]:not([data-split-done])');
     targets.forEach((el) => {
       el.dataset.splitDone = '';
-      if (reduced()) return;
       const text = el.textContent?.trim() ?? '';
       if (!text) return;
       el.setAttribute('aria-label', text);
@@ -107,7 +105,7 @@
 
   // ---------- 3) 기울어지는 카드 ----------
   const tilt = () => {
-    if (reduced() || !finePointer()) return;
+    if (!finePointer()) return;
     document.querySelectorAll<HTMLElement>('[data-tilt]:not([data-tilt-ready])').forEach((card) => {
       card.dataset.tiltReady = '';
       let frame = 0;
