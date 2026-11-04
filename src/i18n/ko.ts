@@ -11,6 +11,7 @@ const ko = {
     hours: '월~토 08:00~18:00',
     closed: '일요일·공휴일 휴무',
     telLabel: '02-2292-0062',
+    telLabel2: '02-814-5998',
     mobileLabel: '010-8548-7264',
   },
   nav: {

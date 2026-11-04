@@ -10,12 +10,14 @@ export const SHOP = {
   hours: '월~토 08:00~18:00',
   closed: '일요일·공휴일 휴무',
   tel: { label: '02-2292-0062', href: 'tel:0222920062' },
+  tel2: { label: '02-814-5998', href: 'tel:028145998' }, // 간판에 있는 두 번째 가게 전화
   mobile: { label: '010-8548-7264', href: 'tel:01085487264', sms: 'sms:01085487264' },
 };
 
 // 해외에서도 걸리는 국제 번호 (외국어 페이지에서 사용)
 const INTL = {
   tel: 'tel:+82222920062',
+  tel2: 'tel:+8228145998',
   mobile: 'tel:+821085487264',
   sms: 'sms:+821085487264',
 };
@@ -32,6 +34,7 @@ export const shopFor = (lang: Lang) => {
     hours: t.hours,
     closed: t.closed,
     tel: { label: t.telLabel, href: ko ? SHOP.tel.href : INTL.tel },
+    tel2: { label: t.telLabel2, href: ko ? SHOP.tel2.href : INTL.tel2 },
     mobile: { label: t.mobileLabel, href: ko ? SHOP.mobile.href : INTL.mobile, sms: ko ? SHOP.mobile.sms : INTL.sms },
   };
 };

@@ -10,6 +10,7 @@ const en: Dict = {
     hours: 'Mon–Sat 8:00 AM – 6:00 PM',
     closed: 'Closed Sundays & public holidays',
     telLabel: '+82 2-2292-0062',
+    telLabel2: '+82 2-814-5998',
     mobileLabel: '+82 10-8548-7264',
   },
   nav: {

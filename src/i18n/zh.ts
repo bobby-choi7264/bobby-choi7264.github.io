@@ -10,6 +10,7 @@ const zh: Dict = {
     hours: '周一至周六 8:00–18:00',
     closed: '周日及法定节假日休息',
     telLabel: '+82 2-2292-0062',
+    telLabel2: '+82 2-814-5998',
     mobileLabel: '+82 10-8548-7264',
   },
   nav: {

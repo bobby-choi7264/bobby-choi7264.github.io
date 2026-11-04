@@ -39,6 +39,7 @@ export const getFooterData = (lang: Lang = 'ko') => {
         links: [
           { text: t.footer.orderForm, href: localize(lang, '/contact') },
           { text: `${t.footer.shopPhone} ${shop.tel.label}`, href: shop.tel.href },
+          { text: `${t.footer.shopPhone} ${shop.tel2.label}`, href: shop.tel2.href },
           { text: `${t.footer.mobilePhone} ${shop.mobile.label}`, href: shop.mobile.href },
         ],
       },

@@ -42,6 +42,7 @@ const labels = {
 
 const cards = [
   { href: shop.tel.href, icon: 'tabler:phone-call', small: c.shopPhone, big: shop.tel.label },
+  { href: shop.tel2.href, icon: 'tabler:phone', small: c.shopPhone, big: shop.tel2.label },
   { href: shop.mobile.href, icon: 'tabler:device-mobile', small: c.mobilePhone, big: shop.mobile.label },
   { href: shop.mobile.sms, icon: 'tabler:photo-up', small: c.sendFiles, big: c.sendSms },
 ];
@@ -55,7 +56,7 @@ const cards = [
   </section>
 
   <section class="px-4 py-12">
-    <div class="max-w-6xl mx-auto grid gap-4 sm:grid-cols-3">
+    <div class="max-w-6xl mx-auto grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {
         cards.map((card) => (
           <a

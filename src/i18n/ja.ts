@@ -10,6 +10,7 @@ const ja: Dict = {
     hours: '月〜土 8:00〜18:00',
     closed: '日曜・祝日定休',
     telLabel: '+82 2-2292-0062',
+    telLabel2: '+82 2-814-5998',
     mobileLabel: '+82 10-8548-7264',
   },
   nav: {
