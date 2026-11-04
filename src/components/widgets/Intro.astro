@@ -46,7 +46,6 @@ const t = useT(langFromPath(Astro.url.pathname));
   </div>
 
   <div class="intro-glow" aria-hidden="true"></div>
-  <div class="intro-flash" aria-hidden="true"></div>
   <div class="intro-stage flex flex-col items-center text-center px-6" aria-hidden="true">
     <div class="intro-line gold-rule mb-8"></div>
     <p class="intro-title font-heading text-4xl md:text-6xl font-bold pl-[0.35em]" translate="no">
@@ -54,12 +53,8 @@ const t = useT(langFromPath(Astro.url.pathname));
     </p>
     <p class="intro-sub mt-6 text-xs md:text-sm tracking-[0.5em] text-[#c49654]/80 pl-[0.5em]">{SHOP.nameEn}</p>
     <p class="intro-sub mt-3 text-sm md:text-base text-[#e2d6c4]/70">{t.intro.sub}</p>
-    <!-- 도장: 그림자가 먼저 내려앉고, 무겁게 찍힌 뒤 충격파·가루가 퍼짐 -->
-    <span class="intro-press mt-8">
-      <span class="intro-shadow"></span>
-      <span class="intro-ring"></span>
-      <Seal class="intro-seal text-2xl md:text-3xl" />
-    </span>
+    <!-- 도장: 인주가 종이에 스며들듯 천천히 배어 나옴 -->
+    <Seal class="intro-seal mt-8 text-2xl md:text-3xl" />
   </div>
   <!-- 인주가 고르지 않게 묻은 듯한 도장 질감 -->
   <svg width="0" height="0" class="absolute" aria-hidden="true" focusable="false">
@@ -82,7 +77,7 @@ const t = useT(langFromPath(Astro.url.pathname));
     if (!intro || !root.classList.contains('intro-active')) return;
 
     const LOCK_MS = 2000; // 연출이 시작된 뒤 이 시간 동안은 넘길 수 없음
-    const STAMP_MS = 2280; // 도장이 종이에 닿는 순간 (tailwind.css의 sealStamp와 맞춤)
+    const STAMP_MS = 2280; // 도장이 다 배어 나오는 순간 (tailwind.css의 inkSeep과 맞춤)
     const END_MS = 3400; // 걷히기 시작하는 시점 (tailwind.css의 introOut과 맞춤)
     const FONT_WAIT_MS = 2500; // 글꼴을 이보다 오래 기다리지는 않음
     let startedAt = 0;
@@ -125,36 +120,13 @@ const t = useT(langFromPath(Astro.url.pathname));
     window.addEventListener('keydown', onKey, true);
     intro.addEventListener('click', trySkip);
 
-    // 도장이 닿는 순간: 화면 울림·빛·충격파 + 금빛 톱밥 가루가 사방으로 튐
-    const impact = () => {
-      intro.classList.add('impact');
-      const press = intro.querySelector('.intro-press');
-      if (!press) return;
-      for (let i = 0; i < 22; i++) {
-        const dust = document.createElement('i');
-        const angle = Math.random() * Math.PI * 2;
-        const dist = 40 + Math.random() * 90;
-        dust.className = 'intro-dust';
-        dust.style.setProperty('--dx', `${Math.cos(angle) * dist}px`);
-        dust.style.setProperty('--dy', `${Math.sin(angle) * dist * 0.6 - 10}px`);
-        dust.style.setProperty('--s', `${0.5 + Math.random() * 1.1}`);
-        dust.style.animationDelay = `${Math.random() * 60}ms`;
-        press.appendChild(dust);
-      }
-    };
-
     const start = (withSound) => {
       if (startedAt || finished) return;
       startedAt = performance.now();
       signal('sc:intro-start', { sound: withSound });
       intro.classList.remove('gate');
       intro.classList.add('play');
-      timers.push(
-        setTimeout(() => {
-          signal('sc:intro-stamp');
-          impact();
-        }, STAMP_MS)
-      );
+      timers.push(setTimeout(() => signal('sc:intro-stamp'), STAMP_MS));
       // 입장 화면이 걷히기 시작하면 첫 화면 글자가 올라오기 시작
       timers.push(setTimeout(() => root.classList.add('intro-reveal'), END_MS));
       timers.push(setTimeout(finish, END_MS + 900));
