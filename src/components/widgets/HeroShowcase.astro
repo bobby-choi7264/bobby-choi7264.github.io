@@ -14,6 +14,8 @@ const t = useT(lang).hero;
 const shop = shopFor(lang);
 const slides = pick(HERO_SLIDES, lang);
 const seconds = 36 / slides.length;
+// 첫 사진이 처음부터 다 보이게 시작(36초의 3% = 서서히 나타나는 시간만큼 앞당김). 입장 화면에서 끊김 없이 이어지도록
+const delay = (index: number) => `${(index * seconds - 36 * 0.03).toFixed(2)}s`;
 ---
 
 <section
@@ -23,7 +25,7 @@ const seconds = 36 / slides.length;
   <div class="absolute inset-0" aria-hidden="true">
     {
       slides.map((slide, index) => (
-        <div class="hero-slide" style={`animation-delay:${index * seconds}s`}>
+        <div class="hero-slide" style={`animation-delay:${delay(index)}`}>
           <Image
             src={slide.src}
             alt=""
@@ -35,7 +37,7 @@ const seconds = 36 / slides.length;
             format="webp"
             loading={index === 0 ? 'eager' : 'lazy'}
             fetchpriority={index === 0 ? 'high' : 'low'}
-            style={`animation-delay:${index * seconds}s`}
+            style={`animation-delay:${delay(index)}`}
           />
         </div>
       ))

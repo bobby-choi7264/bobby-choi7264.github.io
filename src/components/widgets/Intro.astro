@@ -1,16 +1,22 @@
 ---
 // 첫 방문 때만 나오는 입장 화면.
-// 먼저 도장과 '화면을 누르면 입장합니다'를 보여 줍니다. 브라우저는 사람이 한 번 누르기 전에는 소리를 막기 때문에,
+// 첫 화면과 같은 공방 사진을 어둡게 깔고 상호와 '화면을 누르면 입장합니다'를 보여 줍니다. 브라우저는 사람이 한 번 누르기 전에는 소리를 막기 때문에,
 // 화면을 누르는(또는 키를 누르는) 순간 소리(SoundSystem.astro)와 연출이 함께 시작됩니다.
 // 전에 소리를 꺼 둔 방문자는 소리 없이 시작합니다.
 // 연출이 시작된 뒤 2초 동안은 넘길 수 없고, 그 뒤에는 누르면 바로 넘어가며, 가만히 두면 3.4초쯤 스스로 걷힙니다.
-// 소리와 맞추려고 연출 시점마다 신호를 보냅니다: sc:intro-start(시작), sc:intro-stamp(도장), sc:intro-out(걷힘)
+// 소리와 맞추려고 연출 시점마다 신호를 보냅니다: sc:intro-start(시작), sc:intro-stamp(큰 소리, 금선이 그어지는 때), sc:intro-out(걷힘)
+// 걷힐 때 아래에 같은 사진의 첫 화면이 있어서 끊김 없이 이어집니다.
 // 같은 방문(세션) 안에서는 다시 나오지 않습니다.
-import Seal from '~/components/common/Seal.astro';
+import Image from '~/components/common/Image.astro';
 import { SHOP } from '~/data/shop';
+import { HERO_SLIDES, pick } from '~/data/works';
 import { langFromPath, useT } from '~/i18n';
 
-const t = useT(langFromPath(Astro.url.pathname));
+const lang = langFromPath(Astro.url.pathname);
+const t = useT(lang);
+// 첫 화면 슬라이드쇼의 첫 사진과 똑같은 설정으로 불러와서 같은 파일을 한 번만 받음
+const photo = pick(HERO_SLIDES, lang)[0];
+const chars = [...SHOP.name];
 ---
 
 <script is:inline data-astro-rerun>
@@ -33,41 +39,43 @@ const t = useT(langFromPath(Astro.url.pathname));
   </style></noscript
 >
 
-<div id="intro" class="wood-grain" role="dialog" aria-modal="true" aria-label={SHOP.name}>
+<div id="intro" role="dialog" aria-modal="true" aria-label={SHOP.name}>
+  <div class="intro-photo" aria-hidden="true">
+    <Image
+      src={photo.src}
+      alt=""
+      widths={[768, 1280, 1800]}
+      sizes="100vw"
+      width={1800}
+      height={1000}
+      layout="none"
+      format="webp"
+      loading="eager"
+      fetchpriority="high"
+    />
+  </div>
+  <div class="intro-shade" aria-hidden="true"></div>
+
   <div class="intro-gate">
-    <Seal class="intro-gate-seal text-3xl md:text-4xl" />
-    <p class="mt-6 font-heading text-xl md:text-2xl text-[#f5ecde]" translate="no">{SHOP.name}</p>
-    <p class="mt-2 text-[10px] md:text-xs tracking-[0.5em] pl-[0.5em] text-[#c49654]/80" translate="no">
+    <p class="font-heading text-3xl md:text-4xl font-bold text-[#f8f1e6]" translate="no">{SHOP.name}</p>
+    <p class="mt-3 text-[11px] md:text-xs tracking-[0.45em] pl-[0.45em] text-[#e0ba78]/85" translate="no">
       {SHOP.nameEn}
     </p>
-    <p class="intro-tap mt-12 text-sm md:text-base text-[#e2d6c4]/80">
+    <p class="intro-tap mt-14 text-sm md:text-base text-[#efe6d8]/85">
       <span class="intro-tap-ring" aria-hidden="true"></span>{t.intro.enter}
     </p>
   </div>
 
-  <div class="intro-glow" aria-hidden="true"></div>
   <div class="intro-stage flex flex-col items-center text-center px-6" aria-hidden="true">
-    <div class="intro-line gold-rule mb-8"></div>
-    <p class="intro-title font-heading text-4xl md:text-6xl font-bold pl-[0.35em]" translate="no">
-      <span class="gold-text">{SHOP.name}</span>
+    <p class="intro-kicker text-[11px] md:text-sm tracking-[0.45em] pl-[0.45em] text-[#e0ba78]" translate="no">
+      {SHOP.nameEn}
     </p>
-    <p class="intro-sub mt-6 text-xs md:text-sm tracking-[0.5em] text-[#c49654]/80 pl-[0.5em]">{SHOP.nameEn}</p>
-    <p class="intro-sub mt-3 text-sm md:text-base text-[#e2d6c4]/70">{t.intro.sub}</p>
-    <!-- 도장: 인주가 종이에 스며들듯 천천히 배어 나옴 -->
-    <Seal class="intro-seal mt-8 text-2xl md:text-3xl" />
+    <p class="intro-title mt-5 font-heading text-5xl md:text-7xl font-bold text-[#fbf6ee]" translate="no">
+      {chars.map((char, i) => <span style={`--i:${i}`}>{char}</span>)}
+    </p>
+    <div class="intro-line mt-7"></div>
+    <p class="intro-sub mt-6 text-sm md:text-lg text-[#efe6d8]/90">{t.intro.sub}</p>
   </div>
-  <!-- 인주가 고르지 않게 묻은 듯한 도장 질감 -->
-  <svg width="0" height="0" class="absolute" aria-hidden="true" focusable="false">
-    <filter id="intro-ink" x="-10%" y="-10%" width="120%" height="120%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="4" result="n"></feTurbulence>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G" result="d"
-      ></feDisplacementMap>
-      <feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="1" seed="9" result="spots"></feTurbulence>
-      <feColorMatrix in="spots" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -4 3.15" result="mask"
-      ></feColorMatrix>
-      <feComposite in="d" in2="mask" operator="in"></feComposite>
-    </filter>
-  </svg>
 </div>
 
 <script is:inline data-astro-rerun>
@@ -77,7 +85,7 @@ const t = useT(langFromPath(Astro.url.pathname));
     if (!intro || !root.classList.contains('intro-active')) return;
 
     const LOCK_MS = 2000; // 연출이 시작된 뒤 이 시간 동안은 넘길 수 없음
-    const STAMP_MS = 2280; // 도장이 다 배어 나오는 순간 (tailwind.css의 inkSeep과 맞춤)
+    const STAMP_MS = 2280; // 큰 소리가 나는 순간 = 금선이 그어지는 때 (tailwind.css의 introLine과 맞춤)
     const END_MS = 3400; // 걷히기 시작하는 시점 (tailwind.css의 introOut과 맞춤)
     const FONT_WAIT_MS = 2500; // 글꼴을 이보다 오래 기다리지는 않음
     let startedAt = 0;
