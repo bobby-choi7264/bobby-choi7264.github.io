@@ -28,6 +28,7 @@ export const getFooterData = (lang: Lang = 'ko') => {
         links: [
           { text: t.nav.about, href: localize(lang, '/about') },
           { text: t.nav.services, href: localize(lang, '/services') },
+          { text: t.nav.woods, href: localize(lang, '/woods') },
           { text: t.nav.works, href: localize(lang, '/works') },
           ...(lang === 'ko' ? [{ text: t.nav.news, href: getBlogPermalink() }] : []),
         ],

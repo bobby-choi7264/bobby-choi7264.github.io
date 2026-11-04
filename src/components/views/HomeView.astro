@@ -132,6 +132,19 @@ const PRINCIPLE_NUMS = ['一', '二', '三'];
           })
         }
       </div>
+      <p class="mt-10 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
+        <a
+          href={localize(lang, '/services#cases')}
+          class="inline-flex min-h-11 items-center gap-1 text-primary hover:underline"
+        >
+          {t.servicesPage.casesTitle}
+          <Icon name="tabler:arrow-right" class="h-4 w-4" />
+        </a>
+        <a href={localize(lang, '/woods')} class="inline-flex min-h-11 items-center gap-1 text-primary hover:underline">
+          {t.nav.woods}
+          <Icon name="tabler:arrow-right" class="h-4 w-4" />
+        </a>
+      </p>
     </div>
   </section>
 
@@ -212,6 +225,19 @@ const PRINCIPLE_NUMS = ['一', '二', '三'];
         <blockquote class="font-heading text-2xl md:text-4xl font-bold leading-snug text-heading text-balance">
           {h.quote1}<br /><span class="gold-text">{h.quote2}</span>
         </blockquote>
+        <a href={localize(lang, '/about')} class="mt-6 inline-flex items-center gap-3 group">
+          <Image
+            src="~/assets/images/owner/craftsman.jpg"
+            alt=""
+            widths={[112]}
+            width={112}
+            height={112}
+            layout="fixed"
+            format="webp"
+            class="h-14 w-14 rounded-full object-cover object-[50%_28%] border border-primary/50"
+          />
+          <span class="font-heading text-primary group-hover:underline">— {h.quoteBy}</span>
+        </a>
         <div class="gold-rule my-8 max-w-xs"></div>
         <ol class="space-y-6">
           {

@@ -6,7 +6,7 @@ import Image from '~/components/common/Image.astro';
 import OrderSteps from '~/components/widgets/OrderSteps.astro';
 import { SERVICES } from '~/data/shop';
 import { pick } from '~/data/works';
-import { useT, type Lang } from '~/i18n';
+import { localize, useT, type Lang } from '~/i18n';
 
 export interface Props {
   lang: Lang;
@@ -28,6 +28,12 @@ const PHOTOS: Record<string, string[]> = {
   custom: ['custom-133', 'custom-53', 'custom-87'],
   furniture: ['furniture-129', 'furniture-127', 'furniture-22'],
 };
+// 작업 사례마다 순서대로 보여 줄 사진 3장 (문구는 src/i18n/*.ts의 servicesPage.cases)
+const CASES = [
+  ['column-13', 'column-29', 'column-110'],
+  ['lathe-85', 'lathe-82', 'lathe-84'],
+  ['column-122', 'column-14', 'column-111'],
+];
 ---
 
 <Layout metadata={metadata} lang={lang} crumb={t.nav.services}>
@@ -113,6 +119,70 @@ const PHOTOS: Record<string, string[]> = {
       );
     })
   }
+
+  <!-- 작업 사례: 실제 작업장 사진 3장으로 보여 주는 진행 순서 -->
+  <section id="cases" class="relative px-4 py-16 md:py-24 border-y border-primary/15 bg-dark scroll-mt-20">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-12">
+        <p class="text-sm tracking-[0.3em] text-primary mb-3">{p.casesTag}</p>
+        <h2 class="font-heading text-3xl md:text-4xl font-bold text-heading" data-split>{p.casesTitle}</h2>
+        <div class="ruler mx-auto my-6 max-w-md"></div>
+        <p class="text-muted max-w-2xl mx-auto text-pretty">{p.casesLead}</p>
+      </div>
+      <div class="space-y-14 md:space-y-20">
+        {
+          p.cases.map((item, index) => {
+            const photos = pick(CASES[index], lang);
+            return (
+              <article class="grid gap-6 lg:grid-cols-[2fr_3fr] lg:gap-12 items-center">
+                <div class="intersect-once intersect-quarter motion-safe:opacity-0 motion-safe:intersect:animate-fade">
+                  <p class="font-heading text-primary/80 text-sm tracking-[0.2em]">
+                    {String(index + 1).padStart(2, '0')} · {item.sub}
+                  </p>
+                  <h3 class="mt-2 font-heading text-2xl md:text-3xl font-bold text-heading text-balance">
+                    {item.title}
+                  </h3>
+                  <p class="mt-4 text-default/90 text-pretty">{item.text}</p>
+                  {index === 1 && (
+                    <a
+                      href={localize(lang, '/woods')}
+                      class="mt-5 inline-flex min-h-11 items-center gap-1 text-primary hover:underline"
+                    >
+                      {p.woodsLink}
+                      <Icon name="tabler:arrow-right" class="h-4 w-4" />
+                    </a>
+                  )}
+                </div>
+                <ol class="grid grid-cols-3 gap-2 md:gap-3">
+                  {photos.map((photo, i) => (
+                    <li class="relative">
+                      <div class="relative overflow-hidden rounded-lg border border-primary/20 aspect-[3/4] reveal-wipe intersect intersect-once intersect-quarter">
+                        <Image
+                          src={photo.src}
+                          alt={photo.alt}
+                          widths={[240, 400]}
+                          sizes="(max-width: 1023px) 33vw, 240px"
+                          width={400}
+                          height={533}
+                          layout="cover"
+                          format="webp"
+                          class="photo-tone h-full w-full object-cover"
+                        />
+                      </div>
+                      <p class="mt-2 flex gap-1.5 text-xs md:text-sm text-muted leading-snug">
+                        <span class="font-heading font-bold text-primary">{i + 1}</span>
+                        <span>{item.steps[i]}</span>
+                      </p>
+                    </li>
+                  ))}
+                </ol>
+              </article>
+            );
+          })
+        }
+      </div>
+    </div>
+  </section>
 
   <OrderSteps />
 </Layout>

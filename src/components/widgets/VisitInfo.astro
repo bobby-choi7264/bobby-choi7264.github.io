@@ -1,6 +1,7 @@
 ---
 // 전화·문자·길찾기 버튼과 지도. 홈과 주문·문의 페이지에서 함께 씁니다.
 import { Icon } from 'astro-icon/components';
+import OpenStatus from '~/components/common/OpenStatus.astro';
 import { MAP_LINKS, mapEmbed, shopFor } from '~/data/shop';
 import { langFromPath, useT } from '~/i18n';
 
@@ -41,6 +42,7 @@ const isKo = lang === 'ko';
           <dd>
             <span class="text-heading">{SHOP.hours}</span>
             <span class="block text-sm text-muted">{SHOP.closed}</span>
+            <OpenStatus class="mt-3" />
           </dd>
         </div>
         <div class="flex gap-4">

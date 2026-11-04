@@ -24,7 +24,7 @@ const DICTS: Record<Lang, Dict> = { ko, en, ja, zh };
 export const useT = (lang: Lang): Dict => DICTS[lang];
 
 // 여러 나라 말로 만든 페이지 (소식 글은 한국어만 있습니다)
-export const TRANSLATED_PAGES = ['/', '/about', '/services', '/works', '/contact'];
+export const TRANSLATED_PAGES = ['/', '/about', '/services', '/woods', '/works', '/contact'];
 
 export const isLang = (value: unknown): value is Lang => LOCALES.includes(value as Lang);
 

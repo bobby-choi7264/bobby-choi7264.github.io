@@ -1,0 +1,109 @@
+---
+// '지금 영업 중' 표시. 한국 시간 기준으로 월~토 08:00~18:00이면 영업 중, 아니면 언제 여는지 알려 줍니다.
+// 공휴일은 따로 계산하지 않습니다(영업시간 아래에 '공휴일 휴무'가 함께 적혀 있음).
+// 영업시간이 바뀌면 아래 OPEN·CLOSE와 src/i18n/*.ts의 visit.status 문구를 같이 고치세요.
+import { langFromPath, useT } from '~/i18n';
+
+export interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+const s = useT(langFromPath(Astro.url.pathname)).visit.status;
+---
+
+<p
+  class={`open-status ${className}`}
+  data-open-status
+  data-open={s.open}
+  data-soon={s.soon}
+  data-before={s.before}
+  data-after={s.after}
+  data-sunday={s.sunday}
+  data-saturday={s.saturday}
+  aria-live="polite"
+  hidden
+>
+  <i aria-hidden="true"></i><span></span>
+</p>
+
+<script>
+  const OPEN = 8; // 여는 시각(시)
+  const CLOSE = 18; // 닫는 시각(시)
+  const seoulNow = () => {
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Asia/Seoul',
+      weekday: 'short',
+      hour: 'numeric',
+      minute: 'numeric',
+      hourCycle: 'h23',
+    }).formatToParts(new Date());
+    const get = (type: string) => parts.find((p) => p.type === type)?.value ?? '';
+    return { day: get('weekday'), hour: Number(get('hour')) + Number(get('minute')) / 60 };
+  };
+  const update = () => {
+    const { day, hour } = seoulNow();
+    document.querySelectorAll<HTMLElement>('[data-open-status]').forEach((el) => {
+      let state: 'open' | 'soon' | 'before' | 'after' | 'sunday' | 'saturday';
+      if (day === 'Sun') state = 'sunday';
+      else if (hour < OPEN) state = 'before';
+      else if (hour < CLOSE - 1) state = 'open';
+      else if (hour < CLOSE) state = 'soon';
+      else state = day === 'Sat' ? 'saturday' : 'after';
+      el.dataset.state = state;
+      el.querySelector('span')!.textContent = el.dataset[state] ?? '';
+      el.hidden = false;
+    });
+  };
+  let timer = 0;
+  document.addEventListener('astro:page-load', () => {
+    update();
+    clearInterval(timer);
+    timer = window.setInterval(update, 60_000);
+  });
+</script>
+
+<style>
+  .open-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid rgb(196 150 84 / 0.35);
+    background: rgb(20 15 11 / 0.6);
+    font-size: 0.875rem;
+    color: #e2d6c4;
+  }
+  .open-status[hidden] {
+    display: none;
+  }
+  .open-status i {
+    position: relative;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 999px;
+    background: #b8322a;
+    flex-shrink: 0;
+  }
+  .open-status[data-state='open'] i,
+  .open-status[data-state='soon'] i {
+    background: #8fbf6a;
+  }
+  .open-status[data-state='soon'] i {
+    background: #e0ba78;
+  }
+  .open-status[data-state='open'] i::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    border: 1px solid #8fbf6a;
+    animation: openPulse 2s ease-out infinite;
+  }
+  @keyframes openPulse {
+    to {
+      transform: scale(2.6);
+      opacity: 0;
+    }
+  }
+</style>

@@ -1,0 +1,9 @@
+---
+import WoodsView from '~/components/views/WoodsView.astro';
+import { foreignPaths, type Lang } from '~/i18n';
+
+export const getStaticPaths = foreignPaths;
+const lang = Astro.params.lang as Lang;
+---
+
+<WoodsView lang={lang} />

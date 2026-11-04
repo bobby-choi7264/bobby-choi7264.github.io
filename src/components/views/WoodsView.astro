@@ -1,0 +1,175 @@
+---
+// 나무 고르기 페이지. 한국어(/woods)와 다른 언어 페이지가 함께 씁니다. 나무 목록은 src/data/woods.ts
+import { Icon } from 'astro-icon/components';
+import Layout from '~/layouts/PageLayout.astro';
+import { WOODS, PICKS } from '~/data/woods';
+import { shopFor } from '~/data/shop';
+import { localize, useT, type Lang } from '~/i18n';
+
+export interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+const w = t.woods;
+const shop = shopFor(lang);
+const byKey = new Map(WOODS.map((wood) => [wood.key, wood]));
+
+const metadata = {
+  title: w.metaTitle,
+  description: w.metaDescription,
+};
+---
+
+<Layout metadata={metadata} lang={lang} crumb={t.nav.woods}>
+  <section class="px-4 pt-16 pb-10 md:pt-24 text-center wood-grain">
+    <p class="text-sm tracking-[0.3em] text-primary mb-3">{w.tag}</p>
+    <h1 class="font-heading text-4xl md:text-6xl font-bold text-heading text-balance" data-split>{w.title}</h1>
+    <div class="ruler mx-auto my-6 max-w-md"></div>
+    <p class="text-muted max-w-2xl mx-auto text-pretty">{w.lead}</p>
+  </section>
+
+  <section class="px-4 py-12 md:py-16">
+    <ul class="max-w-6xl mx-auto grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        WOODS.map((wood, i) => (
+          <li
+            id={wood.key}
+            class="wood-card scroll-mt-24 intersect-once intersect-quarter motion-safe:opacity-0 motion-safe:intersect:animate-fade"
+            style={`--c1:${wood.colors[0]};--c2:${wood.colors[1]};animation-delay:${(i % 4) * 0.08}s`}
+          >
+            <div class="wood-spindle" aria-hidden="true" />
+            <div class="p-5">
+              <h2 class="font-heading text-xl font-bold text-heading">{wood.name[lang]}</h2>
+              <p class="text-xs italic text-muted" lang="la" translate="no">
+                {wood.latin}
+              </p>
+              <dl class="mt-4 space-y-3 text-sm">
+                <div>
+                  <dt class="text-primary">{w.look}</dt>
+                  <dd class="text-default/90">{wood.look[lang]}</dd>
+                </div>
+                <div>
+                  <dt class="text-primary">{w.hard}</dt>
+                  <dd class="flex items-center gap-2">
+                    <span class="flex gap-1" aria-hidden="true">
+                      {Array.from({ length: 5 }, (_, n) => (
+                        <i class:list={['wood-dot', { 'is-on': n < wood.hard }]} />
+                      ))}
+                    </span>
+                    <span class="text-muted text-xs">
+                      {wood.hard}/5 · {wood.hard <= 2 ? w.hardLow : wood.hard >= 4 ? w.hardHigh : ''}
+                    </span>
+                  </dd>
+                </div>
+                <div>
+                  <dt class="text-primary">{w.uses}</dt>
+                  <dd class="text-heading">{wood.uses[lang]}</dd>
+                </div>
+              </dl>
+              <p class="mt-4 text-sm text-muted text-pretty">{wood.feel[lang]}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="px-4 py-14 md:py-20 border-y border-primary/15 bg-dark">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-10">
+        <p class="text-sm tracking-[0.3em] text-primary mb-3">{w.picksTag}</p>
+        <h2 class="font-heading text-3xl md:text-4xl font-bold text-heading" data-split>{w.picksTitle}</h2>
+        <div class="ruler mx-auto my-6 max-w-md"></div>
+      </div>
+      <ul class="grid gap-4 md:grid-cols-2">
+        {
+          PICKS.map((pick) => (
+            <li class="rounded-xl border border-primary/25 bg-[#1b130d]/70 p-5">
+              <h3 class="font-heading text-lg font-bold text-heading">{pick.title[lang]}</h3>
+              <ul class="mt-3 flex flex-wrap gap-2">
+                {pick.woods.map((key) => {
+                  const wood = byKey.get(key)!;
+                  return (
+                    <li>
+                      <a
+                        href={`#${key}`}
+                        class="inline-flex min-h-11 items-center gap-2 rounded-full border border-primary/35 px-3 text-sm text-heading hover:bg-primary/15"
+                      >
+                        <i
+                          class="h-3 w-3 rounded-full"
+                          style={`background:linear-gradient(135deg,${wood.colors[0]},${wood.colors[1]})`}
+                          aria-hidden="true"
+                        />
+                        {wood.name[lang]}
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="mt-8 text-sm text-muted text-pretty text-center max-w-3xl mx-auto">{w.note}</p>
+    </div>
+  </section>
+
+  <section class="px-4 py-16 md:py-20 text-center wood-grain">
+    <h2 class="font-heading text-2xl md:text-3xl font-bold text-heading">{w.ctaTitle}</h2>
+    <p class="mt-3 text-muted text-pretty">{w.ctaText}</p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <a href={localize(lang, '/contact')} class="btn-primary"
+        ><Icon name="tabler:clipboard-text" class="w-5 h-5 mr-2" />{w.ctaOrder}</a
+      >
+      <a href={shop.tel.href} class="btn border-primary/60 text-heading hover:bg-primary/15"
+        ><Icon name="tabler:phone" class="w-5 h-5 mr-2" />{w.ctaCall}</a
+      >
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .wood-card {
+    overflow: hidden;
+    border-radius: 0.85rem;
+    border: 1px solid rgb(196 150 84 / 0.25);
+    background: rgb(27 19 13 / 0.75);
+  }
+  /* 로구로로 깎은 둥근 봉처럼 보이는 나뭇결 색 견본 */
+  .wood-spindle {
+    height: 5.5rem;
+    background:
+      linear-gradient(180deg, rgb(0 0 0 / 0.55), rgb(255 240 210 / 0.28) 32%, transparent 52%, rgb(0 0 0 / 0.6)),
+      repeating-linear-gradient(
+        180deg,
+        transparent 0 5px,
+        color-mix(in srgb, var(--c2) 55%, transparent) 5px 6px,
+        transparent 6px 11px,
+        color-mix(in srgb, var(--c2) 30%, transparent) 11px 13px
+      ),
+      linear-gradient(90deg, var(--c1), var(--c2) 45%, var(--c1) 75%, var(--c2));
+    background-size:
+      100% 100%,
+      100% 26px,
+      100% 100%;
+    animation: woodSpin 1.2s linear infinite;
+  }
+  @keyframes woodSpin {
+    to {
+      background-position:
+        0 0,
+        0 26px,
+        0 0;
+    }
+  }
+  .wood-dot {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 999px;
+    border: 1px solid rgb(196 150 84 / 0.5);
+  }
+  .wood-dot.is-on {
+    background: #c49654;
+  }
+</style>

@@ -4,6 +4,7 @@ import { Icon } from 'astro-icon/components';
 import Image from '~/components/common/Image.astro';
 import Seal from '~/components/common/Seal.astro';
 import WorkshopLight from '~/components/widgets/WorkshopLight.astro';
+import OpenStatus from '~/components/common/OpenStatus.astro';
 import { HERO_SLIDES, pick } from '~/data/works';
 import { shopFor } from '~/data/shop';
 import { langFromPath, localize, useT } from '~/i18n';
@@ -30,7 +31,7 @@ const seconds = 36 / slides.length;
             layout="none"
             format="webp"
             loading={index === 0 ? 'eager' : 'lazy'}
-            fetchpriority={index === 0 ? 'high' : undefined}
+            fetchpriority={index === 0 ? 'high' : 'low'}
             style={`animation-delay:${index * seconds}s`}
           />
         </div>
@@ -79,6 +80,9 @@ const seconds = 36 / slides.length;
         <a href={localize(lang, '/works')} class="btn border-white/30 text-heading hover:bg-white/10"
           ><Icon name="tabler:photo" class="w-5 h-5 mr-2" />{t.works}</a
         >
+      </div>
+      <div class="mt-6 min-h-8">
+        <OpenStatus />
       </div>
     </div>
   </div>

@@ -331,6 +331,9 @@
 .hero-reveal > *:nth-child(4) {
   animation-delay: 0.45s;
 }
+.hero-reveal > *:nth-child(5) {
+  animation-delay: 0.6s;
+}
 @keyframes heroReveal {
   to {
     opacity: 1;
