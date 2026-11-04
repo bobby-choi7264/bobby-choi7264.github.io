@@ -401,7 +401,7 @@ const s = useT(lang).sound;
     stopRoom();
   };
 
-  // ---------- 입장 연출 소리: 큰북과 현악 합주가 차오르다 도장이 '쿵' ----------
+  // ---------- 입장 연출 소리: 큰북·현악이 차오르고, 로구로 깎는 소리 끝에 나무 실로폰 화음 ----------
   // 큰북(팀파니) 한 번: 낮게 떨어지는 울림 + 가죽 치는 잡음
   const drum = (when: number, level: number, pitch = 1) => {
     const c = ctx!;
@@ -476,119 +476,85 @@ const s = useT(lang).sound;
     });
   };
 
-  // 연출 시작: 큰북 한 번 → 낮은 현이 차오르며 북이 점점 빠르게 굴러 도장 직전까지 긴장을 올림
+  // 로구로가 돌며 나무를 깎는 '스르르' 소리: 깎는 잡음이 회전처럼 일렁이며 점점 높고 커지다가 끝에서 멈춤
+  const latheCut = (when: number, dur: number) => {
+    const c = ctx!;
+    const n = noise(dur + 0.2);
+    const bp = c.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.Q.value = 2.2;
+    bp.frequency.setValueAtTime(500, when);
+    bp.frequency.exponentialRampToValueAtTime(2600, when + dur);
+    const g = c.createGain();
+    g.gain.setValueAtTime(0.0001, when);
+    g.gain.exponentialRampToValueAtTime(0.11, when + dur * 0.85);
+    g.gain.exponentialRampToValueAtTime(0.0001, when + dur + 0.12);
+    // 나무가 돌아가는 느낌: 소리 크기가 빠르게 일렁임 (점점 빨라짐)
+    const spin = c.createGain();
+    spin.gain.value = 0.65;
+    const lfo = c.createOscillator();
+    lfo.frequency.setValueAtTime(9, when);
+    lfo.frequency.linearRampToValueAtTime(22, when + dur);
+    const depth = c.createGain();
+    depth.gain.value = 0.35;
+    lfo.connect(depth).connect(spin.gain);
+    n.connect(bp).connect(spin).connect(g).connect(musicBus);
+    n.start(when);
+    lfo.start(when);
+    lfo.stop(when + dur + 0.2);
+  };
+
+  // 나무 실로폰(마림바)처럼 맑고 따뜻한 한 음: 기본음 + 나무 막대 특유의 높은 배음 + 부드러운 채 소리
+  const woodBell = (midi: number, when: number, level: number) => {
+    const c = ctx!;
+    const f = hz(midi);
+    [
+      [1, level, 2.4],
+      [4, level * 0.18, 0.5],
+      [9.9, level * 0.05, 0.18],
+    ].forEach(([mul, lv, dec]) => {
+      const o = c.createOscillator();
+      o.type = 'sine';
+      o.frequency.value = f * mul;
+      const g = c.createGain();
+      g.gain.setValueAtTime(0.0001, when);
+      g.gain.exponentialRampToValueAtTime(lv, when + 0.004);
+      g.gain.exponentialRampToValueAtTime(0.0001, when + dec);
+      o.connect(g).connect(musicBus);
+      o.start(when);
+      o.stop(when + dec + 0.05);
+    });
+    const tap = noise(0.03);
+    const lp = c.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = 1800;
+    const tg = c.createGain();
+    tg.gain.setValueAtTime(level * 0.25, when);
+    tg.gain.exponentialRampToValueAtTime(0.0001, when + 0.03);
+    tap.connect(lp).connect(tg).connect(musicBus);
+    tap.start(when);
+  };
+
+  // 연출 시작: 큰북 한 번 → 낮은 현이 차오르고, 금선이 그어지는 동안 로구로가 나무를 깎는 소리가 점점 높아짐
   const introStart = () => {
     const c = ctx!;
     const t = c.currentTime + 0.03;
     drum(t, 0.9, 1);
     swell([26, 38, 45, 50, 53, 57], t, 2.2, 0.15, 0.085);
     shimmer(t + 0.5);
-    // 북 굴리기: 0.7초부터 2.2초까지 점점 촘촘하고 크게
-    let when = t + 0.7;
-    let gap = 0.16;
-    while (when < t + 2.2) {
-      const k = (when - t - 0.7) / 1.5;
-      drum(when, 0.08 + k * 0.22, 0.85 + Math.random() * 0.05);
-      when += gap;
-      gap = Math.max(0.055, gap * 0.9);
-    }
+    latheCut(t + 0.9, 1.35);
   };
 
-  // 도장이 찍히는 순간: 큰북 세 개를 한꺼번에 내리치고, 땅이 길게 울리며,
-  // 금관 합주가 장조로 크게 터지고, 징 같은 울림이 오래 퍼짐. 압축기를 거치지 않는 길로 보내 더 크게.
+  // 금선이 다 그어지는 순간: 나무 실로폰 화음이 아래에서 위로 맑게 퍼지고(D장조),
+  // 현악이 따뜻하게 받쳐 주며, 높은 반짝임이 남음. 큰 타격음 없이 은은하게.
   const introStamp = () => {
     const c = ctx!;
     const t = c.currentTime + 0.01;
-    const boom = c.createGain();
-    boom.gain.value = 1;
-    boom.connect(c.destination);
-    boom.connect(reverb);
-    // 땅울림
-    const o = c.createOscillator();
-    o.type = 'sine';
-    o.frequency.setValueAtTime(64, t);
-    o.frequency.exponentialRampToValueAtTime(27, t + 1.2);
-    const g = c.createGain();
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(0.95, t + 0.012);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 3.2);
-    o.connect(g).connect(boom);
-    o.start(t);
-    o.stop(t + 3.3);
-    // 큰북 세 개
-    [0.62, 0.8, 1.05].forEach((pitch, i) => {
-      const d = c.createOscillator();
-      d.frequency.setValueAtTime(110 * pitch, t);
-      d.frequency.exponentialRampToValueAtTime(48 * pitch, t + 0.35);
-      const dg = c.createGain();
-      dg.gain.setValueAtTime(0.0001, t);
-      dg.gain.exponentialRampToValueAtTime(0.55 - i * 0.1, t + 0.006);
-      dg.gain.exponentialRampToValueAtTime(0.0001, t + 1.6);
-      d.connect(dg).connect(boom);
-      d.start(t);
-      d.stop(t + 1.7);
-    });
-    // 가죽과 나무가 부딪히는 타격음
-    const hit = noise(0.35, true);
-    const hl = c.createBiquadFilter();
-    hl.type = 'lowpass';
-    hl.frequency.value = 1400;
-    const hg = c.createGain();
-    hg.gain.setValueAtTime(0.9, t);
-    hg.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
-    hit.connect(hl).connect(hg).connect(boom);
-    hit.start(t);
-    // 금관 합주 (D장조로 크게 한 번)
-    const brass = c.createBiquadFilter();
-    brass.type = 'lowpass';
-    brass.Q.value = 1.2;
-    brass.frequency.setValueAtTime(5200, t);
-    brass.frequency.exponentialRampToValueAtTime(700, t + 2.4);
-    const bg = c.createGain();
-    bg.gain.setValueAtTime(0.0001, t);
-    bg.gain.exponentialRampToValueAtTime(0.16, t + 0.03);
-    bg.gain.exponentialRampToValueAtTime(0.07, t + 0.8);
-    bg.gain.exponentialRampToValueAtTime(0.0001, t + 4.5);
-    brass.connect(bg).connect(boom);
-    [26, 38, 45, 50, 54, 57, 62, 66, 69, 74].forEach((midi) =>
-      [-9, 0, 8].forEach((cents) => {
-        const b = c.createOscillator();
-        b.type = 'sawtooth';
-        b.frequency.value = hz(midi);
-        b.detune.value = cents;
-        const og = c.createGain();
-        og.gain.value = midi < 48 ? 0.4 : 0.2;
-        b.connect(og).connect(brass);
-        b.start(t);
-        b.stop(t + 4.6);
-      })
-    );
-    // 징: 맞지 않는 배음들이 오래 웅웅 울림
-    [98, 151, 213, 287, 362].forEach((f, i) => {
-      const z = c.createOscillator();
-      z.type = 'sine';
-      z.frequency.setValueAtTime(f * 1.01, t);
-      z.frequency.exponentialRampToValueAtTime(f, t + 1.5);
-      const zg = c.createGain();
-      zg.gain.setValueAtTime(0.0001, t);
-      zg.gain.exponentialRampToValueAtTime(0.09 / (i + 1), t + 0.05);
-      zg.gain.exponentialRampToValueAtTime(0.0001, t + 5.5);
-      z.connect(zg).connect(boom);
-      z.start(t);
-      z.stop(t + 5.6);
-    });
-    // 심벌즈처럼 퍼지는 쇳소리
-    const crash = noise(3);
-    const ch = c.createBiquadFilter();
-    ch.type = 'highpass';
-    ch.frequency.value = 4500;
-    const cg = c.createGain();
-    cg.gain.setValueAtTime(0.0001, t);
-    cg.gain.exponentialRampToValueAtTime(0.12, t + 0.02);
-    cg.gain.exponentialRampToValueAtTime(0.0001, t + 2.8);
-    crash.connect(ch).connect(cg).connect(boom);
-    crash.start(t);
-    stamp();
+    woodBell(38, t, 0.32);
+    woodBell(50, t, 0.22);
+    [57, 62, 66, 69, 74].forEach((midi, i) => woodBell(midi, t + 0.06 + i * 0.07, 0.13 - i * 0.012));
+    swell([38, 50, 57, 62, 66, 69], t, 0.35, 0.6, 0.06);
+    shimmer(t + 0.25);
   };
 
   // 입장 화면이 위로 걷힐 때: 넓게 퍼지는 바람 소리
