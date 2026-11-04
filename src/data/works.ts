@@ -526,7 +526,8 @@ export const worksIn = (lang: Lang = 'ko'): Work[] => ALL.map(localize(lang));
 export const worksBy = (key: CategoryKey, lang: Lang = 'ko') => worksIn(lang).filter((item) => item.category === key);
 
 // 첫 화면 슬라이드쇼와 대표 작업에 쓰는 사진
-export const HERO_SLIDES = ['furniture-140', 'lathe-80', 'column-04', 'lathe-25', 'column-14', 'furniture-57'];
+// 맨 앞 사진은 입장 화면이 걷힐 때 보이는 사진이기도 함 (3단 진열대는 어색하다는 의견으로 4번째로)
+export const HERO_SLIDES = ['lathe-80', 'column-04', 'lathe-25', 'furniture-140', 'column-14', 'furniture-57'];
 // 위 사진 중 세로로 긴 사진. 넓은 화면에서는 잘리지 않게 전체를 오른쪽에 두고 빈 곳은 흐린 사진으로 채움
 export const HERO_TALL = ['furniture-140'];
 export const FEATURED = [
