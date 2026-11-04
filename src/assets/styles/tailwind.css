@@ -164,16 +164,6 @@
   stroke-width: 2.4;
 }
 
-[data-aw-toggle-menu] path {
-  @apply transition;
-}
-[data-aw-toggle-menu].expanded g > path:first-child {
-  @apply -rotate-45 translate-y-[15px] translate-x-[-3px];
-}
-[data-aw-toggle-menu].expanded g > path:last-child {
-  @apply rotate-45 translate-y-[-8px] translate-x-[14px];
-}
-
 /* Current page in the header navigation (set server-side in Header.astro and
    kept in sync on client-side navigations). Override --aw-color-link in
    CustomStyles.astro to change the colour. */
