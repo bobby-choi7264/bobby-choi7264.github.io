@@ -48,7 +48,7 @@ const mosaic = [
       <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-[#140f0b]"></div>
     </div>
     <div class="relative">
-      <p class="text-sm tracking-[0.3em] text-primary mb-3">{a.tag}</p>
+      <p class="text-sm tracking-[0.08em] text-primary mb-3">{a.tag}</p>
       <h1 class="font-heading text-4xl md:text-6xl font-bold text-heading" translate="no" data-split>성창공예</h1>
       {lang !== 'ko' && <p class="mt-2 text-sm tracking-[0.4em] text-primary/80">{t.brand}</p>}
       <div class="ruler mx-auto my-6 max-w-md"></div>
@@ -71,7 +71,6 @@ const mosaic = [
             format="webp"
             class="photo-tone h-full w-full object-cover"
           />
-          <span class="corner-marks" aria-hidden="true"></span>
         </div>
         <Seal class="stamp-in absolute -bottom-5 -right-3 text-2xl intersect intersect-once intersect-half" />
       </div>
@@ -80,7 +79,7 @@ const mosaic = [
           <span class="gold-text text-6xl md:text-7xl">55</span><span class="text-2xl text-primary ml-1"
             >{t.home.yearsUnit}</span
           >
-          <span class="ml-3 align-middle text-sm tracking-[0.3em] text-primary">{a.yearsSide}</span>
+          <span class="ml-3 align-middle text-sm tracking-[0.08em] text-primary">{a.yearsSide}</span>
         </p>
         <h2 class="font-heading text-3xl md:text-4xl font-bold text-heading text-balance">
           {a.title1}<br /><span class="gold-text">{a.title2}</span>
@@ -92,9 +91,8 @@ const mosaic = [
 
   <!-- 만드는 사람: 장인 인사말 (사진은 가게에서 찍은 사진을 받으면 넣을 예정) -->
   <section class="relative overflow-hidden px-4 py-16 md:py-24 border-y border-primary/15 bg-dark">
-    <span class="hanja-mark -left-10 -bottom-16 text-[14rem] md:text-[22rem]" aria-hidden="true">匠</span>
     <div class="relative max-w-3xl mx-auto text-center">
-      <p class="text-sm tracking-[0.3em] text-primary mb-4">{a.craftTag}</p>
+      <p class="text-sm tracking-[0.08em] text-primary mb-4">{a.craftTag}</p>
       <h2 class="font-heading text-3xl md:text-4xl font-bold text-heading text-balance leading-snug">
         {a.craftTitle1}<br /><span class="gold-text">{a.craftTitle2}</span>
       </h2>
@@ -112,7 +110,7 @@ const mosaic = [
   <section class="px-4 py-20">
     <div class="max-w-6xl mx-auto">
       <div class="text-center mb-10">
-        <p class="text-sm tracking-[0.3em] text-primary mb-3">{a.galleryTag}</p>
+        <p class="text-sm tracking-[0.08em] text-primary mb-3">{a.galleryTag}</p>
         <h2 class="font-heading text-2xl md:text-4xl font-bold text-heading text-balance" data-split>
           {a.galleryTitle}
         </h2>

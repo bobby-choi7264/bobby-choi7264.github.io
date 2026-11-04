@@ -31,3 +31,4 @@ pnpm-workspace.yaml
 
 # 인계 문서 (개인 메모 포함, 공개 저장소에 올리지 않음)
 HANDOFF.md
+design-preview/

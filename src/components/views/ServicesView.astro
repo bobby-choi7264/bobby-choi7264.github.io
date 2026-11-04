@@ -20,7 +20,6 @@ const metadata = {
   description: p.metaDescription,
 };
 
-const NUMS = ['壹', '貳', '參', '肆'];
 // 분야마다 보여 줄 사진 3장. 서로 비슷한 사진이나 홈 화면 카드 사진과 겹치지 않게 골랐습니다.
 const PHOTOS: Record<string, string[]> = {
   lathe: ['lathe-83', 'lathe-55', 'lathe-79'],
@@ -38,7 +37,7 @@ const CASES = [
 
 <Layout metadata={metadata} lang={lang} crumb={t.nav.services}>
   <section class="px-4 pt-16 pb-10 md:pt-24 text-center wood-grain">
-    <p class="text-sm tracking-[0.3em] text-primary mb-3">{p.tag}</p>
+    <p class="text-sm tracking-[0.08em] text-primary mb-3">{p.tag}</p>
     <h1 class="font-heading text-4xl md:text-6xl font-bold text-heading" data-split>{p.title}</h1>
     <div class="ruler mx-auto my-6 max-w-md"></div>
     <p class="text-muted max-w-2xl mx-auto">{p.lead}</p>
@@ -63,15 +62,6 @@ const CASES = [
       const photos = pick(PHOTOS[service.key], lang);
       return (
         <section id={service.key} class="relative px-4 py-14 md:py-20 scroll-mt-20 overflow-hidden">
-          <span
-            class:list={[
-              'hanja-mark top-6 text-[10rem] md:text-[16rem]',
-              index % 2 === 1 ? 'left-0 lg:left-auto lg:right-4' : '-right-4',
-            ]}
-            aria-hidden="true"
-          >
-            {NUMS[index]}
-          </span>
           <div
             class:list={[
               'relative max-w-6xl mx-auto grid gap-10 lg:grid-cols-2 items-center',
@@ -110,7 +100,6 @@ const CASES = [
                     format="webp"
                     class="photo-tone h-full w-full object-cover"
                   />
-                  {i === 0 && <span class="corner-marks" aria-hidden="true" />}
                 </div>
               ))}
             </div>
@@ -124,8 +113,8 @@ const CASES = [
   <section id="cases" class="relative px-4 py-16 md:py-24 border-y border-primary/15 bg-dark scroll-mt-20">
     <div class="max-w-6xl mx-auto">
       <div class="text-center mb-12">
-        <p class="text-sm tracking-[0.3em] text-primary mb-3">{p.casesTag}</p>
-        <h2 class="font-heading text-3xl md:text-4xl font-bold text-heading" data-split>{p.casesTitle}</h2>
+        <p class="text-sm tracking-[0.08em] text-primary mb-3">{p.casesTag}</p>
+        <h2 class="font-heading text-3xl md:text-4xl font-bold text-heading text-balance" data-split>{p.casesTitle}</h2>
         <div class="ruler mx-auto my-6 max-w-md"></div>
         <p class="text-muted max-w-2xl mx-auto text-pretty">{p.casesLead}</p>
       </div>
