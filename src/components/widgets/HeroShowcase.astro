@@ -16,7 +16,10 @@ const slides = pick(HERO_SLIDES, lang);
 const seconds = 36 / slides.length;
 ---
 
-<section class="relative -mt-[72px] h-[100svh] min-h-[560px] w-full overflow-hidden bg-[#0e0a07]" data-spotlight>
+<section
+  class="relative -mt-[120px] lg:-mt-[72px] flex min-h-[100svh] flex-col w-full overflow-hidden bg-[#0e0a07]"
+  data-spotlight
+>
   <div class="absolute inset-0" aria-hidden="true">
     {
       slides.map((slide, index) => (
@@ -43,7 +46,9 @@ const seconds = 36 / slides.length;
     <div class="hero-spot" aria-hidden="true"></div>
   </div>
 
-  <div class="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
+  <div
+    class="relative z-10 flex flex-1 flex-col items-center justify-center px-6 pt-[136px] pb-20 lg:pt-[96px] text-center"
+  >
     <div class="hero-reveal flex flex-col items-center">
       <p
         class:list={[

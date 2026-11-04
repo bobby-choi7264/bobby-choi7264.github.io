@@ -128,7 +128,8 @@ const en: Dict = {
     allWorks: (n: number) => `View All ${n} Works`,
     orderTag: 'Order',
     orderTitle: 'One photo is all it takes',
-    orderLead: 'Feel free to ask. Send us a photo, a drawing or rough dimensions, and we’ll suggest how to make it and give you a quote.',
+    orderLead:
+      'Feel free to ask. Send us a photo, a drawing or rough dimensions, and we’ll suggest how to make it and give you a quote.',
     orderForm: 'Fill in the Order Form',
     sendPhoto: 'Text Us a Photo',
     newsTitle: 'News',

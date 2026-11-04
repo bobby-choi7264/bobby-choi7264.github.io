@@ -10,6 +10,7 @@ export const getHeaderData = (lang: Lang = 'ko') => {
     links: [
       { text: t.about, href: localize(lang, '/about') },
       { text: t.services, href: localize(lang, '/services') },
+      { text: t.woods, href: localize(lang, '/woods') },
       { text: t.works, href: localize(lang, '/works') },
       ...(lang === 'ko' ? [{ text: t.news, href: getBlogPermalink() }] : []),
       { text: t.contact, href: localize(lang, '/contact') },

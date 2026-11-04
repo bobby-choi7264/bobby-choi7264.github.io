@@ -91,13 +91,63 @@
   box-shadow: none;
 }
 
-#header.expanded nav {
-  position: fixed;
-  top: 70px;
-  left: 0;
-  right: 0;
-  bottom: 70px !important;
-  padding: 0 5px;
+/* 휴대폰·태블릿 상단 메뉴 탭: 늘 보이고, 옆으로 밀어서 넘김 (Header.astro) */
+.mobile-tabs-list {
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding: 0 0.75rem 0.6rem;
+  scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 1.5rem), transparent);
+  mask-image: linear-gradient(90deg, #000 calc(100% - 1.5rem), transparent);
+}
+.mobile-tabs-list::-webkit-scrollbar {
+  display: none;
+}
+.mobile-tabs-list li:last-child {
+  padding-right: 1.25rem;
+}
+.mobile-tab {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.6rem;
+  padding: 0 0.95rem;
+  border-radius: 999px;
+  border: 1px solid rgb(196 150 84 / 0.3);
+  background: rgb(20 15 11 / 0.5);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: var(--aw-color-text-heading);
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+.mobile-tab:hover {
+  border-color: rgb(196 150 84 / 0.7);
+}
+#header .mobile-tab.aw-link-active {
+  border-color: var(--aw-color-primary);
+  background: rgb(196 150 84 / 0.2);
+  color: var(--aw-color-accent);
+}
+/* 주문·문의는 늘 눈에 띄게 */
+#header .mobile-tab.is-cta {
+  border-color: var(--aw-color-primary);
+  background: var(--aw-color-primary);
+  color: #140f0b;
+  font-weight: 700;
+}
+#header .mobile-tab.is-cta.aw-link-active {
+  box-shadow: 0 0 0 2px rgb(240 205 145 / 0.55);
+}
+/* 휴대폰에서는 위쪽 메뉴가 두 줄이라, 페이지 안 링크(#)로 이동할 때 그만큼 띄움 */
+@media (width < 64rem) {
+  html {
+    scroll-padding-top: 7.5rem;
+  }
 }
 
 .dropdown:focus .dropdown-menu,

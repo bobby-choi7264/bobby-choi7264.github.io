@@ -111,7 +111,8 @@ const ja: Dict = {
     allWorks: (n: number) => `作品をすべて見る（${n}点）`,
     orderTag: 'ご注文',
     orderTitle: '写真一枚で大丈夫です',
-    orderLead: 'お気軽にご相談ください。写真や図面、おおよそのサイズを教えていただければ、つくり方とお見積もりをご案内します。',
+    orderLead:
+      'お気軽にご相談ください。写真や図面、おおよそのサイズを教えていただければ、つくり方とお見積もりをご案内します。',
     orderForm: 'ご注文フォーム',
     sendPhoto: 'SMSで写真を送る',
     newsTitle: 'お知らせ',
