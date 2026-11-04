@@ -201,9 +201,9 @@ const en: Dict = {
     title1: 'How a block of wood',
     title2: 'becomes something useful',
     paragraphs: [
-      `Seongchang Craft is the workshop of <b>a master who has been carving wood for ${YEARS} years</b>. In Euljiro, Seoul, we turn wood on the lathe — known in Korean workshops by its Japanese name, <b>rokuro</b>. Setting a blade against fast-spinning wood, we shape round forms like columns, legs, bowls and stands. Above all, <b>wooden tableware</b> — bowls, plates and lidded boxes — is what we do best.`,
-      'From <b>mass-produced moldings</b> such as stair balusters and furniture legs, and <b>props for TV broadcasters</b>, to <b>graduation pieces</b> for design students, shop signs and homeware — if it can be made of wood, we’re happy to talk.',
-      'The precision to copy one sample into hundreds of identical pieces, and fifty-five years of experience finding a way to make shapes we’ve never seen before. That is the craft of Seongchang.',
+      `Seongchang Craft is the workshop of <b>a master who has been carving wood for ${YEARS} years</b>. In Euljiro, Seoul, we turn wood on the lathe — known in Korean workshops by its Japanese name, <b>rokuro</b>. Setting a blade against fast-spinning wood, we shape round forms like columns, legs, bowls and stands. Above all, <b>wooden tableware</b> — bowls, plates and lidded boxes — is what we do best, and we can finish them in traditional <b>ottchil</b> (Korean lacquer) ourselves.`,
+      'We also handle <b>mass-produced moldings</b> such as stair balusters and furniture legs, and <b>interior woodwork</b> from cutting solid wood to furniture frames and lattice doors. From <b>props for TV broadcasters</b> to <b>graduation pieces</b> for design students, shop signs and homeware — if it can be made of wood, we’re happy to talk.',
+      `The precision to copy one sample into hundreds of identical pieces, and ${YEARS} years of experience finding a way to make shapes we’ve never seen before. That is the craft of Seongchang.`,
     ],
     shopAlt: 'The front of the Seongchang Craft workshop in Euljiro',
     galleryTag: 'Inside the Workshop',
