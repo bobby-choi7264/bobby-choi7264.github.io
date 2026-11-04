@@ -303,6 +303,19 @@
 .intro-active,
 .intro-active body {
   overflow: hidden;
+  overscroll-behavior: none;
+}
+/* 배경 층(사진·빛·먼지)은 휴대폰 주소창이 숨었을 때의 가장 큰 높이(lvh)로 고정 →
+   주소창이 줄었다 늘었다 해도 크기가 바뀌지 않아 튀지 않음. 글자는 #intro(보이는 화면) 가운데 그대로.
+   아래쪽 각 층의 inset: 0보다 앞서도록 html을 붙여 우선순위를 높임 */
+html #intro .intro-photo,
+html #intro .intro-reel,
+html #intro .intro-shade,
+html #intro .intro-beam,
+html #intro .intro-dust {
+  bottom: auto;
+  height: 100vh;
+  height: 100lvh;
 }
 #intro .intro-photo {
   position: absolute;

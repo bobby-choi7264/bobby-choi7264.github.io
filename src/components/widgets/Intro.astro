@@ -122,8 +122,10 @@ const reel = pick(['column-123', 'column-16', 'column-14', 'column-122', 'column
     const timers = [];
     const signal = (name, detail) => document.dispatchEvent(new CustomEvent(name, { detail }));
 
+    // 입장 화면이 떠 있는 동안은(누르기 전·후 모두) 위아래로 끌어도 뒤 페이지가 움직이지 않게 막음.
+    // 막지 않으면 휴대폰 주소창이 줄었다 늘었다 하며 화면 높이가 바뀌어 배경이 튀어 보임
     const block = (e) => {
-      if (startedAt && e.cancelable) e.preventDefault();
+      if (e.cancelable) e.preventDefault();
     };
     const finish = () => {
       if (finished) return;
@@ -148,7 +150,7 @@ const reel = pick(['column-123', 'column-16', 'column-14', 'column-122', 'column
     // 단추를 고르는 동안에는 키보드(Tab·Enter)를 막지 않음
     const onKey = (e) => {
       if (!startedAt) return;
-      block(e);
+      if (e.cancelable) e.preventDefault();
       trySkip();
     };
 
@@ -221,13 +223,20 @@ const reel = pick(['column-123', 'column-16', 'column-14', 'column-122', 'column
     });
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-      w = canvas.clientWidth;
-      h = canvas.clientHeight;
+      const nw = canvas.clientWidth;
+      const nh = canvas.clientHeight;
+      if (nw === w && nh === h) return;
+      const widthChanged = nw !== w;
+      w = nw;
+      h = nh;
       canvas.width = Math.round(w * dpr);
       canvas.height = Math.round(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const count = Math.round(Math.min(90, (w * h) / 14000));
-      motes = Array.from({ length: count }, () => newMote());
+      // 높이만 조금 바뀐 경우(휴대폰 주소창)는 먼지를 새로 뿌리지 않고 그대로 이어감
+      if (widthChanged || !motes.length) {
+        const count = Math.round(Math.min(90, (w * h) / 14000));
+        motes = Array.from({ length: count }, () => newMote());
+      }
     };
     // 작업등 빛줄기(.intro-beam과 같은 방향): 왼쪽 위에서 오른쪽 아래로. 빛 안에 있는 먼지일수록 밝게
     const inBeam = (x, y) => {
