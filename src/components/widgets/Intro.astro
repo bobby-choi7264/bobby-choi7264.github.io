@@ -45,6 +45,8 @@ const t = useT(langFromPath(Astro.url.pathname));
     </p>
   </div>
 
+  <div class="intro-glow" aria-hidden="true"></div>
+  <div class="intro-flash" aria-hidden="true"></div>
   <div class="intro-stage flex flex-col items-center text-center px-6" aria-hidden="true">
     <div class="intro-line gold-rule mb-8"></div>
     <p class="intro-title font-heading text-4xl md:text-6xl font-bold pl-[0.35em]" translate="no">
@@ -52,8 +54,25 @@ const t = useT(langFromPath(Astro.url.pathname));
     </p>
     <p class="intro-sub mt-6 text-xs md:text-sm tracking-[0.5em] text-[#c49654]/80 pl-[0.5em]">{SHOP.nameEn}</p>
     <p class="intro-sub mt-3 text-sm md:text-base text-[#e2d6c4]/70">{t.intro.sub}</p>
-    <Seal class="intro-seal mt-8 text-lg md:text-xl" />
+    <!-- 도장: 그림자가 먼저 내려앉고, 무겁게 찍힌 뒤 충격파·가루가 퍼짐 -->
+    <span class="intro-press mt-8">
+      <span class="intro-shadow"></span>
+      <span class="intro-ring"></span>
+      <Seal class="intro-seal text-2xl md:text-3xl" />
+    </span>
   </div>
+  <!-- 인주가 고르지 않게 묻은 듯한 도장 질감 -->
+  <svg width="0" height="0" class="absolute" aria-hidden="true" focusable="false">
+    <filter id="intro-ink" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="4" result="n"></feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G" result="d"
+      ></feDisplacementMap>
+      <feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="1" seed="9" result="spots"></feTurbulence>
+      <feColorMatrix in="spots" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -4 3.15" result="mask"
+      ></feColorMatrix>
+      <feComposite in="d" in2="mask" operator="in"></feComposite>
+    </filter>
+  </svg>
 </div>
 
 <script is:inline data-astro-rerun>
@@ -106,13 +125,36 @@ const t = useT(langFromPath(Astro.url.pathname));
     window.addEventListener('keydown', onKey, true);
     intro.addEventListener('click', trySkip);
 
+    // 도장이 닿는 순간: 화면 울림·빛·충격파 + 금빛 톱밥 가루가 사방으로 튐
+    const impact = () => {
+      intro.classList.add('impact');
+      const press = intro.querySelector('.intro-press');
+      if (!press) return;
+      for (let i = 0; i < 22; i++) {
+        const dust = document.createElement('i');
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 40 + Math.random() * 90;
+        dust.className = 'intro-dust';
+        dust.style.setProperty('--dx', `${Math.cos(angle) * dist}px`);
+        dust.style.setProperty('--dy', `${Math.sin(angle) * dist * 0.6 - 10}px`);
+        dust.style.setProperty('--s', `${0.5 + Math.random() * 1.1}`);
+        dust.style.animationDelay = `${Math.random() * 60}ms`;
+        press.appendChild(dust);
+      }
+    };
+
     const start = (withSound) => {
       if (startedAt || finished) return;
       startedAt = performance.now();
       signal('sc:intro-start', { sound: withSound });
       intro.classList.remove('gate');
       intro.classList.add('play');
-      timers.push(setTimeout(() => signal('sc:intro-stamp'), STAMP_MS));
+      timers.push(
+        setTimeout(() => {
+          signal('sc:intro-stamp');
+          impact();
+        }, STAMP_MS)
+      );
       // 입장 화면이 걷히기 시작하면 첫 화면 글자가 올라오기 시작
       timers.push(setTimeout(() => root.classList.add('intro-reveal'), END_MS));
       timers.push(setTimeout(finish, END_MS + 900));

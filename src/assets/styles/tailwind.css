@@ -244,76 +244,250 @@
 .intro-active body {
   overflow: hidden;
 }
+/* 연출 순서 (Intro.astro의 STAMP_MS 2.28초 · END_MS 3.4초와 맞춤)
+   0~1.2초 어둠 속에 작업등 빛이 번지고 금선이 가운데서 양옆으로 그어짐
+   0.4~1.9초 빛이 훑고 지나가며 상호가 드러남 → 소개 글
+   1.85초 도장 그림자가 내려앉고, 2.0초부터 무거운 도장이 가속하며 내려와 2.28초에 찍힘(튕김 없음)
+   찍히는 순간(.impact) 화면 울림·빛·금빛 충격파·톱밥 가루
+   3.4초 화면이 살짝 다가오며 녹아 사라짐 */
 #intro.play {
-  animation: introOut 0.9s cubic-bezier(0.7, 0, 0.2, 1) 3.4s forwards;
+  animation: introOut 0.9s cubic-bezier(0.55, 0, 0.3, 1) 3.4s forwards;
+}
+#intro .intro-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 60% 45% at 50% 50%, rgb(196 120 52 / 0.22), transparent 70%);
+  opacity: 0;
+}
+#intro .intro-flash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 62%, rgb(255 236 200 / 0.55), transparent 55%);
+  opacity: 0;
 }
 #intro .intro-line {
-  width: 0;
+  width: min(320px, 70vw);
+  transform: scaleX(0);
 }
 #intro .intro-title {
   opacity: 0;
-  letter-spacing: 0.9em;
-  filter: blur(8px);
+  letter-spacing: 0.35em;
+  transform: translateY(8px);
+  -webkit-mask-image: linear-gradient(100deg, #000 40%, transparent 60%);
+  mask-image: linear-gradient(100deg, #000 40%, transparent 60%);
+  -webkit-mask-size: 300% 100%;
+  mask-size: 300% 100%;
+  -webkit-mask-position: 100% 0;
+  mask-position: 100% 0;
 }
 #intro .intro-sub {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(6px);
+}
+#intro .intro-press {
+  position: relative;
+  display: inline-block;
 }
 #intro .intro-seal {
+  position: relative;
+  z-index: 1;
   opacity: 0;
+  filter: url(#intro-ink);
+}
+#intro .intro-shadow {
+  position: absolute;
+  inset: 8% 4% -6%;
+  border-radius: 20%;
+  background: rgb(0 0 0 / 0.75);
+  filter: blur(10px);
+  opacity: 0;
+  transform: scale(1.5);
+}
+#intro .intro-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 3.2em;
+  height: 3.2em;
+  margin: -1.6em 0 0 -1.6em;
+  border-radius: 999px;
+  background: radial-gradient(circle, transparent 55%, rgb(240 205 145 / 0.35) 68%, transparent 72%);
+  filter: blur(1.5px);
+  opacity: 0;
+  pointer-events: none;
+}
+#intro.play .intro-glow {
+  animation: introGlow 2.4s ease-out forwards;
 }
 #intro.play .intro-line {
-  animation: introLine 1.2s cubic-bezier(0.6, 0, 0.2, 1) 0.2s forwards;
+  animation: introLine 1.3s cubic-bezier(0.65, 0, 0.25, 1) 0.15s forwards;
 }
 #intro.play .intro-title {
-  animation: introTitle 1.6s cubic-bezier(0.2, 0.6, 0.2, 1) 0.4s forwards;
+  animation: introTitle 1.5s cubic-bezier(0.25, 0.6, 0.2, 1) 0.4s forwards;
 }
 #intro.play .intro-sub {
-  animation: introSub 1s ease 1.4s forwards;
+  animation: introSub 0.9s ease 1.35s forwards;
+}
+#intro.play .intro-shadow {
+  animation: sealShadow 0.43s cubic-bezier(0.55, 0, 1, 0.45) 1.85s forwards;
 }
 #intro.play .intro-seal {
-  animation: sealStamp 0.45s cubic-bezier(0.3, 0, 0.3, 1.4) 2s forwards;
+  animation:
+    sealDrop 0.28s cubic-bezier(0.6, 0, 1, 0.5) 2s forwards,
+    sealSettle 0.35s ease-out 2.28s forwards;
 }
 #intro.play .gold-text {
-  animation: goldShine 3s linear 0.4s infinite;
+  animation: goldShine 2.6s ease-in-out 1.2s 1 forwards;
+}
+#intro.impact .intro-stage {
+  animation: introShake 0.45s cubic-bezier(0.3, 0.7, 0.4, 1);
+}
+#intro.impact .intro-flash {
+  animation: introFlash 0.7s ease-out;
+}
+#intro.impact .intro-ring {
+  animation: sealRing 1s cubic-bezier(0.1, 0.7, 0.3, 1) forwards;
+}
+#intro .intro-dust {
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  width: 3px;
+  height: 3px;
+  border-radius: 999px;
+  background: #f0cd91;
+  box-shadow: 0 0 6px rgb(240 205 145 / 0.8);
+  opacity: 0;
+  pointer-events: none;
+  animation: introDust 1.3s cubic-bezier(0.15, 0.6, 0.35, 1) forwards;
+}
+@keyframes introGlow {
+  to {
+    opacity: 1;
+  }
 }
 @keyframes introLine {
   to {
-    width: min(320px, 70vw);
+    transform: scaleX(1);
   }
 }
 @keyframes introTitle {
-  to {
+  0% {
     opacity: 1;
-    letter-spacing: 0.35em;
-    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
   }
 }
 @keyframes introSub {
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
+  }
+}
+@keyframes sealShadow {
+  0% {
+    opacity: 0;
+    transform: scale(1.5) rotate(-4deg);
+  }
+  100% {
+    opacity: 0.9;
+    transform: scale(1) rotate(-4deg);
+  }
+}
+@keyframes sealDrop {
+  0% {
+    opacity: 0;
+    transform: translateY(-14px) scale(1.28) rotate(-4deg);
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(-4deg);
+  }
+}
+@keyframes sealSettle {
+  0% {
+    transform: scale(0.965) rotate(-4deg);
+    filter: url(#intro-ink) brightness(1.35);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(-4deg);
+    filter: url(#intro-ink);
+  }
+}
+@keyframes introShake {
+  0% {
+    transform: translate(0, 0);
+  }
+  15% {
+    transform: translate(-2px, 3px);
+  }
+  35% {
+    transform: translate(2px, -2px);
+  }
+  55% {
+    transform: translate(-1px, 1px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+@keyframes introFlash {
+  0% {
+    opacity: 0.55;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes sealRing {
+  0% {
+    opacity: 0.8;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(3.4);
+  }
+}
+@keyframes introDust {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(var(--s));
+  }
+  70% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy) + 28px)) scale(var(--s));
   }
 }
 @keyframes introOut {
-  to {
-    transform: translateY(-100%);
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.06);
+    filter: blur(6px);
     visibility: hidden;
   }
 }
 @keyframes goldShine {
   to {
     background-position: -200% 0;
-  }
-}
-@keyframes sealStamp {
-  0% {
-    opacity: 0;
-    transform: scale(2.2) rotate(-4deg);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) rotate(-4deg);
   }
 }
 
