@@ -147,8 +147,11 @@ const columnsClass =
             <Icon name="tabler:chevron-right" class="h-5 w-5" />
           </button>
           {/* 창은 화면 크기로 고정하고 사진만 그 안에 맞춰 넣음 → 가로·세로 사진이 바뀌어도 화살표·닫기 위치가 그대로 */}
-          <div data-aw-gallery-stage class="flex min-h-0 flex-1 items-center justify-center px-3 pt-16 pb-2 sm:px-20">
-            <img data-aw-gallery-img class="h-full w-full object-contain" alt="" />
+          <div
+            data-aw-gallery-stage
+            class="flex min-h-0 flex-1 items-center justify-center overflow-hidden px-3 pt-16 pb-2 sm:px-20 touch-pan-y touch-pinch-zoom select-none"
+          >
+            <img data-aw-gallery-img class="h-full w-full object-contain" alt="" draggable="false" />
           </div>
           <div class="flex h-16 shrink-0 flex-col items-center justify-start gap-2 px-4">
             <p data-aw-gallery-caption class="text-center text-sm text-white/90" aria-live="polite" />
@@ -206,8 +209,68 @@ const columnsClass =
           dialog.showModal();
         })
       );
-      dialog.querySelector('[data-aw-gallery-prev]')?.addEventListener('click', () => show(current - 1));
-      dialog.querySelector('[data-aw-gallery-next]')?.addEventListener('click', () => show(current + 1));
+      const prevButton = dialog.querySelector<HTMLButtonElement>('[data-aw-gallery-prev]')!;
+      const nextButton = dialog.querySelector<HTMLButtonElement>('[data-aw-gallery-next]')!;
+      prevButton.addEventListener('click', () => show(current - 1));
+      nextButton.addEventListener('click', () => show(current + 1));
+
+      // 끌어서 넘기기 (손가락·마우스): 사진이 따라 움직이고, 충분히 끌거나 빠르게 튕기면 옆 사진으로
+      const stage = dialog.querySelector<HTMLElement>('[data-aw-gallery-stage]')!;
+      let drag: { id: number; x: number; y: number; t: number; dx: number; on: boolean } | undefined;
+      let justDragged = false;
+      const moveImg = (dx: number, ms = 0) => {
+        img.style.transition = ms ? `transform ${ms}ms ease, opacity 0.25s ease` : 'none';
+        img.style.transform = dx ? `translateX(${dx}px)` : '';
+      };
+      stage.addEventListener('pointerdown', (event) => {
+        if (!event.isPrimary || event.button !== 0 || flat.length < 2) return;
+        drag = { id: event.pointerId, x: event.clientX, y: event.clientY, t: performance.now(), dx: 0, on: false };
+      });
+      stage.addEventListener('pointermove', (event) => {
+        if (!drag || event.pointerId !== drag.id) return;
+        const dx = event.clientX - drag.x;
+        const dy = event.clientY - drag.y;
+        if (!drag.on) {
+          if (Math.abs(dx) < 8) return;
+          // 위아래로 더 많이 움직였으면 넘기기가 아님
+          if (Math.abs(dy) > Math.abs(dx)) return void (drag = undefined);
+          drag.on = true;
+          stage.setPointerCapture(event.pointerId);
+        }
+        drag.dx = dx;
+        moveImg(dx);
+      });
+      const endDrag = (event: PointerEvent) => {
+        if (!drag || event.pointerId !== drag.id) return;
+        const { dx, on, t } = drag;
+        drag = undefined;
+        if (!on) return;
+        justDragged = true;
+        setTimeout(() => (justDragged = false));
+        const fast = Math.abs(dx) / (performance.now() - t) > 0.5;
+        if (
+          event.type === 'pointercancel' ||
+          (Math.abs(dx) < stage.clientWidth * 0.18 && !(fast && Math.abs(dx) > 30))
+        ) {
+          moveImg(0, 200);
+          return;
+        }
+        const dir = dx < 0 ? 1 : -1;
+        moveImg(-dir * stage.clientWidth, 180);
+        setTimeout(() => {
+          // 단추를 누른 것처럼 처리 (효과음도 같이)
+          (dir > 0 ? nextButton : prevButton).click();
+          moveImg(dir * 60);
+          img.getBoundingClientRect();
+          moveImg(0, 250);
+        }, 180);
+      };
+      // 움직임이 끝나면 원래 스타일(tailwind.css의 불러오는 동안 감춤)로 되돌림
+      img.addEventListener('transitionend', () => {
+        if (!drag) img.style.transition = '';
+      });
+      stage.addEventListener('pointerup', endDrag);
+      stage.addEventListener('pointercancel', endDrag);
       dialog.addEventListener('keydown', (event) => {
         if (event.key === 'ArrowLeft') show(current - 1);
         if (event.key === 'ArrowRight') show(current + 1);
@@ -219,6 +282,7 @@ const columnsClass =
       dialog.addEventListener('close', () => {
         // 닫자마자 다른 사진을 열었으면(이미 다시 열려 있으면) 건드리지 않음
         if (dialog.open) return;
+        moveImg(0);
         img.removeAttribute('src');
         img.classList.add('is-loading');
       });
@@ -226,6 +290,7 @@ const columnsClass =
       dialog.addEventListener('click', (event) => {
         // 사진 바깥의 빈 곳을 누르면 닫기
         const target = event.target as HTMLElement;
+        if (justDragged) return;
         if (target === dialog || target.hasAttribute('data-aw-gallery-stage')) dialog.close();
       });
     }
