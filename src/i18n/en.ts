@@ -47,7 +47,7 @@ const en: Dict = {
     title1: `${YEARS} years, one craft —`,
     title2: 'nothing but wood',
     lead: 'From a single bowl to hundreds of columns — if it can be made of wood, we turn it.',
-    tags: 'Wooden tableware · Moldings & cutting · Mass production · TV props · Student projects',
+    tags: 'Wooden tableware · Ottchil lacquer · Moldings & cutting · Interiors · Mass production · TV props · Student projects',
     order: 'Request an Order',
     call: 'Call Us',
     works: 'See Our Work',

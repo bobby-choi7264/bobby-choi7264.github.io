@@ -10,6 +10,7 @@ import { langFromPath, localize, useT } from '~/i18n';
 
 const lang = langFromPath(Astro.url.pathname);
 const t = useT(lang).hero;
+const tagList = t.tags.split(' · ');
 const shop = shopFor(lang);
 const slides = pick(HERO_SLIDES, lang);
 const seconds = 36 / slides.length;
@@ -93,7 +94,16 @@ const delay = (index: number) => `${(index * seconds - 36 * 0.03).toFixed(2)}s`;
       <p class="mt-6 max-w-xl text-base md:text-lg text-default/90">
         {t.lead}
         <br class="hidden sm:inline" />
-        <span class="mt-2 block text-primary/90 text-balance">{t.tags}</span>
+        <span class="mt-2 block text-primary/90 text-balance">
+          {
+            /* 줄이 바뀌어도 가운뎃점이 줄 앞에 오지 않게, 항목마다 끊기지 않는 덩어리로 */
+            tagList.map((tag, i) => (
+              <Fragment>
+                <span class="whitespace-nowrap">{i < tagList.length - 1 ? `${tag} ·` : tag}</span>{' '}
+              </Fragment>
+            ))
+          }
+        </span>
       </p>
       <div class="mt-10 flex flex-wrap justify-center gap-3">
         <a href={localize(lang, '/contact')} class="btn-primary"
