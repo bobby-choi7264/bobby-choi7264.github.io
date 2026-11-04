@@ -46,7 +46,7 @@ const ALL = [
   w('lathe-28', '대형 원목 항아리', 'Large wooden jar', '大きな木の壺', '大型原木罐'),
   w(
     'lathe-21',
-    '선반 가공한 그릇과 화병',
+    '로구로로 깎은 그릇과 화병',
     'Lathe-turned bowl and vase',
     'ろくろで挽いた器と花瓶',
     '车床旋制的碗与花瓶'
@@ -74,7 +74,7 @@ const ALL = [
     'キノコ・ひょうたん形のこしょう入れ',
     '蘑菇与葫芦造型胡椒罐'
   ),
-  w('lathe-69', '흑색 후추 그라인더', 'Black pepper mill', '黒いペッパーミル', '黑色胡椒研磨器'),
+  w('lathe-69', '흑색 후추 그라인더', 'Black-finished pepper mill', '黒いペッパーミル', '黑色胡椒研磨器'),
   w('lathe-70', '원목 후추·소금통 세트', 'Wooden salt & pepper set', '木の塩・こしょう入れ セット', '原木胡椒盐罐套装'),
   w('lathe-71', '원목 후추·소금통 세트', 'Wooden salt & pepper set', '木の塩・こしょう入れ セット', '原木胡椒盐罐套装'),
   w('lathe-72', '원목 후추·소금통 세트', 'Wooden salt & pepper set', '木の塩・こしょう入れ セット', '原木胡椒盐罐套装'),
@@ -101,7 +101,7 @@ const ALL = [
     '옻칠 원목 공기와 수저',
     'Lacquered wooden rice bowls and spoons',
     '漆塗りの木の椀と匙',
-    '漆器原木饭碗与汤匙'
+    '上漆原木饭碗与汤匙'
   ),
   w('lathe-52', '와인잔 원목 받침', 'Wooden wine glass stand', 'ワイングラスの木の台', '原木红酒杯托'),
   w('lathe-02', '원목 찻잔과 받침', 'Wooden teacup and saucer', '木の湯のみと茶托', '原木茶杯与杯托'),
@@ -123,7 +123,7 @@ const ALL = [
   ),
   w(
     'lathe-101',
-    '선반 위의 작은 원목 망치들',
+    '로구로 위의 작은 원목 망치들',
     'Small wooden mallets on the lathe',
     'ろくろ台の上の小さな木槌',
     '车床上的小木槌'
@@ -161,14 +161,14 @@ const ALL = [
   ),
   w(
     'column-14',
-    '선반에서 가공 중인 기둥',
+    '로구로에서 깎고 있는 기둥',
     'A column being turned on the lathe',
     'ろくろで加工中の柱',
     '车床上正在加工的柱子'
   ),
   w(
     'column-16',
-    '선반에서 가공 중인 기둥',
+    '로구로에서 깎고 있는 기둥',
     'A column being turned on the lathe',
     'ろくろで加工中の柱',
     '车床上正在加工的柱子'
@@ -201,18 +201,18 @@ const ALL = [
   w('column-31', '대형 기둥용 원목', 'Timber for large columns', '大きな柱用の原木', '大型柱用原木'),
   w('column-107', '화병형 난간 동자', 'Vase-shaped balusters', '花瓶形の手すり子', '花瓶形栏杆柱'),
   w('column-108', '긴 장식 기둥 한 쌍', 'A pair of tall decorative columns', '背の高い装飾柱（一対）', '一对高装饰柱'),
-  w('column-109', '구슬 머리 기둥', 'Columns with ball tops', '玉頭の柱', '圆球柱头的柱子'),
+  w('column-109', '구슬 머리 기둥', 'Columns with ball tops', '玉飾り付きの柱', '圆球柱头的柱子'),
   w('column-110', '묶어 둔 난간 동자', 'Bundled balusters', '束ねた手すり子', '成捆的栏杆柱'),
   w(
     'column-111',
-    '선반에서 깎고 있는 다리',
+    '로구로에서 깎고 있는 다리',
     'A leg being turned on the lathe',
     'ろくろで挽いている脚',
     '车床上正在车削的腿'
   ),
   w(
     'column-112',
-    '선반에서 깎고 있는 원뿔형 부재',
+    '로구로에서 깎고 있는 원뿔형 부재',
     'A tapered piece being turned on the lathe',
     'ろくろで挽いている円すい形の部材',
     '车床上正在车削的锥形部件'
@@ -224,24 +224,42 @@ const ALL = [
     'とがった頭の装飾柱 四本',
     '四根尖顶装饰柱'
   ),
-  w('column-114', '구슬 이음 기둥 묶음', 'Stacked bead-turned columns', '玉つなぎの柱の束', '成排的串珠柱'),
-  w('column-115', '선반 위의 구슬 장식 봉', 'A beaded rod on the lathe', 'ろくろ上の玉飾りの棒', '车床上的串珠装饰杆'),
+  w('column-114', '구슬 이음 기둥 묶음', 'Bundle of bead-turned columns', '玉つなぎの柱の束', '成捆的串珠柱'),
+  w(
+    'column-115',
+    '로구로에 걸린 구슬 장식 봉',
+    'A beaded rod on the lathe',
+    'ろくろ上の玉飾りの棒',
+    '车床上的串珠装饰杆'
+  ),
   w('column-116', '홈을 새긴 구슬 장식 봉', 'Beaded rod with carved grooves', '溝を刻んだ玉飾りの棒', '刻槽串珠装饰杆'),
   w('column-117', '흰색 도장 장식 기둥', 'White-painted decorative column', '白塗装の装飾柱', '白色涂装装饰柱'),
   w('column-118', '촛대형 장식 기둥', 'Candlestick-style decorative columns', '燭台形の装飾柱', '烛台形装饰柱'),
-  w('column-119', '가구 다리 묶음', 'A batch of furniture legs', '家具脚の一群', '一批家具腿'),
+  w('column-119', '가구 다리 묶음', 'A batch of furniture legs', '家具脚の束', '一批家具腿'),
   w('column-120', '긴 기둥 다섯 개', 'Five tall columns', '長い柱 五本', '五根长柱'),
   w('column-121', '홈 파인 원형 기둥', 'Fluted round columns', '溝彫りの丸柱', '凹槽圆柱'),
   w(
     'column-122',
-    '선반에서 가공 중인 굵은 부재',
+    '로구로에서 깎고 있는 굵은 부재',
     'A thick piece being turned on the lathe',
     'ろくろで加工中の太い部材',
     '车床上加工中的粗部件'
   ),
-  w('column-123', '선반에서 가공 중인 봉', 'A rod being turned on the lathe', 'ろくろで加工中の棒', '车床上加工中的杆'),
+  w(
+    'column-123',
+    '로구로에서 깎고 있는 봉',
+    'A rod being turned on the lathe',
+    'ろくろで加工中の棒',
+    '车床上加工中的杆'
+  ),
   w('column-124', '꽈배기 계단 엄지기둥', 'Twisted stair newel post', 'ねじり形の階段親柱', '麻花楼梯起步柱'),
-  w('column-125', '구슬 머리 계단 엄지기둥', 'Ball-topped stair newel posts', '玉頭の階段親柱', '圆球顶楼梯起步柱'),
+  w(
+    'column-125',
+    '구슬 머리 계단 엄지기둥',
+    'Ball-topped stair newel posts',
+    '玉飾り付きの階段親柱',
+    '圆球顶楼梯起步柱'
+  ),
   w('column-126', '출고를 기다리는 엄지기둥', 'Newel posts waiting to ship', '出荷を待つ親柱', '待出货的起步柱'),
 
   w('furniture-57', '전통 창살문', 'Traditional lattice door', '伝統的な格子戸', '传统窗棂门'),
@@ -306,7 +324,13 @@ const ALL = [
     '店先での出荷作業',
     '店门前的出货作业'
   ),
-  w('workshop-08', '직접 만들어 쓰는 선반 공구', 'Lathe tools we make ourselves', '自作のろくろ工具', '自制的车床刀具'),
+  w(
+    'workshop-08',
+    '직접 만들어 쓰는 로구로 공구',
+    'Lathe tools we make ourselves',
+    '自作のろくろ工具',
+    '自制的车床刀具'
+  ),
   w(
     'workshop-137',
     '을지로 매장 앞에 쌓인 난간 동자',
@@ -321,7 +345,7 @@ const ALL = [
     '柱でいっぱいの工房の中',
     '摆满柱子的工坊内部'
   ),
-  w('workshop-139', '오래된 선반 기계와 부품', 'An old lathe and turned parts', '古い旋盤と部品', '老车床与零件'),
+  w('workshop-139', '오래된 로구로 기계와 부품', 'An old lathe and turned parts', '古いろくろと部品', '老车床与零件'),
 ];
 
 export type Work = { src: string; alt: string; caption: string; category: CategoryKey; file: string };

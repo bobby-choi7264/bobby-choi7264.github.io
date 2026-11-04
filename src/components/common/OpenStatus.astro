@@ -1,6 +1,7 @@
 ---
 // '지금 영업 중' 표시. 한국 시간 기준으로 월~토 08:00~18:00이면 영업 중, 아니면 언제 여는지 알려 줍니다.
-// 공휴일은 따로 계산하지 않습니다(영업시간 아래에 '공휴일 휴무'가 함께 적혀 있음).
+// 공휴일에는 '오늘은 쉽니다', 다음 날이 공휴일이면 '다음 영업일에 엽니다'로 보여 줍니다.
+// ⚠️ 공휴일 목록(HOLIDAYS)은 매년 연말에 다음 해 것을 추가해야 합니다(대체공휴일·임시공휴일 포함, 정부 발표 확인).
 // 영업시간이 바뀌면 아래 OPEN·CLOSE와 src/i18n/*.ts의 visit.status 문구를 같이 고치세요.
 import { langFromPath, useT } from '~/i18n';
 
@@ -20,6 +21,8 @@ const s = useT(langFromPath(Astro.url.pathname)).visit.status;
   data-after={s.after}
   data-sunday={s.sunday}
   data-saturday={s.saturday}
+  data-closed-day={s.closedDay}
+  data-next={s.next}
   aria-live="polite"
   hidden
 >
@@ -29,26 +32,82 @@ const s = useT(langFromPath(Astro.url.pathname)).visit.status;
 <script>
   const OPEN = 8; // 여는 시각(시)
   const CLOSE = 18; // 닫는 시각(시)
-  const seoulNow = () => {
+  // 쉬는 공휴일(한국 시간 날짜). 대체공휴일 포함. 매년 다음 해 것을 추가하세요.
+  const HOLIDAYS = new Set([
+    // 2026 (토요일에 걸린 공휴일도 쉬므로 포함)
+    '2026-01-01',
+    '2026-02-16',
+    '2026-02-17',
+    '2026-02-18',
+    '2026-03-02',
+    '2026-05-05',
+    '2026-05-25',
+    '2026-06-03',
+    '2026-06-06',
+    '2026-08-15',
+    '2026-08-17',
+    '2026-09-24',
+    '2026-09-25',
+    '2026-09-26',
+    '2026-09-28',
+    '2026-10-03',
+    '2026-10-05',
+    '2026-10-09',
+    '2026-12-25',
+    // 2027 (음력 공휴일은 정부 발표로 다시 확인할 것)
+    '2027-01-01',
+    '2027-02-05',
+    '2027-02-06',
+    '2027-02-08',
+    '2027-03-01',
+    '2027-05-05',
+    '2027-05-13',
+    '2027-08-16',
+    '2027-09-14',
+    '2027-09-15',
+    '2027-09-16',
+    '2027-10-04',
+    '2027-10-09',
+    '2027-10-11',
+    '2027-12-25',
+    '2027-12-27',
+  ]);
+  // 한국 시간 기준 날짜·요일·시각. offsetDays로 내일(1) 등을 구함
+  const seoul = (offsetDays = 0) => {
     const parts = new Intl.DateTimeFormat('en-US', {
       timeZone: 'Asia/Seoul',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
       weekday: 'short',
       hour: 'numeric',
       minute: 'numeric',
       hourCycle: 'h23',
-    }).formatToParts(new Date());
+    }).formatToParts(new Date(Date.now() + offsetDays * 86_400_000));
     const get = (type: string) => parts.find((p) => p.type === type)?.value ?? '';
-    return { day: get('weekday'), hour: Number(get('hour')) + Number(get('minute')) / 60 };
+    return {
+      date: `${get('year')}-${get('month')}-${get('day')}`,
+      day: get('weekday'),
+      hour: Number(get('hour')) + Number(get('minute')) / 60,
+    };
   };
+  const isOff = (d: { date: string; day: string }) => d.day === 'Sun' || HOLIDAYS.has(d.date);
+  type State = 'open' | 'soon' | 'before' | 'after' | 'sunday' | 'saturday' | 'closedDay' | 'next';
   const update = () => {
-    const { day, hour } = seoulNow();
+    const today = seoul();
+    const tomorrow = seoul(1);
+    const dayAfter = seoul(2);
+    let state: State;
+    if (isOff(today)) {
+      // 일요일이고 월요일에 문을 열면 '월요일에 엽니다', 공휴일이거나 월요일도 쉬면 '다음 영업일'
+      state = today.day === 'Sun' && !isOff(tomorrow) ? 'sunday' : 'closedDay';
+    } else if (today.hour < OPEN) state = 'before';
+    else if (today.hour < CLOSE - 1) state = 'open';
+    else if (today.hour < CLOSE) state = 'soon';
+    else if (!isOff(tomorrow)) state = 'after';
+    else if (today.day === 'Sat' && !isOff(dayAfter)) state = 'saturday';
+    else state = 'next';
     document.querySelectorAll<HTMLElement>('[data-open-status]').forEach((el) => {
-      let state: 'open' | 'soon' | 'before' | 'after' | 'sunday' | 'saturday';
-      if (day === 'Sun') state = 'sunday';
-      else if (hour < OPEN) state = 'before';
-      else if (hour < CLOSE - 1) state = 'open';
-      else if (hour < CLOSE) state = 'soon';
-      else state = day === 'Sat' ? 'saturday' : 'after';
       el.dataset.state = state;
       el.querySelector('span')!.textContent = el.dataset[state] ?? '';
       el.hidden = false;

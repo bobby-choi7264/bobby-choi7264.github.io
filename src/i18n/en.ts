@@ -30,7 +30,7 @@ const en: Dict = {
     tagline: 'Turning wood on the lathe in Euljiro, Seoul, for 55 years.',
     explore: 'Explore',
     order: 'Order & Contact',
-    orderForm: 'Order form',
+    orderForm: 'Order Form',
     shopPhone: 'Workshop',
     mobilePhone: 'Mobile',
     visit: 'Visit',
@@ -45,7 +45,7 @@ const en: Dict = {
     title1: 'Fifty-five years',
     title2: 'turning wood in Euljiro',
     lead: 'Every piece is turned by a master who has worked the wood lathe for 55 years.',
-    tags: 'Wooden tableware · Moldings & cutting · Mass production · Broadcast props · Student projects',
+    tags: 'Wooden tableware · Moldings & cutting · Mass production · Supplying broadcasters · Student projects',
     order: 'Request an Order',
     call: 'Call Us',
     works: 'See Our Work',
@@ -55,7 +55,7 @@ const en: Dict = {
     lathe: {
       title: 'Woodturning',
       description:
-        'We shape spinning wood on the lathe (called “rokuro” in Korea’s workshops). Bowls, plates and lidded boxes are our specialty, and we turn columns, legs and handles with precision.',
+        'We shape spinning wood on the lathe (known as “rokuro” in Korean workshops). Bowls, plates and lidded boxes are our specialty, and we turn columns, legs and handles with precision.',
       points: [
         'Wooden tableware: bowls, plates, lidded boxes, stands',
         'Pepper & salt mills, teacups, mugs',
@@ -65,11 +65,11 @@ const en: Dict = {
     column: {
       title: 'Moldings & Cutting',
       description:
-        'Balusters, stair spindles, furniture legs and moldings — matched to your drawing or sample and produced in volume. We also supply broadcasting studios.',
+        'Newel posts, stair balusters, furniture legs and moldings — matched to your drawing or sample and produced in volume. We also supply broadcasting studios.',
       points: [
         'Stair balusters & decorative columns',
         'Table, chair and furniture legs',
-        'Mass production from a single sample; broadcast props',
+        'Mass production from a single sample; supplying broadcasters',
       ],
     },
     custom: {
@@ -91,7 +91,7 @@ const en: Dict = {
   home: {
     metaTitle: 'Seongchang Craft — 55-Year Master Woodturner, Custom Woodwork | Euljiro, Seoul',
     metaDescription:
-      'Seongchang Craft in Euljiro, Seoul. A master woodturner with 55 years of experience: wooden tableware, mass production, broadcast props, moldings, student projects and custom woodcraft. Mon–Sat 8 AM–6 PM.',
+      'Seongchang Craft, Euljiro, Seoul: a 55-year master woodturner making wooden tableware, moldings, student projects and custom woodcraft. Mon–Sat 8 AM–6 PM.',
     servicesTag: 'What We Do',
     servicesTitle: 'Here’s What We Make',
     servicesLead:
@@ -109,8 +109,8 @@ const en: Dict = {
         text: 'Bowls, plates and lidded boxes — things you hold every day — are what we turn best, reading the grain and thickness by hand.',
       },
       {
-        title: 'From volume runs to broadcast props',
-        text: 'We copy one sample into hundreds of identical pieces, keeping both quantity and quality at broadcast-studio standard.',
+        title: 'From volume runs to broadcasters',
+        text: 'We copy one sample into hundreds of identical pieces, keeping both quantity and quality to broadcast-studio standards.',
       },
       {
         title: 'Not sure how? Let’s figure it out',
@@ -150,7 +150,7 @@ const en: Dict = {
       },
       {
         title: 'Turn with the blade',
-        text: 'Against the spinning wood, the hand alone draws every curve and every measurement.',
+        text: 'We set the blade against the spinning wood and shape every curve and dimension by hand.',
       },
       {
         title: 'Sand and finish',
@@ -177,6 +177,8 @@ const en: Dict = {
       after: 'Closed now · opens tomorrow at 8 AM (Korea time)',
       sunday: 'Closed today · opens Monday at 8 AM (Korea time)',
       saturday: 'Closed now · opens Monday at 8 AM (Korea time)',
+      closedDay: 'Closed today · opens the next business day at 8 AM (Korea time)',
+      next: 'Closed now · opens the next business day at 8 AM (Korea time)',
     },
     note: 'We speak Korean. A short text message or photo with a translation app works well.',
   },
@@ -200,7 +202,7 @@ const en: Dict = {
     title2: 'becomes something useful',
     paragraphs: [
       'Seongchang Craft is the workshop of <b>a master who has been carving wood for 55 years</b>. In Euljiro, Seoul, we turn wood on the lathe — known in Korean workshops by its Japanese name, <b>rokuro</b>. Setting a blade against fast-spinning wood, we shape round forms like columns, legs, bowls and stands. Above all, <b>wooden tableware</b> — bowls, plates and lidded boxes — is what we do best.',
-      'From <b>mass-produced moldings</b> such as stair balusters and furniture legs, and <b>props for broadcasting studios</b>, to <b>graduation pieces</b> for design students, shop signs and homeware — if it can be made of wood, we’re happy to talk.',
+      'From <b>mass-produced moldings</b> such as stair balusters and furniture legs, and <b>supplies for broadcasting studios</b>, to <b>graduation pieces</b> for design students, shop signs and homeware — if it can be made of wood, we’re happy to talk.',
       'The precision to copy one sample into hundreds of identical pieces, and fifty-five years of experience finding a way to make shapes we’ve never seen before. That is the craft of Seongchang.',
     ],
     shopAlt: 'The front of the Seongchang Craft workshop in Euljiro',
@@ -232,13 +234,13 @@ const en: Dict = {
     note: 'Availability and price vary by wood, and we can also work with woods not listed here. Tell us what you want to make and the feel you are after, and we will choose the right wood together.',
     ctaTitle: 'Not sure which wood?',
     ctaText: 'Just send a photo or drawing and we will suggest a suitable wood and give you a quote.',
-    ctaOrder: 'Request an Order',
+    ctaOrder: 'Fill in the Order Form',
     ctaCall: 'Call for advice',
   },
   servicesPage: {
     metaTitle: 'Services',
     metaDescription:
-      'Woodturning and wooden tableware by a 55-year master, mass production and broadcast props, moldings, student projects and all kinds of woodcraft — and how ordering works.',
+      'Woodturning, wooden tableware, moldings, mass production and student projects by a 55-year master — and how ordering works.',
     tag: 'What We Make',
     title: 'Services',
     lead: 'If it can be made of wood, just ask.',
@@ -270,7 +272,10 @@ const en: Dict = {
     ],
     step: 'STEP',
     steps: [
-      { title: 'Consultation', text: 'Tell us the photo, drawing, size and quantity — by phone or text.' },
+      {
+        title: 'Consultation',
+        text: 'Send us a photo or drawing and tell us the size and quantity — by phone or text.',
+      },
       { title: 'Quote', text: 'We choose the wood and method, then tell you the cost and lead time.' },
       { title: 'Making', text: 'If needed, we turn a sample first for you to check before full production.' },
       { title: 'Delivery', text: 'Pick it up at our Euljiro workshop, or let’s arrange shipping.' },

@@ -46,7 +46,7 @@ export const WOODS: Wood[] = [
     hard: 4,
     colors: ['#c8a374', '#8f6b42'],
     latin: 'Quercus',
-    name: { ko: '참나무 (오크)', en: 'Oak', ja: 'オーク（ナラ）', zh: '橡木' },
+    name: { ko: '참나무(오크)', en: 'Oak', ja: 'オーク（ナラ）', zh: '橡木' },
     look: {
       ko: '밝은 황갈색에 곧고 굵은 결',
       en: 'Light tan with straight, open grain',
@@ -71,7 +71,7 @@ export const WOODS: Wood[] = [
     hard: 3,
     colors: ['#7a5236', '#3f2717'],
     latin: 'Juglans',
-    name: { ko: '호두나무 (월넛)', en: 'Walnut', ja: 'ウォールナット', zh: '胡桃木' },
+    name: { ko: '호두나무(월넛)', en: 'Walnut', ja: 'ウォールナット', zh: '胡桃木' },
     look: {
       ko: '짙은 초콜릿색, 차분하고 고급스러운 결',
       en: 'Deep chocolate brown with a calm, refined grain',
@@ -96,7 +96,7 @@ export const WOODS: Wood[] = [
     hard: 4,
     colors: ['#dcc49c', '#a88a5e'],
     latin: 'Fraxinus',
-    name: { ko: '물푸레나무 (애쉬)', en: 'Ash', ja: 'タモ（アッシュ）', zh: '白蜡木' },
+    name: { ko: '물푸레나무(애쉬)', en: 'Ash', ja: 'タモ（アッシュ）', zh: '白蜡木' },
     look: {
       ko: '밝은 크림색에 또렷한 결',
       en: 'Pale cream with a clear, defined grain',
@@ -121,7 +121,7 @@ export const WOODS: Wood[] = [
     hard: 3,
     colors: ['#b8774c', '#7d4527'],
     latin: 'Prunus',
-    name: { ko: '벚나무 (체리)', en: 'Cherry', ja: 'チェリー（サクラ）', zh: '樱桃木' },
+    name: { ko: '벚나무(체리)', en: 'Cherry', ja: 'チェリー（サクラ）', zh: '樱桃木' },
     look: {
       ko: '붉은 기가 도는 갈색, 곱고 매끄러운 결',
       en: 'Reddish brown with a fine, smooth grain',
@@ -146,7 +146,7 @@ export const WOODS: Wood[] = [
     hard: 4,
     colors: ['#ecd8b4', '#c2a679'],
     latin: 'Acer',
-    name: { ko: '단풍나무 (메이플)', en: 'Maple', ja: 'メープル（カエデ）', zh: '枫木' },
+    name: { ko: '단풍나무(메이플)', en: 'Maple', ja: 'メープル（カエデ）', zh: '枫木' },
     look: {
       ko: '하얗게 밝은 색, 결이 촘촘하고 매끈',
       en: 'Bright, almost white, with a tight, even grain',
@@ -199,7 +199,7 @@ export const WOODS: Wood[] = [
     name: { ko: '오동나무', en: 'Paulownia', ja: '桐', zh: '泡桐木' },
     look: {
       ko: '연한 회갈색, 은은한 결',
-      en: 'Soft greyish beige with a subtle grain',
+      en: 'Soft grayish beige with a subtle grain',
       ja: '淡い灰褐色、やさしい木目',
       zh: '浅灰褐色，纹理淡雅',
     },
@@ -218,7 +218,7 @@ export const WOODS: Wood[] = [
   },
 ];
 
-/** 만들 물건별 추천 나무 (key는 위 WOODS의 key) */
+/** 만들 물건별 추천 나무(key는 위 WOODS의 key) */
 export const PICKS: { title: Text; woods: string[] }[] = [
   {
     title: {

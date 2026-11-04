@@ -6,7 +6,7 @@ export const SHOP = {
   nameEn: 'SEONGCHANG CRAFT',
   address: '서울특별시 중구 을지로 219',
   addressShort: '서울 중구 을지로 219',
-  hours: '월~토 08:00 ~ 18:00',
+  hours: '월~토 08:00~18:00',
   closed: '일요일·공휴일 휴무',
   tel: { label: '02-2292-0062', href: 'tel:0222920062' },
   mobile: { label: '010-8548-7264', href: 'tel:01085487264', sms: 'sms:01085487264' },

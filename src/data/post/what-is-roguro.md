@@ -3,7 +3,7 @@ publishDate: 2026-11-01T09:00:00Z
 title: 로구로(목선반)란 무엇인가요?
 excerpt: 나무를 돌리면서 깎는 기계, 로구로. 어떤 것을 만들 수 있는지 사진과 함께 소개합니다.
 image: ~/assets/images/works/column-14.jpg
-imageAlt: 선반에서 가공 중인 원목 기둥
+imageAlt: 로구로에서 깎고 있는 원목 기둥
 category: 작업 이야기
 tags:
   - 로구로
