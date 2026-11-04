@@ -178,7 +178,6 @@ const zh: Dict = {
       '无论做一件还是几百件，都是要拿在手里用的东西，所以每一件都用同样的心意去车。有想做的东西，请随时打电话来，我会笑着迎接您。',
     ],
     craftSign: 'Seongchang 工艺 匠人',
-    craftAlt: '开怀大笑的 Seongchang 工艺匠人',
   },
   woods: {
     metaTitle: '选择木材',

@@ -213,7 +213,6 @@ const en: Dict = {
       'Whether it is one piece or several hundred, these are things people will hold in their hands, so I turn each one with the same care. If there is something you would like made, please give me a call. You will be welcomed with a smile.',
     ],
     craftSign: 'Master craftsman, Seongchang Craft',
-    craftAlt: 'The master craftsman of Seongchang Craft, smiling broadly',
   },
   woods: {
     metaTitle: 'Choosing Wood',
