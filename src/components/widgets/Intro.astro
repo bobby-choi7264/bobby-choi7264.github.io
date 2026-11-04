@@ -10,13 +10,14 @@
 import Image from '~/components/common/Image.astro';
 import Mark from '~/components/common/Mark.astro';
 import { SHOP } from '~/data/shop';
-import { HERO_SLIDES, pick } from '~/data/works';
+import { HERO_SLIDES, HERO_TALL, pick } from '~/data/works';
 import { langFromPath, useT } from '~/i18n';
 
 const lang = langFromPath(Astro.url.pathname);
 const t = useT(lang);
 // 첫 화면 슬라이드쇼의 첫 사진과 똑같은 설정으로 불러와서 같은 파일을 한 번만 받음
 const photo = pick(HERO_SLIDES, lang)[0];
+const tall = HERO_TALL.includes(photo.file);
 const chars = [...SHOP.name];
 // 누르기 전 배경: 같은 자리에서 찍은 '로구로 위에서 깎이는 나무' 사진들을 천천히 겹쳐 넘겨 타임랩스처럼 보이게 함
 // (tailwind.css의 .intro-reel — 5장 기준으로 맞춰 둠. 사진 수를 바꾸면 그쪽 reelFade·reelDrift의 %도 고칠 것)
@@ -44,14 +45,30 @@ const reel = pick(['column-123', 'column-16', 'column-14', 'column-122', 'column
 >
 
 <div id="intro" role="dialog" aria-modal="true" aria-label={SHOP.name}>
-  <div class="intro-photo" aria-hidden="true">
+  <div class:list={['intro-photo', tall && 'is-tall']} aria-hidden="true">
+    {
+      tall && (
+        <div class="photo-fill">
+          <Image
+            src={photo.src}
+            alt=""
+            widths={[768]}
+            sizes="100vw"
+            width={768}
+            height={1365}
+            layout="none"
+            format="webp"
+            loading="eager"
+          />
+        </div>
+      )
+    }
     <Image
       src={photo.src}
       alt=""
-      widths={[768, 1280, 1800]}
-      sizes="100vw"
-      width={1800}
-      height={1000}
+      {...tall
+        ? { widths: [768, 1012], sizes: '57vh', width: 1012, height: 1800 }
+        : { widths: [768, 1280, 1800], sizes: '100vw', width: 1800, height: 1000 }}
       layout="none"
       format="webp"
       loading="eager"

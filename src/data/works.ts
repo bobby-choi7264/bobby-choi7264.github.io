@@ -16,6 +16,167 @@ const w = (file: string, ko: string, en: string, ja: string, zh: string) => ({
 });
 
 const ALL = [
+  w(
+    'furniture-140',
+    '3단 원형 원목 진열대',
+    'Three-tier round wooden display stand',
+    '三段の丸い木製ディスプレイ台',
+    '三层圆形原木展示架'
+  ),
+  w(
+    'furniture-141',
+    '3단 원형 진열대 — 가게 앞에서',
+    'Three-tier display stand in front of the shop',
+    '三段の丸いディスプレイ台 — 店の前で',
+    '三层圆形展示架——摄于店门前'
+  ),
+  w(
+    'furniture-142',
+    '3단 원형 진열대 — 저녁 무렵',
+    'Three-tier display stand in the evening',
+    '三段の丸いディスプレイ台 — 夕暮れどき',
+    '三层圆形展示架——傍晚'
+  ),
+  w(
+    'custom-143',
+    '사람 키만 한 대형 원목 체스 말',
+    'Giant wooden chess pieces',
+    '人の背丈ほどの大きな木のチェス駒',
+    '近一人高的大型原木国际象棋棋子'
+  ),
+  w(
+    'custom-144',
+    '대형 체스 말 — 킹·퀸·나이트',
+    'Giant chess pieces: king, queen and knight',
+    '大きなチェス駒 — キング・クイーン・ナイト',
+    '大型棋子——国王、王后与骑士'
+  ),
+  w(
+    'custom-145',
+    '대형 체스 말 한 벌',
+    'A full set of giant chess pieces',
+    '大きなチェス駒 ひと揃い',
+    '一整套大型棋子'
+  ),
+  w(
+    'custom-146',
+    '대형 체스 말 — 다듬기 전',
+    'Giant chess pieces before finishing',
+    '大きなチェス駒 — 仕上げ前',
+    '大型棋子——打磨前'
+  ),
+  w(
+    'custom-147',
+    '대형 체스 말 — 나이트',
+    'Giant chess piece: the knight',
+    '大きなチェス駒 — ナイト',
+    '大型棋子——骑士'
+  ),
+  w(
+    'custom-148',
+    '대형 체스 말 — 비숍',
+    'Giant chess piece: the bishop',
+    '大きなチェス駒 — ビショップ',
+    '大型棋子——主教'
+  ),
+  w(
+    'custom-149',
+    '대형 체스 말 — 비숍과 폰',
+    'Giant chess pieces: bishops and pawns',
+    '大きなチェス駒 — ビショップとポーン',
+    '大型棋子——主教与兵'
+  ),
+  w(
+    'custom-150',
+    '대형 체스 말 — 폰 여러 개',
+    'Giant chess pieces: a row of pawns',
+    '大きなチェス駒 — ポーンがずらり',
+    '大型棋子——一排兵'
+  ),
+  w(
+    'custom-151',
+    '같은 모양으로 여러 개 만든 원목 소품',
+    'Wooden pieces made in a matching batch',
+    '同じ形で何台も作った木の小物',
+    '同款批量制作的原木小件'
+  ),
+  w(
+    'column-152',
+    '포장을 마친 난간 동자 — 대량 납품',
+    'Balusters bundled for a bulk delivery',
+    '梱包を終えた手すり子 — 大量納品',
+    '打包完成的栏杆立柱——批量交货'
+  ),
+  w(
+    'column-153',
+    '난간 동자 대량 납품 — 옆에서 본 모습',
+    'Bulk balusters seen from the side',
+    '手すり子の大量納品 — 横から',
+    '批量栏杆立柱——侧面'
+  ),
+  w(
+    'column-154',
+    '묶음으로 포장한 원목 봉',
+    'Turned wooden spindles in bundles',
+    '束ねて梱包した木の丸棒',
+    '成捆包装的原木车削杆'
+  ),
+  w('column-155', '난간 엄지기둥 여러 개', 'A batch of newel posts', '親柱をまとめて', '一批栏杆端柱'),
+  w(
+    'column-156',
+    '흰색으로 칠한 원목 난간',
+    'White-painted wooden balustrade',
+    '白く塗装した木の手すり',
+    '白色涂装原木栏杆'
+  ),
+  w(
+    'column-157',
+    '배불뚝이 모양 테이블 다리 네 개',
+    'Four bulbous table legs',
+    'ふくらみのあるテーブル脚 4本',
+    '四根鼓腹形桌腿'
+  ),
+  w('column-158', '묶어 둔 원목 테이블 다리', 'Bundled wooden table legs', '束ねた木のテーブル脚', '捆好的原木桌腿'),
+  w(
+    'column-159',
+    '볼트를 끼운 둥근 원목 가구 발',
+    'Round wooden furniture feet with bolts',
+    'ボルト付きの丸い木の家具脚',
+    '带螺栓的圆形原木家具脚'
+  ),
+  w(
+    'column-160',
+    '둥근 원목 가구 발 — 위아래 모습',
+    'Round wooden furniture feet, top and bottom',
+    '丸い木の家具脚 — 上と下',
+    '圆形原木家具脚——正反面'
+  ),
+  w(
+    'lathe-161',
+    '로구로로 깎은 대형 원목 화병',
+    'Large lathe-turned wooden vase',
+    'ろくろで挽いた大きな木の花瓶',
+    '车床旋制的大型原木花瓶'
+  ),
+  w('lathe-162', '달걀 모양 대형 꼭지 장식', 'Large egg-shaped wooden finial', '卵形の大きな飾り頭', '蛋形大型木顶饰'),
+  w('lathe-163', '원목 촛대 세 가지', 'Three wooden candlesticks', '木の燭台 三種', '三款原木烛台'),
+  w(
+    'lathe-164',
+    '원목 촛대 대량 제작',
+    'Wooden candlesticks made in quantity',
+    '木の燭台をまとめて制作',
+    '批量制作的原木烛台'
+  ),
+  w('lathe-165', '원목 키친타월 걸이', 'Wooden paper towel holder', '木のキッチンペーパーホルダー', '原木厨房纸巾架'),
+  w(
+    'lathe-166',
+    '둥근 받침이 달린 원목 스탠드 두 개',
+    'Two wooden stands with round trays',
+    '丸いトレイ付きの木のスタンド 2台',
+    '两款带圆托盘的原木立架'
+  ),
+  w('lathe-167', '원목 나무망치 두 자루', 'Two wooden mallets', '木槌 2本', '两把原木木槌'),
+  w('lathe-168', '원목 밀대', 'Wooden rolling pin', '木の麺棒', '原木擀面杖'),
   w('lathe-80', '원목 받침대', 'Solid wood stand', '無垢材の台', '原木底座'),
   w(
     'lathe-81',
@@ -365,16 +526,18 @@ export const worksIn = (lang: Lang = 'ko'): Work[] => ALL.map(localize(lang));
 export const worksBy = (key: CategoryKey, lang: Lang = 'ko') => worksIn(lang).filter((item) => item.category === key);
 
 // 첫 화면 슬라이드쇼와 대표 작업에 쓰는 사진
-export const HERO_SLIDES = ['lathe-80', 'column-04', 'lathe-25', 'column-14', 'lathe-81', 'furniture-57'];
+export const HERO_SLIDES = ['furniture-140', 'lathe-80', 'column-04', 'lathe-25', 'column-14', 'furniture-57'];
+// 위 사진 중 세로로 긴 사진. 넓은 화면에서는 잘리지 않게 전체를 오른쪽에 두고 빈 곳은 흐린 사진으로 채움
+export const HERO_TALL = ['furniture-140'];
 export const FEATURED = [
+  'furniture-140',
+  'custom-145',
   'lathe-80',
   'column-13',
   'lathe-56',
   'custom-40',
   'lathe-25',
   'furniture-57',
-  'column-36',
-  'lathe-50',
 ];
 export const pick = (files: string[], lang: Lang = 'ko') =>
   files.map((file) => worksIn(lang).find((item) => item.file === file)!).filter(Boolean);
@@ -382,6 +545,11 @@ export const pick = (files: string[], lang: Lang = 'ko') =>
 // 같은 물건을 구도만 바꿔 찍은 사진 묶음. 갤러리에는 맨 앞 사진 하나만 보이고,
 // 누르면 묶음 안의 사진을 넘겨 볼 수 있습니다. 설명도 맨 앞 사진의 것을 씁니다.
 export const GROUPS: string[][] = [
+  ['furniture-140', 'furniture-141', 'furniture-142'],
+  ['custom-145', 'custom-143', 'custom-144', 'custom-146', 'custom-147', 'custom-148', 'custom-149', 'custom-150'],
+  ['column-152', 'column-153'],
+  ['column-159', 'column-160'],
+  ['lathe-163', 'lathe-164'],
   // 후추·소금통과 그라인더는 모두 한 묶음
   [
     'lathe-70',

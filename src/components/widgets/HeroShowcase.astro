@@ -4,7 +4,7 @@ import { Icon } from 'astro-icon/components';
 import Image from '~/components/common/Image.astro';
 import WorkshopLight from '~/components/widgets/WorkshopLight.astro';
 import OpenStatus from '~/components/common/OpenStatus.astro';
-import { HERO_SLIDES, pick } from '~/data/works';
+import { HERO_SLIDES, HERO_TALL, pick } from '~/data/works';
 import { shopFor } from '~/data/shop';
 import { langFromPath, localize, useT } from '~/i18n';
 
@@ -13,6 +13,11 @@ const t = useT(lang).hero;
 const shop = shopFor(lang);
 const slides = pick(HERO_SLIDES, lang);
 const seconds = 36 / slides.length;
+// 세로 사진은 세로 모양 그대로(가로로 잘라 저장하지 않게)
+const size = (file: string) =>
+  HERO_TALL.includes(file)
+    ? { widths: [768, 1012], sizes: '57vh', width: 1012, height: 1800 }
+    : { widths: [768, 1280, 1800], sizes: '100vw', width: 1800, height: 1000 };
 // 첫 사진이 처음부터 다 보이게 시작(36초의 3% = 서서히 나타나는 시간만큼 앞당김). 입장 화면에서 끊김 없이 이어지도록
 const delay = (index: number) => `${(index * seconds - 36 * 0.03).toFixed(2)}s`;
 ---
@@ -24,14 +29,30 @@ const delay = (index: number) => `${(index * seconds - 36 * 0.03).toFixed(2)}s`;
   <div class="absolute inset-0" aria-hidden="true">
     {
       slides.map((slide, index) => (
-        <div class="hero-slide" style={`animation-delay:${delay(index)}`}>
+        <div
+          class:list={['hero-slide', HERO_TALL.includes(slide.file) && 'is-tall']}
+          style={`animation-delay:${delay(index)}`}
+        >
+          {HERO_TALL.includes(slide.file) && (
+            <div class="photo-fill">
+              <Image
+                src={slide.src}
+                alt=""
+                widths={[768]}
+                sizes="100vw"
+                width={768}
+                height={1365}
+                layout="none"
+                format="webp"
+                loading={index === 0 ? 'eager' : 'lazy'}
+                style={`animation-delay:${delay(index)}`}
+              />
+            </div>
+          )}
           <Image
             src={slide.src}
             alt=""
-            widths={[768, 1280, 1800]}
-            sizes="100vw"
-            width={1800}
-            height={1000}
+            {...size(slide.file)}
             layout="none"
             format="webp"
             loading={index === 0 ? 'eager' : 'lazy'}
