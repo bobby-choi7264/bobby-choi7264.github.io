@@ -214,7 +214,7 @@ const en: Dict = {
       `I have been turning wood in Euljiro for ${YEARS} years. Even now, my favorite moment is looking at a drawing or a photo a customer brings in and thinking, “Ah, this is how I can turn it.”`,
       'Whether it is one piece or several hundred, these are things people will hold in their hands, so I turn each one with the same care. If there is something you would like made, please give me a call. You will be welcomed with a smile.',
     ],
-    craftSign: 'Master craftsman, Seongchang Craft',
+    craftSign: 'Choi Gwan-gyu, owner of Seongchang Craft',
   },
   woods: {
     metaTitle: 'Choosing Wood',

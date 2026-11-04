@@ -4,6 +4,7 @@ import { useT, type Lang } from '~/i18n';
 export const SHOP = {
   name: '성창공예',
   nameEn: 'SEONGCHANG CRAFT',
+  owner: '최관규', // 대표 (명함: 崔寬圭)
   address: '서울특별시 중구 을지로 219',
   addressShort: '서울 중구 을지로 219',
   hours: '월~토 08:00~18:00',

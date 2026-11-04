@@ -14,7 +14,7 @@ import CraftProcess from '~/components/widgets/CraftProcess.astro';
 import Mark from '~/components/common/Mark.astro';
 import Image from '~/components/common/Image.astro';
 import { SITE } from 'astrowind:config';
-import { SERVICES, shopFor } from '~/data/shop';
+import { SERVICES, SHOP, shopFor } from '~/data/shop';
 import { FEATURED, GALLERY_COUNT, pick } from '~/data/works';
 import { localize, useT, type Lang } from '~/i18n';
 
@@ -47,6 +47,7 @@ const structuredData = {
   name: lang === 'ko' ? shop.name : `${shop.name} (${shop.nameEn})`,
   url: SITE?.site,
   telephone: ['+82-2-2292-0062', '+82-10-8548-7264'],
+  founder: { '@type': 'Person', name: lang === 'ko' ? SHOP.owner : 'Choi Gwan-gyu' },
   address: {
     '@type': 'PostalAddress',
     streetAddress: '을지로 219',
