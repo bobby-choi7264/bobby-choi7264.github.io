@@ -325,6 +325,7 @@
 #intro .intro-stage {
   position: relative;
 }
+#intro .intro-mark,
 #intro .intro-kicker,
 #intro .intro-sub {
   opacity: 0;
@@ -352,6 +353,9 @@
 }
 #intro.play .intro-photo img {
   animation: introPhoto 4.4s cubic-bezier(0.25, 0.6, 0.3, 1) forwards;
+}
+#intro.play .intro-mark {
+  animation: introRise 1.2s ease 0.25s forwards;
 }
 #intro.play .intro-kicker {
   animation: introRise 1s ease 0.4s forwards;
@@ -430,27 +434,6 @@
 
 .intro-done #intro {
   display: none;
-}
-
-/* 장인 느낌: 붉은 낙관(도장) */
-.seal {
-  display: inline-grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.05em 0.1em;
-  padding: 0.22em;
-  border-radius: 0.12em;
-  color: #f8ecdc;
-  background: #b8322a;
-  box-shadow:
-    inset 0 0 0 0.07em #f8ecdc,
-    0 0 0 0.05em #b8322a;
-  font-family: 'Noto Serif KR', serif;
-  font-weight: 900;
-  line-height: 1;
-  transform: rotate(-4deg);
-  /* 인주가 고르게 묻지 않은 듯한 질감 */
-  -webkit-mask-image: radial-gradient(circle at 30% 20%, #000 55%, rgb(0 0 0 / 0.75) 80%);
-  mask-image: radial-gradient(circle at 30% 20%, #000 55%, rgb(0 0 0 / 0.75) 80%);
 }
 
 /* 종이·나무 표면 같은 아주 옅은 알갱이 */
@@ -757,17 +740,6 @@ aw-gallery figcaption::before {
   width: 14px;
   height: 1px;
   background: #c49654;
-}
-
-/* 낙관이 화면에 들어오면 '쾅' 찍힘 */
-.stamp-in[no-intersect] {
-  opacity: 0;
-  transform: scale(2.2) rotate(-4deg);
-}
-.stamp-in {
-  transition:
-    opacity 0.25s ease,
-    transform 0.45s cubic-bezier(0.3, 0, 0.3, 1.4);
 }
 
 /* 글자가 하나씩 떠오르는 제목 (CraftFX) */

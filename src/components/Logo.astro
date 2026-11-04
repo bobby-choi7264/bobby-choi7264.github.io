@@ -1,8 +1,10 @@
 ---
+import Mark from '~/components/common/Mark.astro';
 import { SHOP } from '~/data/shop';
 ---
 
-<span class="self-center ml-2 rtl:ml-0 rtl:mr-2 flex items-baseline gap-2 whitespace-nowrap">
+<span class="self-center ml-2 rtl:ml-0 rtl:mr-2 flex items-center gap-2 whitespace-nowrap">
+  <Mark class="h-7 w-7 md:h-6 md:w-6 text-primary shrink-0" />
   <span class="font-heading text-2xl md:text-xl font-bold gold-text">{SHOP.name}</span>
   <span class="hidden sm:inline text-[11px] tracking-[0.08em] text-primary/80">{SHOP.nameEn}</span>
 </span>

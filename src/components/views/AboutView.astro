@@ -2,7 +2,7 @@
 // 소개 페이지. 한국어(/about)와 다른 언어(/en/about 등) 페이지가 함께 씁니다.
 import Layout from '~/layouts/PageLayout.astro';
 import Image from '~/components/common/Image.astro';
-import Seal from '~/components/common/Seal.astro';
+import Mark from '~/components/common/Mark.astro';
 import VisitInfo from '~/components/widgets/VisitInfo.astro';
 import { useT, type Lang } from '~/i18n';
 
@@ -72,7 +72,6 @@ const mosaic = [
             class="photo-tone h-full w-full object-cover"
           />
         </div>
-        <Seal class="stamp-in absolute -bottom-5 -right-3 text-2xl intersect intersect-once intersect-half" />
       </div>
       <div class="space-y-6 text-lg leading-relaxed">
         <p class="font-heading font-bold leading-none">
@@ -102,7 +101,7 @@ const mosaic = [
       </div>
       <p class="mt-10 inline-flex items-center gap-4 font-heading text-lg text-primary">
         — {a.craftSign}
-        <Seal class="stamp-in text-xl intersect intersect-once intersect-half" />
+        <Mark class="h-8 w-8 text-primary" />
       </p>
     </div>
   </section>

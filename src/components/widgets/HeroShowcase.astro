@@ -2,7 +2,6 @@
 // 화면 전체를 채우는 작업 사진 슬라이드쇼 + 가게 소개 문구.
 import { Icon } from 'astro-icon/components';
 import Image from '~/components/common/Image.astro';
-import Seal from '~/components/common/Seal.astro';
 import WorkshopLight from '~/components/widgets/WorkshopLight.astro';
 import OpenStatus from '~/components/common/OpenStatus.astro';
 import { HERO_SLIDES, pick } from '~/data/works';
@@ -68,9 +67,7 @@ const delay = (index: number) => `${(index * seconds - 36 * 0.03).toFixed(2)}s`;
         }
       </p>
       <h1 class="font-heading text-4xl sm:text-5xl md:text-7xl font-bold leading-tight text-heading">
-        <span class="hero-line">{t.title1}</span><br /><span class="hero-line gold-text">{t.title2}</span><Seal
-          class="ml-3 align-top text-sm sm:text-base md:text-xl"
-        />
+        <span class="hero-line">{t.title1}</span><br /><span class="hero-line gold-text">{t.title2}</span>
       </h1>
       <p class="mt-6 max-w-xl text-base md:text-lg text-default/90">
         {t.lead}

@@ -63,10 +63,6 @@ const extraFonts: Partial<Record<Lang, string>> = {
   zh: '&family=Noto+Sans+SC:wght@400;500;700',
 };
 const fontHref = `https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700${extraFonts[lang] ?? ''}&display=swap`;
-// 명조체(Noto Serif KR 900)는 붉은 도장 글자에만 쓰므로 그 네 글자만 받습니다 (글꼴 용량을 크게 줄임).
-// 명조체로 쓰는 글자가 늘면 아래 GLYPHS_900에 더하세요.
-const GLYPHS_900 = '공성예창';
-const fontHref900 = `https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@900&text=${encodeURIComponent(GLYPHS_900)}&display=swap`;
 
 // 페이지를 옮길 때 내용이 바뀌는 모양 (keyframes는 tailwind.css의 pageOut / pageIn)
 const pageOut = { name: 'pageOut', duration: '0.3s', easing: 'cubic-bezier(0.4, 0, 1, 1)', fillMode: 'both' };
@@ -99,7 +95,6 @@ const pageAnimation = {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href={fontHref} />
-    <link rel="stylesheet" href={fontHref900} />
     <CustomStyles />
     <ApplyColorMode />
     <Metadata

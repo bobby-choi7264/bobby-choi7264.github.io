@@ -8,6 +8,7 @@
 // 걷힐 때 아래에 같은 사진의 첫 화면이 있어서 끊김 없이 이어집니다.
 // 같은 방문(세션) 안에서는 다시 나오지 않습니다.
 import Image from '~/components/common/Image.astro';
+import Mark from '~/components/common/Mark.astro';
 import { SHOP } from '~/data/shop';
 import { HERO_SLIDES, pick } from '~/data/works';
 import { langFromPath, useT } from '~/i18n';
@@ -57,6 +58,7 @@ const chars = [...SHOP.name];
   <div class="intro-shade" aria-hidden="true"></div>
 
   <div class="intro-gate">
+    <Mark class="mb-5 h-12 w-12 text-[#e0ba78]" />
     <p class="font-heading text-3xl md:text-4xl font-bold text-[#f8f1e6]" translate="no">{SHOP.name}</p>
     <p class="mt-3 text-[11px] md:text-xs tracking-[0.45em] pl-[0.45em] text-[#e0ba78]/85" translate="no">
       {SHOP.nameEn}
@@ -67,6 +69,7 @@ const chars = [...SHOP.name];
   </div>
 
   <div class="intro-stage flex flex-col items-center text-center px-6" aria-hidden="true">
+    <Mark class="intro-mark mb-6 h-14 w-14 md:h-16 md:w-16 text-[#e0ba78]" />
     <p class="intro-kicker text-[11px] md:text-sm tracking-[0.45em] pl-[0.45em] text-[#e0ba78]" translate="no">
       {SHOP.nameEn}
     </p>

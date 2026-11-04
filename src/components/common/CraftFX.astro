@@ -56,7 +56,7 @@
     const target = e.target as HTMLElement;
     // 글자를 입력하는 칸에서는 튀지 않게
     if (target.closest('input, textarea, select, [contenteditable], dialog')) return;
-    if (!target.closest('a, button, summary, [data-tilt], .seal')) return;
+    if (!target.closest('a, button, summary, [data-tilt], .brand-mark')) return;
     burst(e.clientX, e.clientY);
   });
 

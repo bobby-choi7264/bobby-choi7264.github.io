@@ -1,0 +1,23 @@
+---
+// 성창공예 마크: 통나무 단면(나이테)과 갈라진 틈. 예전 붉은 도장(Seal) 대신 씁니다.
+// 고리는 뚫린 모양(mask)이라 사진 위든 어두운 바탕이든 또렷합니다. 색은 글자색(currentColor)을 따릅니다.
+// 파비콘(src/assets/favicons)과 공유 이미지도 같은 모양입니다.
+export interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+const id = `mark-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<svg class={`brand-mark ${className}`} viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+  <mask id={id}>
+    <circle cx="24" cy="24" r="22" fill="#fff"></circle>
+    <g fill="none" stroke="#000" stroke-linecap="round">
+      <ellipse cx="22.6" cy="25" rx="15.5" ry="14.6" stroke-width="1.9"></ellipse>
+      <ellipse cx="21.6" cy="25.6" rx="9.8" ry="9.1" stroke-width="1.9"></ellipse>
+      <ellipse cx="21" cy="26" rx="4.2" ry="3.9" stroke-width="1.9"></ellipse>
+      <path d="M24.5 2.5 L26.8 13.5" stroke-width="2.4"></path>
+    </g>
+  </mask>
+  <circle cx="24" cy="24" r="22" fill="currentColor" mask={`url(#${id})`}></circle>
+</svg>

@@ -10,7 +10,7 @@ import BlogLatestPosts from '~/components/widgets/BlogLatestPosts.astro';
 import StructuredData from '~/components/common/StructuredData.astro';
 import PhotoRibbon from '~/components/widgets/PhotoRibbon.astro';
 import CraftProcess from '~/components/widgets/CraftProcess.astro';
-import Seal from '~/components/common/Seal.astro';
+import Mark from '~/components/common/Mark.astro';
 import Image from '~/components/common/Image.astro';
 import { SITE } from 'astrowind:config';
 import { SERVICES, shopFor } from '~/data/shop';
@@ -281,7 +281,7 @@ const PRINCIPLE_NUMS = ['一', '二', '三'];
       <div class="absolute inset-0 bg-black/75"></div>
     </div>
     <div class="relative max-w-3xl mx-auto text-center">
-      <Seal class="stamp-in mb-6 text-lg intersect intersect-once intersect-half" />
+      <Mark class="mb-6 h-10 w-10 text-primary" />
       <p class="text-sm tracking-[0.08em] text-primary mb-3">{h.orderTag}</p>
       <h2 class="font-heading text-3xl md:text-5xl font-bold text-heading text-balance" data-split>{h.orderTitle}</h2>
       <p class="mt-6 text-lg text-default/90 text-pretty">{h.orderLead}</p>
