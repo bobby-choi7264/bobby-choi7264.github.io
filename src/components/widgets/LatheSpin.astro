@@ -177,8 +177,8 @@ const grain = Array.from({ length: 16 }, (_, i) => ({
       })
       .join(' ');
 
+  // 휴대폰 절전 모드 등으로 '움직임 줄이기'가 켜져 있어도 연출함 (작은 그림이고, 깎이는 건 스크롤로 직접 움직이는 것이라)
   const setup = () => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     document.querySelectorAll<HTMLElement>('.lathe[data-profile]:not([data-carving])').forEach((fig) => {
       fig.dataset.carving = '';
       const profile: number[][] = JSON.parse(fig.dataset.profile!);
@@ -300,14 +300,6 @@ const grain = Array.from({ length: 16 }, (_, i) => ({
       opacity: 0;
       transform: translate(calc(386px - 30px - var(--i) * 9px), calc(132px - 40px - var(--i) * 6px))
         rotate(calc(160deg + var(--i) * 40deg)) scale(1.2);
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .lathe-grain,
-    .lathe-tool,
-    .lathe-spark,
-    .lathe-chips path {
-      animation: none;
     }
   }
 </style>
