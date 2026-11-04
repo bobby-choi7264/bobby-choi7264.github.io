@@ -212,6 +212,7 @@ const persistKey = `header-${Array.from(
                 class:list={['mobile-tab', { 'is-cta': href === contactHref, 'aw-link-active': isActive(href) }]}
                 href={href}
               >
+                {href === contactHref && <Icon name="tabler:clipboard-text" class="h-4 w-4" aria-hidden="true" />}
                 {text}
               </a>
             </li>
@@ -296,7 +297,10 @@ const persistKey = `header-${Array.from(
       const list = this.querySelector<HTMLElement>('.mobile-tabs-list');
       const active = list?.querySelector<HTMLElement>('.aw-link-active');
       if (!list || !active) return;
-      const left = active.offsetLeft - (list.clientWidth - active.offsetWidth) / 2;
+      // 오른쪽 끝에 고정된 주문·문의가 가리는 폭은 빼고 가운데를 잡음
+      const cta = list.querySelector<HTMLElement>('li:has(> .is-cta)');
+      const visible = list.clientWidth - (cta && !cta.contains(active) ? cta.offsetWidth : 0);
+      const left = active.offsetLeft - (visible - active.offsetWidth) / 2;
       list.scrollTo({ left: Math.max(0, left), behavior: 'instant' });
     }
 
