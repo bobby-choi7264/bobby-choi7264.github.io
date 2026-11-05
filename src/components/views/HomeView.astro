@@ -11,6 +11,7 @@ import BlogLatestPosts from '~/components/widgets/BlogLatestPosts.astro';
 import StructuredData from '~/components/common/StructuredData.astro';
 import PhotoRibbon from '~/components/widgets/PhotoRibbon.astro';
 import CraftProcess from '~/components/widgets/CraftProcess.astro';
+import CraftFilm from '~/components/widgets/CraftFilm.astro';
 import Mark from '~/components/common/Mark.astro';
 import Image from '~/components/common/Image.astro';
 import { SITE } from 'astrowind:config';
@@ -78,6 +79,7 @@ const PRINCIPLE_NUMS = ['一', '二', '三'];
   <StructuredData slot="head" schema={structuredData} />
   <Intro />
   <HeroShowcase />
+  <CraftFilm />
 
   <!-- 작업 분야 -->
   <section id="services" class="relative px-4 py-20 md:py-28 scroll-mt-16">

@@ -2,6 +2,7 @@
 // 나무 한 토막이 작품이 되기까지 네 단계. 화면에 들어오면 황동색 선이 그어지고 단계가 차례로 떠오릅니다.
 import Image from '~/components/common/Image.astro';
 import LatheSpin from '~/components/widgets/LatheSpin.astro';
+import LatheSteps from '~/components/widgets/LatheSteps.astro';
 import { langFromPath, useT } from '~/i18n';
 
 const t = useT(langFromPath(Astro.url.pathname)).process;
@@ -58,5 +59,7 @@ const STEPS = t.steps.map((step, i) => ({ ...step, num: NUMS[i], src: PHOTOS[i] 
         ))
       }
     </ol>
+
+    <LatheSteps />
   </div>
 </section>

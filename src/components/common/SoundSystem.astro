@@ -384,8 +384,9 @@ const s = useT(lang).sound;
   };
 
   let musicOn = false;
+  let filmSound = false; // 작업 영상 소리를 켠 동안은 배경음악을 쉼
   const startMusic = (delay = 600) => {
-    if (musicOn) return;
+    if (musicOn || filmSound) return;
     musicOn = true;
     window.clearTimeout(musicTimer);
     musicTimer = window.setTimeout(() => {
@@ -703,6 +704,12 @@ const s = useT(lang).sound;
     if (!introSound) return;
     introSound = false;
     fx(introOut);
+  });
+
+  document.addEventListener('sc:film-sound', (e) => {
+    filmSound = (e as CustomEvent<{ on: boolean }>).detail.on;
+    if (filmSound) stopMusic();
+    else if (enabled) startMusic();
   });
 
   document.addEventListener('astro:after-swap', () => {

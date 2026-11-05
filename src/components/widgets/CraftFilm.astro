@@ -1,0 +1,174 @@
+---
+// 첫 화면 아래 작업 영상. 파일은 public/video/ 에 있습니다 (영상은 바탕화면 원본을 편집해 만든 것).
+// 화면에 들어오면 소리 없이 재생하고, 벗어나면 멈춥니다. 영상 파일은 그때 처음 받습니다.
+// 소리를 켜면 SoundSystem.astro에 알려 배경음악을 쉽니다(sc:film-sound).
+import { Icon } from 'astro-icon/components';
+import { langFromPath, useT } from '~/i18n';
+
+const t = useT(langFromPath(Astro.url.pathname)).film;
+---
+
+<section class="relative px-4 pt-16 pb-6 md:pt-24 md:pb-10">
+  <div class="mx-auto max-w-6xl">
+    <div class="mb-8 text-center md:mb-10">
+      <p class="mb-3 text-sm tracking-[0.08em] text-primary">{t.tag}</p>
+      <h2 class="font-heading text-3xl font-bold text-heading text-balance md:text-5xl" data-split>{t.title}</h2>
+      <div class="ruler mx-auto my-6 max-w-md"></div>
+      <p class="mx-auto max-w-2xl text-muted text-pretty">{t.lead}</p>
+    </div>
+
+    <figure
+      class="craft-film relative aspect-video overflow-hidden rounded-xl border border-primary/25 bg-black shadow-2xl"
+      data-craft-film
+    >
+      <video
+        class="h-full w-full object-cover"
+        src="/video/craft-film.mp4"
+        poster="/video/craft-film-poster.jpg"
+        muted
+        loop
+        playsinline
+        preload="none"
+        aria-label={t.label}></video>
+      <div
+        class="absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 bg-gradient-to-t from-black/70 to-transparent p-2 pt-10 sm:p-4 sm:pt-14"
+      >
+        <button
+          type="button"
+          class="film-btn h-11 w-11 justify-center p-0"
+          data-film-toggle
+          data-play={t.play}
+          data-pause={t.pause}
+          aria-label={t.play}
+        >
+          <Icon name="tabler:player-play-filled" class="film-icon-play h-5 w-5" />
+          <Icon name="tabler:player-pause-filled" class="film-icon-pause hidden h-5 w-5" />
+        </button>
+        <button
+          type="button"
+          class="film-btn h-11 px-4 text-sm"
+          data-film-sound
+          data-on={t.soundOn}
+          data-off={t.soundOff}
+        >
+          <Icon name="tabler:volume" class="film-icon-on h-5 w-5 shrink-0" />
+          <Icon name="tabler:volume-off" class="film-icon-off hidden h-5 w-5 shrink-0" />
+          <span data-film-sound-label>{t.soundOn}</span>
+        </button>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .film-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    border: 1px solid rgb(255 255 255 / 0.35);
+    background: rgb(0 0 0 / 0.5);
+    color: #fff;
+    backdrop-filter: blur(4px);
+    transition: background-color 0.2s;
+  }
+  .film-btn:hover {
+    background: rgb(0 0 0 / 0.75);
+  }
+</style>
+
+<script>
+  let cleanup: (() => void) | undefined;
+
+  const setup = () => {
+    cleanup?.();
+    cleanup = undefined;
+    const root = document.querySelector<HTMLElement>('[data-craft-film]');
+    const video = root?.querySelector('video');
+    const toggle = root?.querySelector<HTMLButtonElement>('[data-film-toggle]');
+    const sound = root?.querySelector<HTMLButtonElement>('[data-film-sound]');
+    if (!root || !video || !toggle || !sound) return;
+
+    const announce = (on: boolean) => document.dispatchEvent(new CustomEvent('sc:film-sound', { detail: { on } }));
+    const save = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+    // 움직임 줄이기·데이터 절약 설정이면 저절로 재생하지 않음. 사용자가 직접 멈추면 다시 틀지 않음
+    let auto = !matchMedia('(prefers-reduced-motion: reduce)').matches && !save;
+    let visible = false;
+
+    const render = () => {
+      const playing = !video.paused;
+      toggle.setAttribute('aria-label', (playing ? toggle.dataset.pause : toggle.dataset.play) ?? '');
+      toggle.querySelector('.film-icon-play')?.classList.toggle('hidden', playing);
+      toggle.querySelector('.film-icon-pause')?.classList.toggle('hidden', !playing);
+      sound.querySelector('.film-icon-on')?.classList.toggle('hidden', !video.muted);
+      sound.querySelector('.film-icon-off')?.classList.toggle('hidden', video.muted);
+      const label = sound.querySelector('[data-film-sound-label]');
+      if (label) label.textContent = (video.muted ? sound.dataset.on : sound.dataset.off) ?? '';
+    };
+    const tryPlay = () => video.play().catch(() => render());
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+        if (visible && auto) tryPlay();
+        else if (!visible && !video.paused) video.pause();
+      },
+      { threshold: 0.35 }
+    );
+    io.observe(root);
+
+    const onToggle = () => {
+      if (video.paused) {
+        auto = true;
+        tryPlay();
+      } else {
+        auto = false;
+        video.pause();
+      }
+    };
+    const onSound = () => {
+      if (video.muted) {
+        video.muted = false;
+        video.currentTime = 0;
+        auto = true;
+        announce(true);
+        // 브라우저가 소리 재생을 막으면 소리 없는 재생으로 되돌림
+        video.play().catch(() => {
+          video.muted = true;
+          announce(false);
+          tryPlay();
+          render();
+        });
+      } else {
+        video.muted = true;
+        announce(false);
+      }
+      render();
+    };
+    const onHidden = () => {
+      if (document.hidden) video.pause();
+      else if (visible && auto) tryPlay();
+    };
+    toggle.addEventListener('click', onToggle);
+    sound.addEventListener('click', onSound);
+    video.addEventListener('play', render);
+    video.addEventListener('pause', render);
+    document.addEventListener('visibilitychange', onHidden);
+    render();
+
+    cleanup = () => {
+      io.disconnect();
+      toggle.removeEventListener('click', onToggle);
+      sound.removeEventListener('click', onSound);
+      document.removeEventListener('visibilitychange', onHidden);
+      if (!video.muted) announce(false);
+      video.pause();
+    };
+  };
+
+  document.addEventListener('astro:page-load', setup);
+  document.addEventListener('astro:before-swap', () => {
+    cleanup?.();
+    cleanup = undefined;
+  });
+</script>

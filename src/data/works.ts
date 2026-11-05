@@ -17,6 +17,134 @@ const w = (file: string, ko: string, en: string, ja: string, zh: string) => ({
 
 const ALL = [
   w(
+    'workshop-183',
+    '로구로 앞에서 기둥을 깎는 장인',
+    'The craftsman turning a column at the lathe',
+    'ろくろの前で柱を削る職人',
+    '在车床前车削柱子的匠人'
+  ),
+  w(
+    'lathe-169',
+    '로구로에서 속을 파내는 원목 그릇',
+    'Hollowing out a wooden bowl on the lathe',
+    'ろくろで内側をくり抜く木の器',
+    '在车床上掏挖原木碗'
+  ),
+  w(
+    'lathe-170',
+    '나뭇결이 살아 있는 깊은 원목 그릇',
+    'Deep wooden bowl with rich grain',
+    '木目の美しい深い木の器',
+    '木纹鲜明的深口原木碗'
+  ),
+  w(
+    'column-171',
+    '한 묶음으로 묶은 구슬 모양 기둥',
+    'Bundled bead-turned spindles',
+    '束ねた玉形の柱',
+    '成捆的串珠形柱子'
+  ),
+  w(
+    'column-182',
+    '각재에서 완성까지 — 로구로로 기둥 깎는 순서',
+    'From square timber to finished column on the lathe',
+    '角材から完成まで — ろくろで柱を削る順序',
+    '从方料到成品——车削柱子的步骤'
+  ),
+  w(
+    'column-178',
+    '1. 각재를 로구로에 겁니다',
+    '1. Mounting the square timber on the lathe',
+    '1. 角材をろくろに取り付ける',
+    '1. 将方料装上车床'
+  ),
+  w('column-179', '2. 거친 날로 둥글게 깎습니다', '2. Rough-turning it round', '2. 荒削りで丸くする', '2. 粗车成圆形'),
+  w('column-180', '3. 아래쪽 모양을 잡습니다', '3. Shaping the lower end', '3. 下側の形を出す', '3. 车出下端造型'),
+  w(
+    'column-181',
+    '4. 위쪽 턱을 깎아 냅니다',
+    '4. Cutting the upper collar',
+    '4. 上側の段を削り出す',
+    '4. 车出上端凸缘'
+  ),
+  w(
+    'furniture-172',
+    '구슬 모양 다리를 깎아 만든 긴 테이블',
+    'Long table with bead-turned legs',
+    '玉形の脚を削り出した長テーブル',
+    '串珠形桌腿长桌'
+  ),
+  w(
+    'furniture-173',
+    '나무못을 줄지어 박은 원목 거치대',
+    'Wooden racks with rows of pegs',
+    '木釘を並べた木製ラック',
+    '排列木钉的原木架'
+  ),
+  w(
+    'furniture-184',
+    '칸막이를 넣은 원목 진열장',
+    'Solid-wood display shelf with dividers',
+    '仕切り付きの木製陳列棚',
+    '带隔板的原木陈列架'
+  ),
+  w(
+    'furniture-185',
+    '꽃 모양 창살문을 단 장식장',
+    'Cabinet with floral lattice doors',
+    '花形の格子扉を付けたキャビネット',
+    '花形格栅门装饰柜'
+  ),
+  w(
+    'furniture-186',
+    '구슬 모양 기둥을 세운 벽면 책장',
+    'Wall shelving with bead-turned columns',
+    '玉形の柱を立てた壁面書棚',
+    '串珠柱墙面书架'
+  ),
+  w(
+    'furniture-187',
+    '구슬 모양 기둥 다리의 원형 테이블',
+    'Round table with a bead-turned pedestal',
+    '玉形の脚の丸いテーブル',
+    '串珠柱脚圆桌'
+  ),
+  w(
+    'furniture-188',
+    '레스토랑 주문으로 만든 다리 깎은 테이블',
+    'Tables with turned legs, ordered by a restaurant',
+    'レストランの注文で作った挽き脚のテーブル',
+    '餐厅订制的车腿餐桌'
+  ),
+  w(
+    'furniture-174',
+    '조각 장식을 넣은 원목 카운터',
+    'Carved solid-wood counter',
+    '彫刻入りの木製カウンター',
+    '带雕花的原木柜台'
+  ),
+  w(
+    'custom-175',
+    '방송 납품 소품 — 삼지창 한 쌍',
+    'Broadcast props: a pair of tridents',
+    '放送局納品の小道具 — 三叉槍一対',
+    '供电视台的道具——一对三叉戟'
+  ),
+  w(
+    'custom-176',
+    '판재를 층층이 끼운 탑 모양 작품',
+    'Tower of layered boards on a turned post',
+    '板を層状に重ねた塔形の作品',
+    '层叠板材的塔形作品'
+  ),
+  w(
+    'custom-177',
+    '긴 자루를 단 큰 나무 메(망치)',
+    'Large wooden mallet with a long handle',
+    '長い柄の大きな木槌',
+    '长柄大木槌'
+  ),
+  w(
     'furniture-140',
     '3단 원형 원목 진열대',
     'Three-tier round wooden display stand',
@@ -526,11 +654,15 @@ export const worksIn = (lang: Lang = 'ko'): Work[] => ALL.map(localize(lang));
 export const worksBy = (key: CategoryKey, lang: Lang = 'ko') => worksIn(lang).filter((item) => item.category === key);
 
 // 첫 화면 슬라이드쇼와 대표 작업에 쓰는 사진
-// 맨 앞 사진은 입장 화면이 걷힐 때 보이는 사진이기도 함 (3단 진열대는 어색하다는 의견으로 4번째로)
-export const HERO_SLIDES = ['lathe-80', 'column-04', 'lathe-25', 'furniture-140', 'column-14', 'furniture-57'];
+// 맨 앞 사진은 입장 화면이 걷힐 때 보이는 사진이기도 함 (대표 사진: 작업 영상에서 뽑은 장면)
+// 슬라이드는 6장 기준으로 tailwind.css의 heroFade가 맞춰져 있음. 장수를 바꾸면 그쪽도 고칠 것
+export const HERO_SLIDES = ['workshop-183', 'lathe-80', 'column-04', 'lathe-25', 'furniture-140', 'column-14'];
+// 위 사진 중 중요한 부분(장인 얼굴과 손)이 오른쪽에 있는 사진. 휴대폰 세로 화면에서 그쪽이 보이게 맞춤
+export const HERO_RIGHT = ['workshop-183'];
 // 위 사진 중 세로로 긴 사진. 넓은 화면에서는 잘리지 않게 전체를 오른쪽에 두고 빈 곳은 흐린 사진으로 채움
 export const HERO_TALL = ['furniture-140'];
 export const FEATURED = [
+  'workshop-183',
   'furniture-140',
   'custom-145',
   'lathe-80',
@@ -538,7 +670,6 @@ export const FEATURED = [
   'lathe-56',
   'custom-40',
   'lathe-25',
-  'furniture-57',
 ];
 export const pick = (files: string[], lang: Lang = 'ko') =>
   files.map((file) => worksIn(lang).find((item) => item.file === file)!).filter(Boolean);
@@ -548,6 +679,7 @@ export const pick = (files: string[], lang: Lang = 'ko') =>
 export const GROUPS: string[][] = [
   ['furniture-140', 'furniture-141', 'furniture-142'],
   ['custom-145', 'custom-143', 'custom-144', 'custom-146', 'custom-147', 'custom-148', 'custom-149', 'custom-150'],
+  ['column-182', 'column-178', 'column-179', 'column-180', 'column-181'],
   ['column-152', 'column-153'],
   ['column-159', 'column-160'],
   ['lathe-163', 'lathe-164'],

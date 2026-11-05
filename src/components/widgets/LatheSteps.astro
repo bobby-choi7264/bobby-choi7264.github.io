@@ -1,0 +1,165 @@
+---
+// 기둥 하나가 깎이는 순서. 같은 자리에서 찍은 사진 5장을 축이 같은 위치에 오게 맞춰 두어(src/assets/images/process/),
+// 번호를 누르면 같은 자리에서 나무 모양만 바뀌어 보입니다. 화면에 들어오면 한 번 저절로 넘어갑니다.
+import Image from '~/components/common/Image.astro';
+import { langFromPath, useT } from '~/i18n';
+
+const t = useT(langFromPath(Astro.url.pathname)).latheSteps;
+const steps = t.steps.map((step, i) => ({ ...step, src: `~/assets/images/process/step-${i + 1}.jpg` }));
+---
+
+<div class="mt-16 md:mt-24" data-lathe-steps>
+  <div class="mb-6 text-center">
+    <h3 class="font-heading text-2xl font-bold text-heading md:text-3xl">{t.title}</h3>
+    <p class="mt-2 text-muted text-pretty">{t.lead}</p>
+  </div>
+
+  <div class="relative mx-auto aspect-video max-w-4xl overflow-hidden rounded-xl border border-primary/25 bg-black">
+    {
+      steps.map((step, i) => (
+        <div
+          class:list={[
+            'lathe-step absolute inset-0 transition-opacity duration-300',
+            i === 0 ? 'opacity-100' : 'opacity-0',
+          ]}
+          data-step-photo
+        >
+          <Image
+            src={step.src}
+            alt={step.title}
+            widths={[640, 960, 1400]}
+            sizes="(max-width: 896px) 100vw, 896px"
+            width={1400}
+            height={788}
+            layout="cover"
+            format="webp"
+            class="h-full w-full object-cover"
+          />
+        </div>
+      ))
+    }
+  </div>
+
+  <ol class="mx-auto mt-4 grid max-w-4xl grid-cols-5 gap-1.5 sm:gap-2">
+    {
+      steps.map((step, i) => (
+        <li>
+          <button
+            type="button"
+            class:list={['lathe-step-btn', i === 0 && 'is-on']}
+            aria-pressed={i === 0 ? 'true' : 'false'}
+            aria-label={`${i + 1}. ${step.title}`}
+            data-step-btn
+          >
+            <span class="font-bold">{i + 1}</span>
+            <span class="hidden text-xs sm:block sm:text-sm">{step.title}</span>
+          </button>
+        </li>
+      ))
+    }
+  </ol>
+  <div class="mx-auto mt-4 max-w-4xl text-center md:min-h-[3.5rem]" aria-live="polite">
+    {
+      steps.map((step, i) => (
+        <p class:list={['text-default/90 text-pretty', i !== 0 && 'hidden']} data-step-text>
+          <span class="font-bold text-heading sm:hidden">{step.title}. </span>
+          {step.text}
+        </p>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .lathe-step-btn {
+    display: flex;
+    min-height: 2.75rem;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.125rem;
+    border-radius: 0.625rem;
+    border: 1px solid rgb(196 150 84 / 0.25);
+    padding: 0.375rem 0.25rem;
+    color: var(--aw-color-text-muted);
+    transition:
+      background-color 0.2s,
+      color 0.2s,
+      border-color 0.2s;
+  }
+  .lathe-step-btn:hover {
+    border-color: rgb(196 150 84 / 0.6);
+    color: var(--aw-color-text-heading);
+  }
+  .lathe-step-btn.is-on {
+    border-color: var(--aw-color-primary);
+    background: rgb(196 150 84 / 0.16);
+    color: var(--aw-color-text-heading);
+  }
+</style>
+
+<script>
+  let stop: (() => void) | undefined;
+
+  const setup = () => {
+    stop?.();
+    stop = undefined;
+    const root = document.querySelector<HTMLElement>('[data-lathe-steps]');
+    if (!root) return;
+    const photos = [...root.querySelectorAll<HTMLElement>('[data-step-photo]')];
+    const buttons = [...root.querySelectorAll<HTMLButtonElement>('[data-step-btn]')];
+    const texts = [...root.querySelectorAll<HTMLElement>('[data-step-text]')];
+    let current = 0;
+    let timer: number | undefined;
+
+    const show = (n: number) => {
+      current = n;
+      photos.forEach((p, i) => {
+        p.classList.toggle('opacity-100', i === n);
+        p.classList.toggle('opacity-0', i !== n);
+      });
+      buttons.forEach((b, i) => {
+        b.classList.toggle('is-on', i === n);
+        b.setAttribute('aria-pressed', String(i === n));
+      });
+      texts.forEach((p, i) => p.classList.toggle('hidden', i !== n));
+    };
+    const halt = () => {
+      window.clearInterval(timer);
+      timer = undefined;
+    };
+    buttons.forEach((b, i) =>
+      b.addEventListener('click', () => {
+        halt();
+        io.disconnect();
+        show(i);
+      })
+    );
+    // 처음 화면에 들어오면 1번부터 5번까지 한 번 보여 주고 멈춤
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        io.disconnect();
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        timer = window.setInterval(() => {
+          if (current >= photos.length - 1) return halt();
+          show(current + 1);
+        }, 2200);
+      },
+      { threshold: 0.5 }
+    );
+    io.observe(root);
+    stop = () => {
+      halt();
+      io.disconnect();
+    };
+  };
+
+  document.addEventListener('astro:page-load', setup);
+  document.addEventListener('astro:before-swap', () => {
+    stop?.();
+    stop = undefined;
+  });
+</script>

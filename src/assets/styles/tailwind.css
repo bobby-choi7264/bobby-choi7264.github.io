@@ -270,6 +270,11 @@
     object-position: 90% 50%;
   }
 }
+/* 얼굴·손이 오른쪽에 있는 사진(HERO_RIGHT): 세로 화면에서도 그쪽이 보이게 */
+.hero-slide.is-right > img,
+#intro .intro-photo.is-right > img {
+  object-position: 100% 50%;
+}
 /* 입장 화면이 떠 있는 동안은 슬라이드쇼를 멈춰서, 걷힐 때 같은 사진으로 이어지게 */
 .intro-active .hero-slide,
 .intro-active .hero-slide img {

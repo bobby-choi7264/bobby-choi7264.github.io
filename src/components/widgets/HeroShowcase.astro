@@ -4,7 +4,7 @@ import { Icon } from 'astro-icon/components';
 import Image from '~/components/common/Image.astro';
 import WorkshopLight from '~/components/widgets/WorkshopLight.astro';
 import OpenStatus from '~/components/common/OpenStatus.astro';
-import { HERO_SLIDES, HERO_TALL, pick } from '~/data/works';
+import { HERO_RIGHT, HERO_SLIDES, HERO_TALL, pick } from '~/data/works';
 import { shopFor } from '~/data/shop';
 import { langFromPath, localize, useT } from '~/i18n';
 
@@ -31,7 +31,11 @@ const delay = (index: number) => `${(index * seconds - 36 * 0.03).toFixed(2)}s`;
     {
       slides.map((slide, index) => (
         <div
-          class:list={['hero-slide', HERO_TALL.includes(slide.file) && 'is-tall']}
+          class:list={[
+            'hero-slide',
+            HERO_TALL.includes(slide.file) && 'is-tall',
+            HERO_RIGHT.includes(slide.file) && 'is-right',
+          ]}
           style={`animation-delay:${delay(index)}`}
         >
           {HERO_TALL.includes(slide.file) && (

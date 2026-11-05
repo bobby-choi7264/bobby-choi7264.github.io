@@ -139,6 +139,33 @@ const en: Dict = {
     workshopTitle2: 'the lathe turns in Euljiro',
     workshopLink: 'Our Story',
   },
+  film: {
+    tag: 'In the workshop',
+    title: 'Time, turned in wood',
+    lead: 'Filmed in the workshop by the craftsman: one minute of a column taking shape on the lathe.',
+    soundOn: 'Watch from the start with sound',
+    soundOff: 'Mute',
+    play: 'Play',
+    pause: 'Pause',
+    label: 'Seongchang Craft workshop film: the craftsman turning a wooden column on the lathe',
+  },
+  latheSteps: {
+    title: 'How one column is turned',
+    lead: 'Real photos taken from the same spot. Tap a number to see each stage.',
+    steps: [
+      {
+        title: 'Mount the timber',
+        text: 'The square timber is centred and mounted on the lathe. The column behind it was turned earlier to the same shape.',
+      },
+      { title: 'Turn it round', text: 'The square base is left as it is, and the rest is rough-turned round.' },
+      { title: 'Shape the base', text: 'Working from the lower end, the rounded collar and slim curve take shape.' },
+      {
+        title: 'Cut the collar',
+        text: 'The upper collar is marked out and the thickness reduced to balance the whole form.',
+      },
+      { title: 'Smooth and finish', text: 'Tool marks are smoothed away and the column is finished.' },
+    ],
+  },
   process: {
     tag: 'The Process',
     title: 'From a Block of Wood to a Finished Piece',
