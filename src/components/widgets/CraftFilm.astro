@@ -1,6 +1,6 @@
 ---
 // 첫 화면 아래 작업 영상. 파일은 public/video/ 에 있습니다 (영상은 바탕화면 원본을 편집해 만든 것).
-// 화면에 들어오면 소리 없이 재생하고, 벗어나면 멈춥니다. 영상 파일은 그때 처음 받습니다.
+// 재생을 누르면 소리와 함께 시작하고(영상 파일도 그때 받음), 화면 밖으로 나가면 멈춥니다.
 // 소리를 켜면 SoundSystem.astro에 알려 배경음악을 쉽니다(sc:film-sound).
 import { Icon } from 'astro-icon/components';
 import { langFromPath, useT } from '~/i18n';
@@ -22,10 +22,8 @@ const t = useT(langFromPath(Astro.url.pathname)).film;
       data-craft-film
     >
       <video
-        class="h-full w-full object-cover"
+        class="h-full w-full cursor-pointer object-cover"
         poster="/video/craft-film-poster.jpg"
-        muted
-        loop
         playsinline
         preload="none"
         aria-label={t.label}
@@ -33,6 +31,9 @@ const t = useT(langFromPath(Astro.url.pathname)).film;
         <source src="/video/craft-film-mobile.mp4" type="video/mp4" media="(max-width: 767px)" />
         <source src="/video/craft-film.mp4" type="video/mp4" />
       </video>
+      <span class="film-bigplay" data-film-bigplay aria-hidden="true">
+        <Icon name="tabler:player-play-filled" class="h-8 w-8" />
+      </span>
     </figure>
 
     <div class="mt-3 flex flex-wrap items-center gap-2 sm:gap-3" data-film-controls>
@@ -87,6 +88,25 @@ const t = useT(langFromPath(Astro.url.pathname)).film;
     border-color: var(--aw-color-primary);
     background: rgb(196 150 84 / 0.16);
   }
+  .film-bigplay {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    display: grid;
+    width: 4.5rem;
+    height: 4.5rem;
+    place-items: center;
+    border-radius: 9999px;
+    background: rgb(20 15 11 / 0.72);
+    border: 1px solid rgb(224 186 120 / 0.7);
+    color: #f3d9a4;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    transition: opacity 0.25s;
+  }
+  .film-bigplay.is-hidden {
+    opacity: 0;
+  }
   .film-seek {
     height: 2.75rem;
     accent-color: var(--aw-color-primary);
@@ -103,26 +123,23 @@ const t = useT(langFromPath(Astro.url.pathname)).film;
     const root = document.querySelector<HTMLElement>('[data-craft-film]');
     const controls = document.querySelector<HTMLElement>('[data-film-controls]');
     const video = root?.querySelector('video');
+    const bigPlay = root?.querySelector<HTMLElement>('[data-film-bigplay]');
     const toggle = controls?.querySelector<HTMLButtonElement>('[data-film-toggle]');
     const restart = controls?.querySelector<HTMLButtonElement>('[data-film-restart]');
     const sound = controls?.querySelector<HTMLButtonElement>('[data-film-sound]');
     const seek = controls?.querySelector<HTMLInputElement>('[data-film-seek]');
     const time = controls?.querySelector<HTMLElement>('[data-film-time]');
-    if (!root || !video || !toggle || !restart || !sound || !seek || !time) return;
+    if (!root || !video || !bigPlay || !toggle || !restart || !sound || !seek || !time) return;
 
-    const save = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
-    // 움직임 줄이기·데이터 절약 설정이면 저절로 재생하지 않음. 사용자가 직접 멈추면 다시 틀지 않음
-    let auto = !matchMedia('(prefers-reduced-motion: reduce)').matches && !save;
-    let visible = false;
     let announced = false;
-    let startTimer: number | undefined;
+    let resumeOnReturn = false;
     let fadeTimer: number | undefined;
     let seeking = false;
-    let watching = false; // 사용자가 재생을 눌러 소리와 함께 보는 중
+    let leaving = false; // 화면 밖으로 나가 소리를 줄이는 중
 
-    // 영상이 소리로 재생되는 동안 SoundSystem.astro가 배경음악을 줄임 (sc:film-sound)
-    const syncMusic = () => {
-      const on = visible && !video.muted && !video.paused;
+    // 영상이 소리로 재생되는 동안 SoundSystem.astro가 배경음악을 끔 (sc:film-sound)
+    const syncMusic = (force?: boolean) => {
+      const on = force ?? (!leaving && !video.muted && !video.paused);
       if (on === announced) return;
       announced = on;
       document.dispatchEvent(new CustomEvent('sc:film-sound', { detail: { on } }));
@@ -135,101 +152,64 @@ const t = useT(langFromPath(Astro.url.pathname)).film;
       time.textContent = `${clock(video.currentTime)} / ${clock(total)}`;
     };
     const render = () => {
-      const playing = !video.paused && !previewing();
+      const playing = !video.paused;
       const label = toggle.querySelector('[data-film-toggle-label]');
       if (label) label.textContent = (playing ? toggle.dataset.pause : toggle.dataset.play) ?? '';
       toggle.querySelector('.film-icon-play')?.classList.toggle('hidden', playing);
       toggle.querySelector('.film-icon-pause')?.classList.toggle('hidden', !playing);
+      bigPlay.classList.toggle('is-hidden', playing);
       sound.querySelector('.film-icon-on')?.classList.toggle('hidden', !video.muted);
       sound.querySelector('.film-icon-off')?.classList.toggle('hidden', video.muted);
       const soundLabel = sound.querySelector('[data-film-sound-label]');
       if (soundLabel) soundLabel.textContent = (video.muted ? sound.dataset.on : sound.dataset.off) ?? '';
       syncMusic();
     };
-    const tryPlay = () => video.play().catch(() => render());
-    // 영상 소리도 부드럽게 커지고 작아짐 (iPhone은 음량을 코드로 못 바꿔서 바로 멈춤)
-    const fadeVolume = (to: number, ms: number, then?: () => void) => {
+    const play = () => {
+      leaving = false;
+      window.clearInterval(fadeTimer);
+      video.volume = 1;
+      video.play().catch(() => render());
+    };
+    // 화면 밖으로 나갈 때 소리를 짧게 줄이고 멈춤 (iPhone은 음량을 코드로 못 바꿔서 바로 멈춤)
+    const fadeOutAndPause = () => {
       window.clearInterval(fadeTimer);
       const from = video.volume;
       const started = performance.now();
       fadeTimer = window.setInterval(() => {
-        const p = Math.min(1, (performance.now() - started) / ms);
-        video.volume = from + (to - from) * p;
+        const p = Math.min(1, (performance.now() - started) / 400);
+        video.volume = from * (1 - p);
         if (p < 1) return;
         window.clearInterval(fadeTimer);
-        then?.();
+        video.pause();
+        video.volume = 1;
       }, 40);
     };
 
+    // 화면 밖으로 나가면 정지하고 배경음악을 되살림. 다시 와도 저절로 재생하지 않음
     const io = new IntersectionObserver(
       ([entry]) => {
-        visible = entry.isIntersecting;
-        window.clearTimeout(startTimer);
-        if (visible && auto) {
-          // 스크롤하는 도중에 영상을 받기 시작하면 끊기므로 잠깐 기다렸다가 재생
-          startTimer = window.setTimeout(tryPlay, 350);
-        } else if (!visible && !video.paused) {
-          const leave = () => {
-            video.pause();
-            // 다시 돌아오면 소리 없이 이어서 미리 보기 (갑자기 소리가 나지 않게)
-            video.muted = true;
-            video.volume = 1;
-            watching = false;
-            render();
-          };
-          if (video.muted) leave();
-          else fadeVolume(0, 400, leave);
-        }
+        if (entry.isIntersecting || video.paused) return;
+        leaving = true;
         syncMusic();
+        if (video.muted) video.pause();
+        else fadeOutAndPause();
       },
       { threshold: 0.35 }
     );
     io.observe(root);
 
-    // 소리 없이 미리 돌아가는 상태에서는 단추가 '재생'으로 보이고, 누르면 처음부터 소리와 함께 재생
-    const previewing = () => video.muted && !watching;
-    const playWithSound = () => {
-      watching = true;
-      auto = true;
-      window.clearInterval(fadeTimer);
-      video.volume = 1;
-      video.muted = false;
-      // 브라우저가 소리 재생을 막으면 소리 없는 재생으로 되돌림
-      video.play().catch(() => {
-        video.muted = true;
-        watching = false;
-        tryPlay();
-        render();
-      });
-      render();
-    };
     const onToggle = () => {
-      if (previewing()) {
-        video.currentTime = 0;
-        playWithSound();
-      } else if (video.paused) {
-        playWithSound();
-      } else {
-        auto = false;
-        watching = false;
-        video.pause();
-      }
-      render();
+      if (video.paused) play();
+      else video.pause();
     };
-    const onFrameClick = () => onToggle();
     const onRestart = () => {
       video.currentTime = 0;
       renderTime();
-      playWithSound();
+      play();
     };
     const onSound = () => {
-      if (video.muted) {
-        playWithSound();
-      } else {
-        window.clearInterval(fadeTimer);
-        video.muted = true;
-        render();
-      }
+      video.muted = !video.muted;
+      render();
     };
     const onSeekInput = () => {
       seeking = true;
@@ -240,17 +220,23 @@ const t = useT(langFromPath(Astro.url.pathname)).film;
       seeking = false;
     };
     const onHidden = () => {
-      if (document.hidden) video.pause();
-      else if (visible && auto) tryPlay();
+      if (document.hidden) {
+        resumeOnReturn = !video.paused;
+        video.pause();
+      } else if (resumeOnReturn) {
+        resumeOnReturn = false;
+        play();
+      }
     };
     toggle.addEventListener('click', onToggle);
-    video.addEventListener('click', onFrameClick);
+    video.addEventListener('click', onToggle);
     restart.addEventListener('click', onRestart);
     sound.addEventListener('click', onSound);
     seek.addEventListener('input', onSeekInput);
     seek.addEventListener('change', onSeekEnd);
     video.addEventListener('play', render);
     video.addEventListener('pause', render);
+    video.addEventListener('ended', render);
     video.addEventListener('volumechange', render);
     video.addEventListener('timeupdate', renderTime);
     video.addEventListener('loadedmetadata', renderTime);
@@ -259,17 +245,14 @@ const t = useT(langFromPath(Astro.url.pathname)).film;
 
     cleanup = () => {
       io.disconnect();
-      window.clearTimeout(startTimer);
       window.clearInterval(fadeTimer);
       toggle.removeEventListener('click', onToggle);
-      video.removeEventListener('click', onFrameClick);
       restart.removeEventListener('click', onRestart);
       sound.removeEventListener('click', onSound);
       seek.removeEventListener('input', onSeekInput);
       seek.removeEventListener('change', onSeekEnd);
       document.removeEventListener('visibilitychange', onHidden);
-      visible = false;
-      syncMusic();
+      syncMusic(false);
       video.pause();
     };
   };
