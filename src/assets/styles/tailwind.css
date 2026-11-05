@@ -1624,3 +1624,11 @@ html:not(.allow-zoom) {
     overscroll-behavior-y: none;
   }
 }
+
+/* 상단 메뉴: 끌었을 때 브라우저가 링크 주소를 말풍선처럼 보여 주는 것과 글자 선택을 막음 */
+.mobile-tab,
+.desktop-nav a {
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+}

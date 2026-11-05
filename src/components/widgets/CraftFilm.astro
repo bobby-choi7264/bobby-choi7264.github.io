@@ -186,15 +186,17 @@ const t = useT(langFromPath(Astro.url.pathname)).film;
     };
 
     // 화면 밖으로 나가면 정지하고 배경음악을 되살림. 다시 와도 저절로 재생하지 않음
+    // 상단 메뉴에 가려진 부분은 보이지 않는 것으로 치고, 조금만 보일 때 누른 뒤 나가도 멈추도록 0도 감시함
+    const headerHeight = document.querySelector('header')?.getBoundingClientRect().height ?? 0;
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting || video.paused) return;
+        if (entry.intersectionRatio >= 0.35 || video.paused || leaving) return;
         leaving = true;
         syncMusic();
         if (video.muted) video.pause();
         else fadeOutAndPause();
       },
-      { threshold: 0.35 }
+      { threshold: [0, 0.35], rootMargin: `-${Math.round(headerHeight)}px 0px 0px 0px` }
     );
     io.observe(root);
 

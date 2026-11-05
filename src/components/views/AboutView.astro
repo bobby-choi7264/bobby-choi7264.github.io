@@ -98,7 +98,7 @@ const mosaic = [
       </h2>
       <div class="gold-rule my-7 mx-auto max-w-xs"></div>
       <div class="space-y-5 text-lg leading-relaxed text-default/90">
-        {a.craftParagraphs.map((p) => <p class="text-pretty">{p}</p>)}
+        {a.craftParagraphs.map((p) => <p class="text-pretty [word-break:keep-all]" set:html={p} />)}
       </div>
       <p class="mt-10 inline-flex items-center gap-4 font-heading text-lg text-primary">
         — {a.craftSign}
