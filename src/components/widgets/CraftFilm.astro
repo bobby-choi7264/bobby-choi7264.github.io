@@ -9,7 +9,7 @@ const t = useT(langFromPath(Astro.url.pathname)).film;
 ---
 
 <section class="relative px-4 pt-16 pb-6 md:pt-24 md:pb-10">
-  <div class="mx-auto max-w-6xl">
+  <div class="mx-auto max-w-5xl">
     <div class="mb-8 text-center md:mb-10">
       <p class="mb-3 text-sm tracking-[0.08em] text-primary">{t.tag}</p>
       <h2 class="font-heading text-3xl font-bold text-heading text-balance md:text-5xl" data-split>{t.title}</h2>
@@ -33,50 +33,64 @@ const t = useT(langFromPath(Astro.url.pathname)).film;
         <source src="/video/craft-film-mobile.mp4" type="video/mp4" media="(max-width: 767px)" />
         <source src="/video/craft-film.mp4" type="video/mp4" />
       </video>
-      <div
-        class="absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 bg-gradient-to-t from-black/70 to-transparent p-2 pt-10 sm:p-4 sm:pt-14"
-      >
-        <button
-          type="button"
-          class="film-btn h-11 w-11 justify-center p-0"
-          data-film-toggle
-          data-play={t.play}
-          data-pause={t.pause}
-          aria-label={t.play}
-        >
-          <Icon name="tabler:player-play-filled" class="film-icon-play h-5 w-5" />
-          <Icon name="tabler:player-pause-filled" class="film-icon-pause hidden h-5 w-5" />
-        </button>
-        <button
-          type="button"
-          class="film-btn h-11 px-4 text-sm"
-          data-film-sound
-          data-on={t.soundOn}
-          data-off={t.soundOff}
-        >
-          <Icon name="tabler:volume" class="film-icon-on h-5 w-5 shrink-0" />
-          <Icon name="tabler:volume-off" class="film-icon-off hidden h-5 w-5 shrink-0" />
-          <span data-film-sound-label>{t.soundOn}</span>
-        </button>
-      </div>
     </figure>
+
+    <div class="mt-3 flex flex-wrap items-center gap-2 sm:gap-3" data-film-controls>
+      <button type="button" class="film-btn" data-film-toggle data-play={t.play} data-pause={t.pause}>
+        <Icon name="tabler:player-play" class="film-icon-play h-5 w-5 shrink-0" />
+        <Icon name="tabler:player-pause" class="film-icon-pause hidden h-5 w-5 shrink-0" />
+        <span data-film-toggle-label>{t.play}</span>
+      </button>
+      <button type="button" class="film-btn" data-film-restart>
+        <Icon name="tabler:player-skip-back" class="h-5 w-5 shrink-0" />
+        <span>{t.restart}</span>
+      </button>
+      <button type="button" class="film-btn" data-film-sound data-on={t.soundOn} data-off={t.soundOff}>
+        <Icon name="tabler:volume" class="film-icon-on h-5 w-5 shrink-0" />
+        <Icon name="tabler:volume-off" class="film-icon-off hidden h-5 w-5 shrink-0" />
+        <span data-film-sound-label>{t.soundOn}</span>
+      </button>
+      <div class="flex min-w-48 flex-1 items-center gap-2 basis-full sm:basis-48">
+        <input
+          type="range"
+          class="film-seek min-w-0 flex-1"
+          min="0"
+          max="60"
+          step="0.1"
+          value="0"
+          aria-label={t.seek}
+          data-film-seek
+        />
+        <span class="shrink-0 text-xs tabular-nums text-muted" data-film-time>0:00 / 1:00</span>
+      </div>
+    </div>
   </div>
 </section>
 
 <style>
   .film-btn {
     display: inline-flex;
+    min-height: 2.75rem;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
     border-radius: 9999px;
-    border: 1px solid rgb(255 255 255 / 0.35);
-    background: rgb(0 0 0 / 0.5);
-    color: #fff;
-    backdrop-filter: blur(4px);
-    transition: background-color 0.2s;
+    border: 1px solid rgb(196 150 84 / 0.45);
+    padding: 0 0.85rem;
+    color: var(--aw-color-text-heading);
+    font-size: 0.875rem;
+    white-space: nowrap;
+    transition:
+      background-color 0.2s,
+      border-color 0.2s;
   }
   .film-btn:hover {
-    background: rgb(0 0 0 / 0.75);
+    border-color: var(--aw-color-primary);
+    background: rgb(196 150 84 / 0.16);
+  }
+  .film-seek {
+    height: 2.75rem;
+    accent-color: var(--aw-color-primary);
+    cursor: pointer;
   }
 </style>
 
@@ -87,34 +101,81 @@ const t = useT(langFromPath(Astro.url.pathname)).film;
     cleanup?.();
     cleanup = undefined;
     const root = document.querySelector<HTMLElement>('[data-craft-film]');
+    const controls = document.querySelector<HTMLElement>('[data-film-controls]');
     const video = root?.querySelector('video');
-    const toggle = root?.querySelector<HTMLButtonElement>('[data-film-toggle]');
-    const sound = root?.querySelector<HTMLButtonElement>('[data-film-sound]');
-    if (!root || !video || !toggle || !sound) return;
+    const toggle = controls?.querySelector<HTMLButtonElement>('[data-film-toggle]');
+    const restart = controls?.querySelector<HTMLButtonElement>('[data-film-restart]');
+    const sound = controls?.querySelector<HTMLButtonElement>('[data-film-sound]');
+    const seek = controls?.querySelector<HTMLInputElement>('[data-film-seek]');
+    const time = controls?.querySelector<HTMLElement>('[data-film-time]');
+    if (!root || !video || !toggle || !restart || !sound || !seek || !time) return;
 
-    const announce = (on: boolean) => document.dispatchEvent(new CustomEvent('sc:film-sound', { detail: { on } }));
     const save = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
     // 움직임 줄이기·데이터 절약 설정이면 저절로 재생하지 않음. 사용자가 직접 멈추면 다시 틀지 않음
     let auto = !matchMedia('(prefers-reduced-motion: reduce)').matches && !save;
     let visible = false;
+    let announced = false;
+    let startTimer: number | undefined;
+    let fadeTimer: number | undefined;
+    let seeking = false;
 
+    // 영상이 소리로 재생되는 동안 SoundSystem.astro가 배경음악을 줄임 (sc:film-sound)
+    const syncMusic = () => {
+      const on = visible && !video.muted && !video.paused;
+      if (on === announced) return;
+      announced = on;
+      document.dispatchEvent(new CustomEvent('sc:film-sound', { detail: { on } }));
+    };
+    const clock = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+    const renderTime = () => {
+      const total = Number.isFinite(video.duration) ? video.duration : Number(seek.max);
+      seek.max = String(total);
+      if (!seeking) seek.value = String(video.currentTime);
+      time.textContent = `${clock(video.currentTime)} / ${clock(total)}`;
+    };
     const render = () => {
       const playing = !video.paused;
-      toggle.setAttribute('aria-label', (playing ? toggle.dataset.pause : toggle.dataset.play) ?? '');
+      const label = toggle.querySelector('[data-film-toggle-label]');
+      if (label) label.textContent = (playing ? toggle.dataset.pause : toggle.dataset.play) ?? '';
       toggle.querySelector('.film-icon-play')?.classList.toggle('hidden', playing);
       toggle.querySelector('.film-icon-pause')?.classList.toggle('hidden', !playing);
       sound.querySelector('.film-icon-on')?.classList.toggle('hidden', !video.muted);
       sound.querySelector('.film-icon-off')?.classList.toggle('hidden', video.muted);
-      const label = sound.querySelector('[data-film-sound-label]');
-      if (label) label.textContent = (video.muted ? sound.dataset.on : sound.dataset.off) ?? '';
+      const soundLabel = sound.querySelector('[data-film-sound-label]');
+      if (soundLabel) soundLabel.textContent = (video.muted ? sound.dataset.on : sound.dataset.off) ?? '';
+      syncMusic();
     };
     const tryPlay = () => video.play().catch(() => render());
+    // 영상 소리도 부드럽게 커지고 작아짐 (iPhone은 음량을 코드로 못 바꿔서 바로 멈춤)
+    const fadeVolume = (to: number, ms: number, then?: () => void) => {
+      window.clearInterval(fadeTimer);
+      const from = video.volume;
+      const started = performance.now();
+      fadeTimer = window.setInterval(() => {
+        const p = Math.min(1, (performance.now() - started) / ms);
+        video.volume = from + (to - from) * p;
+        if (p < 1) return;
+        window.clearInterval(fadeTimer);
+        then?.();
+      }, 40);
+    };
 
     const io = new IntersectionObserver(
       ([entry]) => {
         visible = entry.isIntersecting;
-        if (visible && auto) tryPlay();
-        else if (!visible && !video.paused) video.pause();
+        window.clearTimeout(startTimer);
+        if (visible && auto) {
+          // 스크롤하는 도중에 영상을 받기 시작하면 끊기므로 잠깐 기다렸다가 재생
+          startTimer = window.setTimeout(() => {
+            if (!video.muted) fadeVolume(1, 800);
+            tryPlay();
+          }, 350);
+        } else if (!visible && !video.paused) {
+          syncMusic();
+          if (video.muted) video.pause();
+          else fadeVolume(0, 500, () => video.pause());
+        }
+        syncMusic();
       },
       { threshold: 0.35 }
     );
@@ -129,42 +190,64 @@ const t = useT(langFromPath(Astro.url.pathname)).film;
         video.pause();
       }
     };
+    const onRestart = () => {
+      video.currentTime = 0;
+      auto = true;
+      renderTime();
+      tryPlay();
+    };
     const onSound = () => {
-      if (video.muted) {
-        video.muted = false;
-        video.currentTime = 0;
+      window.clearInterval(fadeTimer);
+      video.volume = 1;
+      video.muted = !video.muted;
+      if (!video.muted) {
         auto = true;
-        announce(true);
         // 브라우저가 소리 재생을 막으면 소리 없는 재생으로 되돌림
         video.play().catch(() => {
           video.muted = true;
-          announce(false);
           tryPlay();
           render();
         });
-      } else {
-        video.muted = true;
-        announce(false);
       }
       render();
+    };
+    const onSeekInput = () => {
+      seeking = true;
+      video.currentTime = Number(seek.value);
+      time.textContent = `${clock(Number(seek.value))} / ${clock(Number(seek.max))}`;
+    };
+    const onSeekEnd = () => {
+      seeking = false;
     };
     const onHidden = () => {
       if (document.hidden) video.pause();
       else if (visible && auto) tryPlay();
     };
     toggle.addEventListener('click', onToggle);
+    restart.addEventListener('click', onRestart);
     sound.addEventListener('click', onSound);
+    seek.addEventListener('input', onSeekInput);
+    seek.addEventListener('change', onSeekEnd);
     video.addEventListener('play', render);
     video.addEventListener('pause', render);
+    video.addEventListener('volumechange', render);
+    video.addEventListener('timeupdate', renderTime);
+    video.addEventListener('loadedmetadata', renderTime);
     document.addEventListener('visibilitychange', onHidden);
     render();
 
     cleanup = () => {
       io.disconnect();
+      window.clearTimeout(startTimer);
+      window.clearInterval(fadeTimer);
       toggle.removeEventListener('click', onToggle);
+      restart.removeEventListener('click', onRestart);
       sound.removeEventListener('click', onSound);
+      seek.removeEventListener('input', onSeekInput);
+      seek.removeEventListener('change', onSeekEnd);
       document.removeEventListener('visibilitychange', onHidden);
-      if (!video.muted) announce(false);
+      visible = false;
+      syncMusic();
       video.pause();
     };
   };

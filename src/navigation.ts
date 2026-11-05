@@ -8,6 +8,7 @@ export const getHeaderData = (lang: Lang = 'ko') => {
   const shop = shopFor(lang);
   return {
     links: [
+      { text: t.home, href: localize(lang, '/') },
       { text: t.about, href: localize(lang, '/about') },
       { text: t.services, href: localize(lang, '/services') },
       { text: t.woods, href: localize(lang, '/woods') },

@@ -1565,3 +1565,53 @@ aw-gallery li {
     bottom: calc(max(0.6rem, env(safe-area-inset-bottom)) + 2.9rem);
   }
 }
+
+/* 두 손가락 확대·두 번 눌러 확대를 막음 (사진 크게 보기 중에는 허용, PinchLock.astro) */
+html:not(.allow-zoom) {
+  touch-action: pan-x pan-y;
+}
+
+/* 터치 기기(휴대폰·태블릿): 스크롤이 끊기지 않게 그래픽 부담이 큰 효과를 끔 */
+@media (hover: none) {
+  /* 화면 전체에 고정된 종이 질감: 스크롤할 때마다 전체 화면을 다시 합성함 */
+  body::before {
+    display: none;
+  }
+  /* 떠 있는 단추 뒤 흐림: 지나가는 내용을 매 프레임 다시 흐리게 함 */
+  .sound-btn,
+  .share-fab-btn,
+  .stack-badge {
+    backdrop-filter: none;
+    background: rgb(20 15 11 / 0.94);
+  }
+  .hero-spot {
+    display: none;
+  }
+  /* 첫 화면 사진은 확대 없이 교차만 */
+  .hero-slide img {
+    animation: none;
+  }
+  .service-card {
+    will-change: auto;
+  }
+  /* 스크롤 연동 배경 움직임과 글자 흐림 등장 */
+  .parallax-img {
+    animation: none;
+    transform: scale(1.15);
+  }
+  .split-char {
+    filter: none;
+  }
+}
+
+/* 작은 컴퓨터 화면(1024~1279px): 홈 메뉴가 늘어난 만큼 간격을 줄여 언어 단추와 겹치지 않게 */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .desktop-nav a {
+    padding-inline: 0.5rem;
+    font-size: 0.875rem;
+  }
+  :lang(ja) .desktop-nav a {
+    padding-inline: 0.3rem;
+    font-size: 0.8125rem;
+  }
+}

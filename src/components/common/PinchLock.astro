@@ -1,0 +1,11 @@
+---
+// 휴대폰에서 두 손가락 확대·축소를 막습니다 (touch-action은 tailwind.css의 html:not(.allow-zoom)).
+// 사진 크게 보기를 연 동안에는 사진을 자세히 볼 수 있게 허용합니다(Gallery.astro가 allow-zoom을 붙임).
+---
+
+<script>
+  // iPhone Safari용: touch-action만으로 막히지 않는 경우를 대비
+  document.addEventListener('gesturestart', (e) => {
+    if (!document.documentElement.classList.contains('allow-zoom')) e.preventDefault();
+  });
+</script>

@@ -206,6 +206,7 @@ const columnsClass =
       buttons.forEach((button, index) =>
         button.addEventListener('click', () => {
           show(flat.findIndex((p) => p.item === index));
+          document.documentElement.classList.add('allow-zoom');
           dialog.showModal();
         })
       );
@@ -280,6 +281,15 @@ const columnsClass =
       img.addEventListener('error', loaded);
       // 창을 닫으면 사진을 비워 둠 (다음에 열 때 이전 사진이 보이지 않게)
       dialog.addEventListener('close', () => {
+        // 확대한 채로 닫았으면 원래 크기로 돌아온 뒤에 다시 막음 (확대된 채 갇히지 않게)
+        const vv = window.visualViewport;
+        const release = () => {
+          if (vv && vv.scale > 1.01) return;
+          vv?.removeEventListener('resize', release);
+          document.documentElement.classList.remove('allow-zoom');
+        };
+        vv?.addEventListener('resize', release);
+        release();
         // 닫자마자 다른 사진을 열었으면(이미 다시 열려 있으면) 건드리지 않음
         if (dialog.open) return;
         moveImg(0);

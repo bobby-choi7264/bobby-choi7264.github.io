@@ -117,10 +117,12 @@ const zh: Dict = {
     tag: '工作影像',
     title: '木头被车削的时光',
     lead: '这是匠人亲自拍摄的工作影像,用一分钟记录一根柱子成形的过程。',
-    soundOn: '开启声音从头观看',
+    soundOn: '打开声音',
     soundOff: '关闭声音',
     play: '播放',
     pause: '暂停',
+    restart: '从头播放',
+    seek: '播放进度',
     label: 'Seongchang 工艺工作影像:匠人在车床上车削木柱',
   },
   latheSteps: {

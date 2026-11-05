@@ -21,6 +21,7 @@ import { getCanonical } from '~/utils/permalinks';
 import { LANG_META, LOCALES, TRANSLATED_PAGES, langFromPath, localize, stripLang, useT, type Lang } from '~/i18n';
 
 // Comment the line below to disable View Transitions
+import PinchLock from '~/components/common/PinchLock.astro';
 import { ClientRouter } from 'astro:transitions';
 
 import type { MetaData as MetaDataType } from '~/types';
@@ -123,5 +124,6 @@ const pageAnimation = {
     <CraftFX />
     <LangSuggest lang={lang} />
     <CustomCursor />
+    <PinchLock />
   </body>
 </html>

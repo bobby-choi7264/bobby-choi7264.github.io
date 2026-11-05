@@ -52,6 +52,10 @@ const s = useT(lang).sound;
   let master: GainNode;
   let fxBus: GainNode;
   let musicBus: GainNode;
+  // 작업 영상이 소리로 재생되는 동안은 배경음악을 줄이고, 끝나면 천천히 되돌림
+  const MUSIC_LEVEL = 0.5;
+  const MUSIC_DUCKED = 0.04;
+  let filmSound = false;
   let reverb: ConvolverNode;
   let enabled = false;
   let musicTimer: number | undefined;
@@ -94,7 +98,7 @@ const s = useT(lang).sound;
     fxBus.gain.value = 0.5;
     fxBus.connect(master);
     musicBus = ctx.createGain();
-    musicBus.gain.value = 0.5;
+    musicBus.gain.value = filmSound ? MUSIC_DUCKED : MUSIC_LEVEL;
     musicBus.connect(master);
     musicBus.connect(reverb);
     return ctx;
@@ -384,9 +388,8 @@ const s = useT(lang).sound;
   };
 
   let musicOn = false;
-  let filmSound = false; // 작업 영상 소리를 켠 동안은 배경음악을 쉼
   const startMusic = (delay = 600) => {
-    if (musicOn || filmSound) return;
+    if (musicOn) return;
     musicOn = true;
     window.clearTimeout(musicTimer);
     musicTimer = window.setTimeout(() => {
@@ -709,8 +712,11 @@ const s = useT(lang).sound;
 
   document.addEventListener('sc:film-sound', (e) => {
     filmSound = (e as CustomEvent<{ on: boolean }>).detail.on;
-    if (filmSound) stopMusic();
-    else if (enabled) startMusic();
+    if (!ctx) return;
+    const t = ctx.currentTime;
+    musicBus.gain.cancelScheduledValues(t);
+    musicBus.gain.setValueAtTime(musicBus.gain.value, t);
+    musicBus.gain.linearRampToValueAtTime(filmSound ? MUSIC_DUCKED : MUSIC_LEVEL, t + (filmSound ? 1.2 : 2.5));
   });
 
   document.addEventListener('astro:after-swap', () => {

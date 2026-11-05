@@ -107,6 +107,15 @@ const specks = Array.from({ length: count }, () => ({
       transform: translate(var(--dx), -120px);
     }
   }
+  /* 터치 기기: 흐림·겹침 효과인 빛줄기를 끄고 먼지도 4개 중 1개만 */
+  @media (hover: none) {
+    .beam {
+      display: none;
+    }
+    i:not(:nth-child(4n)) {
+      display: none;
+    }
+  }
   @media (max-width: 640px) {
     i:nth-child(2n) {
       display: none;
