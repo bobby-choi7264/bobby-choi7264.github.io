@@ -270,6 +270,31 @@
     object-position: 90% 50%;
   }
 }
+/* 첫 화면 글자 뒤를 어둡게: 어떤 사진이 지나가도 글자가 묻히지 않게 */
+.hero-text-shade {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 62% 52% at 50% 50%,
+    rgb(14 10 7 / 0.72),
+    rgb(14 10 7 / 0.42) 58%,
+    transparent 100%
+  );
+}
+@media (max-width: 767px) {
+  .hero-text-shade {
+    background: linear-gradient(
+      180deg,
+      transparent 12%,
+      rgb(14 10 7 / 0.46) 30%,
+      rgb(14 10 7 / 0.5) 68%,
+      transparent 92%
+    );
+  }
+}
+.hero-lead {
+  text-shadow: 0 1px 10px rgb(0 0 0 / 0.75);
+}
 /* 얼굴·손이 오른쪽에 있는 사진(HERO_RIGHT): 세로 화면에서도 그쪽이 보이게 */
 .hero-slide.is-right > img {
   object-position: 100% 50%;
@@ -1175,14 +1200,14 @@ aw-gallery figcaption::before {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  max-width: min(17rem, calc(100vw - 6rem));
-  padding: 0.6rem 0.5rem 0.6rem 0.9rem;
+  max-width: min(15rem, calc(100vw - 6rem));
+  padding: 0.3rem 0.3rem 0.3rem 0.75rem;
   border: 1px solid rgb(196 150 84 / 0.4);
   border-radius: 0.75rem;
   background: rgb(27 20 14 / 0.96);
   color: var(--aw-color-text-default);
-  font-size: 0.85rem;
-  line-height: 1.4;
+  font-size: 0.8125rem;
+  line-height: 1.35;
   box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.9);
   animation: dropIn 0.4s ease;
 }
@@ -1201,6 +1226,11 @@ aw-gallery figcaption::before {
   background: rgb(196 150 84 / 0.15);
 }
 
+/* 사진 크게 보기를 연 동안 뒤 페이지가 움직이지 않게 (스크롤 막대 자리는 유지) */
+html:has(aw-gallery dialog[open]) {
+  overflow: hidden;
+  scrollbar-gutter: stable;
+}
 /* 사진 크게 보기: 새 사진을 받는 동안은 감추고, 가운데에 도는 표시 */
 aw-gallery dialog [data-aw-gallery-img] {
   transition: opacity 0.25s ease;

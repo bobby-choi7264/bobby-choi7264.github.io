@@ -401,7 +401,7 @@ const ko = {
   sound: {
     on: '소리 켜기',
     off: '소리 끄기',
-    hint: '소리를 켜면 공방의 소리와 음악이 함께 흐릅니다',
+    hint: '소리를 켜 보세요',
     dismiss: '닫기',
   },
   suggest: {

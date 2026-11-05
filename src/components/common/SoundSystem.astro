@@ -663,7 +663,8 @@ const s = useT(lang).sound;
       // 입장 화면에서 이미 소리를 켰으면 안내하지 않음
       if (store.get(KEY) || store.get(HINT_KEY)) return;
       hint.hidden = false;
-      window.setTimeout(() => (hint.hidden = true), 7000);
+      store.set(HINT_KEY, '1');
+      window.setTimeout(() => (hint.hidden = true), 4000);
     };
     // 입장 화면이 끝난 뒤에 띄움
     const wait = () =>

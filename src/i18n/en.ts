@@ -439,7 +439,7 @@ const en: Dict = {
   sound: {
     on: 'Turn sound on',
     off: 'Turn sound off',
-    hint: 'Turn on sound to hear the workshop and its music',
+    hint: 'Try it with sound',
     dismiss: 'Close',
   },
   suggest: {

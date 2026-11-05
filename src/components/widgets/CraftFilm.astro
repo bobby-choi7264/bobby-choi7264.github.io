@@ -23,13 +23,16 @@ const t = useT(langFromPath(Astro.url.pathname)).film;
     >
       <video
         class="h-full w-full object-cover"
-        src="/video/craft-film.mp4"
         poster="/video/craft-film-poster.jpg"
         muted
         loop
         playsinline
         preload="none"
-        aria-label={t.label}></video>
+        aria-label={t.label}
+      >
+        <source src="/video/craft-film-mobile.mp4" type="video/mp4" media="(max-width: 767px)" />
+        <source src="/video/craft-film.mp4" type="video/mp4" />
+      </video>
       <div
         class="absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 bg-gradient-to-t from-black/70 to-transparent p-2 pt-10 sm:p-4 sm:pt-14"
       >

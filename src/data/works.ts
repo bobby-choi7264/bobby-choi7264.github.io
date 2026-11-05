@@ -649,9 +649,13 @@ const localize =
     category: item.category,
   });
 
-export const WORKS_COUNT = ALL.length;
+// 첫 화면 대표 사진으로만 쓰고 작업물 갤러리·대표 작업에는 넣지 않는 사진
+const NOT_IN_GALLERY = ['workshop-183'];
+const GALLERY_ITEMS = ALL.filter((item) => !NOT_IN_GALLERY.includes(item.file));
+export const WORKS_COUNT = GALLERY_ITEMS.length;
 export const worksIn = (lang: Lang = 'ko'): Work[] => ALL.map(localize(lang));
-export const worksBy = (key: CategoryKey, lang: Lang = 'ko') => worksIn(lang).filter((item) => item.category === key);
+export const worksBy = (key: CategoryKey, lang: Lang = 'ko') =>
+  GALLERY_ITEMS.map(localize(lang)).filter((item) => item.category === key);
 
 // 첫 화면 슬라이드쇼와 대표 작업에 쓰는 사진
 // 맨 앞 사진은 입장 화면이 걷힐 때 보이는 사진이기도 함 (대표 사진: 작업 영상에서 뽑은 장면)
@@ -662,7 +666,6 @@ export const HERO_RIGHT = ['workshop-183'];
 // 위 사진 중 세로로 긴 사진. 넓은 화면에서는 잘리지 않게 전체를 오른쪽에 두고 빈 곳은 흐린 사진으로 채움
 export const HERO_TALL = ['furniture-140'];
 export const FEATURED = [
-  'workshop-183',
   'furniture-140',
   'custom-145',
   'lathe-80',
@@ -670,6 +673,7 @@ export const FEATURED = [
   'lathe-56',
   'custom-40',
   'lathe-25',
+  'furniture-57',
 ];
 export const pick = (files: string[], lang: Lang = 'ko') =>
   files.map((file) => worksIn(lang).find((item) => item.file === file)!).filter(Boolean);
@@ -724,7 +728,7 @@ export type GalleryWork = Work & { photos: { src: string; alt: string }[] };
 
 /** 갤러리용 목록: 묶음은 하나로 합치고(photos에 묶음 사진 전체), 나머지는 사진 한 장씩 */
 export const galleryIn = (lang: Lang = 'ko'): GalleryWork[] => {
-  const works = worksIn(lang);
+  const works = GALLERY_ITEMS.map(localize(lang));
   const byFile = new Map(works.map((w) => [w.file, w]));
   const member = new Map(GROUPS.flatMap((files) => files.map((f) => [f, files] as const)));
   const items: GalleryWork[] = [];

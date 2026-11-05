@@ -402,7 +402,7 @@ const ja: Dict = {
   sound: {
     on: '音をオンにする',
     off: '音をオフにする',
-    hint: '音をオンにすると、工房の音と音楽が流れます',
+    hint: '音をオンにできます',
     dismiss: '閉じる',
   },
   suggest: {

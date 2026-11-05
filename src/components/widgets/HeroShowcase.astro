@@ -71,6 +71,7 @@ const delay = (index: number) => `${(index * seconds - 36 * 0.03).toFixed(2)}s`;
     <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(0,0,0,0.55)_100%)]"></div>
     <WorkshopLight />
     <div class="hero-spot" aria-hidden="true"></div>
+    <div class="hero-text-shade" aria-hidden="true"></div>
   </div>
 
   <div
@@ -95,10 +96,10 @@ const delay = (index: number) => `${(index * seconds - 36 * 0.03).toFixed(2)}s`;
       <h1 class="font-heading text-4xl sm:text-5xl md:text-7xl font-bold leading-tight text-heading">
         <span class="hero-line">{t.title1}</span><br /><span class="hero-line gold-text">{t.title2}</span>
       </h1>
-      <p class="mt-6 max-w-xl text-base md:text-lg text-default/90">
+      <p class="hero-lead mt-6 max-w-xl text-base md:text-lg text-heading">
         {t.lead}
         <br class="hidden sm:inline" />
-        <span class="mt-2 block text-primary/90 text-balance">
+        <span class="mt-2 block text-accent text-balance">
           {
             /* 줄이 바뀌어도 가운뎃점이 줄 앞에 오지 않게, 항목마다 끊기지 않는 덩어리로 */
             tagList.map((tag, i) => (

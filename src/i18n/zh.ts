@@ -378,7 +378,7 @@ const zh: Dict = {
   sound: {
     on: '打开声音',
     off: '关闭声音',
-    hint: '打开声音，聆听工坊的声响与音乐',
+    hint: '可以打开声音',
     dismiss: '关闭',
   },
   suggest: {
