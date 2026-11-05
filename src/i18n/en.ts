@@ -119,8 +119,8 @@ const en: Dict = {
       },
     ],
     benchAlts: [
-      'A wooden column being turned on the lathe',
-      'Lathe tools in the workshop',
+      'A pile of identical turned wooden parts',
+      'The craftsman drilling each part by hand',
       'Turned wooden plates and bowls',
     ],
     featuredTag: 'Made by Hand',
@@ -290,6 +290,12 @@ const en: Dict = {
     casesLead: 'Real photos from our workshop show how an order becomes a finished piece.',
     woodsLink: 'See our guide to choosing wood',
     cases: [
+      {
+        title: 'Every piece by hand, however many',
+        sub: 'Large-quantity parts',
+        text: 'Each identical turned part is taken up again and bored one by one. Large orders get the same handwork.',
+        steps: ['Parts piling up in the workshop', 'Drilled one at a time', 'The full quantity, all alike'],
+      },
       {
         title: 'From one sample to hundreds',
         sub: 'Balusters made in volume',

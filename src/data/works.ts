@@ -17,6 +17,27 @@ const w = (file: string, ko: string, en: string, ja: string, zh: string) => ({
 
 const ALL = [
   w(
+    'lathe-190',
+    '같은 모양으로 깎아 속을 뚫은 부품',
+    'Identical turned and bored parts',
+    '同じ形に挽いて内側をくり抜いた部品',
+    '形状相同、内部钻空的车削零件'
+  ),
+  w(
+    'lathe-191',
+    '부품을 하나씩 드릴로 뚫는 장인',
+    'The craftsman drilling each part by hand',
+    '部品を一つずつドリルで穴あけする職人',
+    '匠人逐个钻孔加工零件'
+  ),
+  w(
+    'lathe-192',
+    '작업장 바닥에 쌓인 부품과 원목 판재',
+    'Finished parts and a solid-wood board on the workshop floor',
+    '工房の床に積まれた部品と無垢板',
+    '工坊地上堆放的零件与原木板'
+  ),
+  w(
     'workshop-183',
     '로구로 앞에서 기둥을 깎는 장인',
     'The craftsman turning a column at the lathe',
@@ -681,6 +702,7 @@ export const pick = (files: string[], lang: Lang = 'ko') =>
 // 같은 물건을 구도만 바꿔 찍은 사진 묶음. 갤러리에는 맨 앞 사진 하나만 보이고,
 // 누르면 묶음 안의 사진을 넘겨 볼 수 있습니다. 설명도 맨 앞 사진의 것을 씁니다.
 export const GROUPS: string[][] = [
+  ['lathe-190', 'lathe-191', 'lathe-192'],
   ['furniture-140', 'furniture-141', 'furniture-142'],
   ['custom-145', 'custom-143', 'custom-144', 'custom-146', 'custom-147', 'custom-148', 'custom-149', 'custom-150'],
   ['column-182', 'column-178', 'column-179', 'column-180', 'column-181'],
