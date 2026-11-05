@@ -52,9 +52,9 @@ const s = useT(lang).sound;
   let master: GainNode;
   let fxBus: GainNode;
   let musicBus: GainNode;
-  // 작업 영상이 소리로 재생되는 동안은 배경음악을 줄이고, 끝나면 천천히 되돌림
+  // 작업 영상이 소리로 재생되는 동안은 배경음악을 끄고, 끝나면 천천히 되돌림
   const MUSIC_LEVEL = 0.5;
-  const MUSIC_DUCKED = 0.04;
+  const MUSIC_DUCKED = 0;
   let filmSound = false;
   let reverb: ConvolverNode;
   let enabled = false;
@@ -716,7 +716,7 @@ const s = useT(lang).sound;
     const t = ctx.currentTime;
     musicBus.gain.cancelScheduledValues(t);
     musicBus.gain.setValueAtTime(musicBus.gain.value, t);
-    musicBus.gain.linearRampToValueAtTime(filmSound ? MUSIC_DUCKED : MUSIC_LEVEL, t + (filmSound ? 1.2 : 2.5));
+    musicBus.gain.linearRampToValueAtTime(filmSound ? MUSIC_DUCKED : MUSIC_LEVEL, t + (filmSound ? 0.6 : 2.5));
   });
 
   document.addEventListener('astro:after-swap', () => {

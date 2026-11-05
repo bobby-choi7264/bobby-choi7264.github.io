@@ -1,19 +1,10 @@
 ---
-// 나무 한 토막이 작품이 되기까지 네 단계. 화면에 들어오면 황동색 선이 그어지고 단계가 차례로 떠오릅니다.
-import Image from '~/components/common/Image.astro';
+// 나무 한 토막이 작품이 되기까지: 스크롤로 깎이는 로구로 그림과 실제 작업 사진 5단계(LatheSteps).
 import LatheSpin from '~/components/widgets/LatheSpin.astro';
 import LatheSteps from '~/components/widgets/LatheSteps.astro';
 import { langFromPath, useT } from '~/i18n';
 
 const t = useT(langFromPath(Astro.url.pathname)).process;
-const NUMS = ['一', '二', '三', '四'];
-const PHOTOS = [
-  '~/assets/images/works/column-31.jpg',
-  '~/assets/images/works/column-14.jpg',
-  '~/assets/images/works/column-16.jpg',
-  '~/assets/images/works/lathe-80.jpg',
-];
-const STEPS = t.steps.map((step, i) => ({ ...step, num: NUMS[i], src: PHOTOS[i] }));
 ---
 
 <section class="relative px-4 py-20 md:py-28 overflow-hidden wood-grain">
@@ -25,40 +16,9 @@ const STEPS = t.steps.map((step, i) => ({ ...step, num: NUMS[i], src: PHOTOS[i] 
     </div>
 
     <LatheSpin class="mx-auto max-w-3xl my-6 md:my-10 drop-shadow-[0_20px_30px_rgba(0,0,0,0.55)]" />
-    <p class="text-center text-muted -mt-2 mb-14 text-sm md:text-base">
+    <p class="text-center text-muted -mt-2 mb-10 text-sm md:text-base">
       {t.caption}
     </p>
-
-    <ol class="relative grid gap-10 md:grid-cols-4 md:gap-6">
-      <span class="process-line intersect intersect-once intersect-quarter hidden md:block" aria-hidden="true"></span>
-      {
-        STEPS.map((step, index) => (
-          <li
-            class="relative intersect-once intersect-quarter motion-safe:opacity-0 motion-safe:intersect:animate-fade"
-            style={`animation-delay:${index * 0.15}s`}
-          >
-            <div class="relative z-10 mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-primary/50 bg-[#140f0b] font-heading text-2xl font-bold text-primary shadow-[0_0_0_6px_#140f0b]">
-              {step.num}
-            </div>
-            <div class="group overflow-hidden rounded-lg border border-primary/25 aspect-[4/3] md:aspect-[3/4]">
-              <Image
-                src={step.src}
-                alt={step.title}
-                widths={[400, 600]}
-                sizes="(max-width: 767px) 100vw, 280px"
-                width={600}
-                height={800}
-                layout="cover"
-                format="webp"
-                class="h-full w-full object-cover transition duration-700 group-hover:scale-105 sepia-[0.25] group-hover:sepia-0"
-              />
-            </div>
-            <h3 class="mt-4 font-heading text-xl font-bold text-heading">{step.title}</h3>
-            <p class="mt-1 text-muted">{step.text}</p>
-          </li>
-        ))
-      }
-    </ol>
 
     <LatheSteps />
   </div>

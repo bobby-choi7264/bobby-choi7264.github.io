@@ -1615,3 +1615,12 @@ html:not(.allow-zoom) {
     font-size: 0.8125rem;
   }
 }
+
+/* 터치 기기: 페이지 맨 위·맨 아래에서 더 끌 때 브라우저가 화면 전체를 늘이는 효과와 당겨서 새로고침을 끔
+   (사진이 길게 늘어나며 버벅이던 문제) */
+@media (hover: none) {
+  html,
+  body {
+    overscroll-behavior-y: none;
+  }
+}

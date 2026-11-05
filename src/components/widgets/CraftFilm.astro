@@ -118,6 +118,7 @@ const t = useT(langFromPath(Astro.url.pathname)).film;
     let startTimer: number | undefined;
     let fadeTimer: number | undefined;
     let seeking = false;
+    let watching = false; // 사용자가 재생을 눌러 소리와 함께 보는 중
 
     // 영상이 소리로 재생되는 동안 SoundSystem.astro가 배경음악을 줄임 (sc:film-sound)
     const syncMusic = () => {
@@ -134,7 +135,7 @@ const t = useT(langFromPath(Astro.url.pathname)).film;
       time.textContent = `${clock(video.currentTime)} / ${clock(total)}`;
     };
     const render = () => {
-      const playing = !video.paused;
+      const playing = !video.paused && !previewing();
       const label = toggle.querySelector('[data-film-toggle-label]');
       if (label) label.textContent = (playing ? toggle.dataset.pause : toggle.dataset.play) ?? '';
       toggle.querySelector('.film-icon-play')?.classList.toggle('hidden', playing);
@@ -166,14 +167,18 @@ const t = useT(langFromPath(Astro.url.pathname)).film;
         window.clearTimeout(startTimer);
         if (visible && auto) {
           // 스크롤하는 도중에 영상을 받기 시작하면 끊기므로 잠깐 기다렸다가 재생
-          startTimer = window.setTimeout(() => {
-            if (!video.muted) fadeVolume(1, 800);
-            tryPlay();
-          }, 350);
+          startTimer = window.setTimeout(tryPlay, 350);
         } else if (!visible && !video.paused) {
-          syncMusic();
-          if (video.muted) video.pause();
-          else fadeVolume(0, 500, () => video.pause());
+          const leave = () => {
+            video.pause();
+            // 다시 돌아오면 소리 없이 이어서 미리 보기 (갑자기 소리가 나지 않게)
+            video.muted = true;
+            video.volume = 1;
+            watching = false;
+            render();
+          };
+          if (video.muted) leave();
+          else fadeVolume(0, 400, leave);
         }
         syncMusic();
       },
@@ -181,35 +186,50 @@ const t = useT(langFromPath(Astro.url.pathname)).film;
     );
     io.observe(root);
 
-    const onToggle = () => {
-      if (video.paused) {
-        auto = true;
-        tryPlay();
-      } else {
-        auto = false;
-        video.pause();
-      }
-    };
-    const onRestart = () => {
-      video.currentTime = 0;
+    // 소리 없이 미리 돌아가는 상태에서는 단추가 '재생'으로 보이고, 누르면 처음부터 소리와 함께 재생
+    const previewing = () => video.muted && !watching;
+    const playWithSound = () => {
+      watching = true;
       auto = true;
-      renderTime();
-      tryPlay();
-    };
-    const onSound = () => {
       window.clearInterval(fadeTimer);
       video.volume = 1;
-      video.muted = !video.muted;
-      if (!video.muted) {
-        auto = true;
-        // 브라우저가 소리 재생을 막으면 소리 없는 재생으로 되돌림
-        video.play().catch(() => {
-          video.muted = true;
-          tryPlay();
-          render();
-        });
+      video.muted = false;
+      // 브라우저가 소리 재생을 막으면 소리 없는 재생으로 되돌림
+      video.play().catch(() => {
+        video.muted = true;
+        watching = false;
+        tryPlay();
+        render();
+      });
+      render();
+    };
+    const onToggle = () => {
+      if (previewing()) {
+        video.currentTime = 0;
+        playWithSound();
+      } else if (video.paused) {
+        playWithSound();
+      } else {
+        auto = false;
+        watching = false;
+        video.pause();
       }
       render();
+    };
+    const onFrameClick = () => onToggle();
+    const onRestart = () => {
+      video.currentTime = 0;
+      renderTime();
+      playWithSound();
+    };
+    const onSound = () => {
+      if (video.muted) {
+        playWithSound();
+      } else {
+        window.clearInterval(fadeTimer);
+        video.muted = true;
+        render();
+      }
     };
     const onSeekInput = () => {
       seeking = true;
@@ -224,6 +244,7 @@ const t = useT(langFromPath(Astro.url.pathname)).film;
       else if (visible && auto) tryPlay();
     };
     toggle.addEventListener('click', onToggle);
+    video.addEventListener('click', onFrameClick);
     restart.addEventListener('click', onRestart);
     sound.addEventListener('click', onSound);
     seek.addEventListener('input', onSeekInput);
@@ -241,6 +262,7 @@ const t = useT(langFromPath(Astro.url.pathname)).film;
       window.clearTimeout(startTimer);
       window.clearInterval(fadeTimer);
       toggle.removeEventListener('click', onToggle);
+      video.removeEventListener('click', onFrameClick);
       restart.removeEventListener('click', onRestart);
       sound.removeEventListener('click', onSound);
       seek.removeEventListener('input', onSeekInput);
