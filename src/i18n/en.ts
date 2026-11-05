@@ -232,7 +232,7 @@ const en: Dict = {
       'We also handle <b>mass-produced moldings</b> such as stair balusters and furniture legs, and <b>interior woodwork</b> from cutting solid wood to furniture frames and lattice doors. From <b>props for TV broadcasters</b> to <b>graduation pieces</b> for design students, shop signs and homeware — if it can be made of wood, we’re happy to talk.',
       `The precision to copy one sample into hundreds of identical pieces, and ${YEARS} years of experience finding a way to make shapes we’ve never seen before. That is the craft of Seongchang.`,
     ],
-    shopAlt: 'The front of the Seongchang Craft workshop in Euljiro',
+    shopAlt: 'The craftsman turning wood at the lathe',
     galleryTag: 'Inside the Workshop',
     galleryTitle: 'A Euljiro Workshop That Smells of Sawdust',
     craftTag: 'The Maker',
