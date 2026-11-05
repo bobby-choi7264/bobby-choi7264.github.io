@@ -3,6 +3,7 @@ import { useT, type Lang } from '~/i18n';
 
 export const SHOP = {
   name: '성창공예',
+  prefix: '거목', // 상호 위에 얹는 호. 표시는 BrandCrown.astro
   nameEn: 'SEONGCHANG CRAFT',
   owner: '최관규', // 대표 (명함: 崔寬圭)
   address: '서울특별시 중구 을지로 219',

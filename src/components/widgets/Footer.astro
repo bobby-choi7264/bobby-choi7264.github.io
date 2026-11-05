@@ -2,6 +2,7 @@
 import { Icon } from 'astro-icon/components';
 import { SITE } from 'astrowind:config';
 import { langFromPath, localize } from '~/i18n';
+import BrandCrown from '~/components/common/BrandCrown.astro';
 import Mark from '~/components/common/Mark.astro';
 import SocialShare from '~/components/common/SocialShare.astro';
 
@@ -39,8 +40,11 @@ const home = localize(langFromPath(Astro.url.pathname), '/');
     <div class="grid grid-cols-12 gap-4 gap-y-8 sm:gap-8 py-8 md:py-12">
       <div class="col-span-12 lg:col-span-4">
         <div class="mb-3 flex items-center gap-3">
-          <Mark class="h-7 w-7 text-primary" />
-          <a class="inline-block font-heading font-bold text-2xl gold-text" href={home} translate="no">{SITE?.name}</a>
+          <Mark class="h-11 w-11 text-primary" />
+          <a class="inline-flex flex-col gap-1.5" href={home} translate="no">
+            <BrandCrown class="text-xs text-primary" />
+            <span class="font-heading font-bold text-2xl leading-none gold-text tracking-[0.04em]">{SITE?.name}</span>
+          </a>
         </div>
         <p class="mb-3 text-sm text-muted">{tagline}</p>
         <SocialShare class="mb-4 block" />

@@ -271,9 +271,12 @@
   }
 }
 /* 얼굴·손이 오른쪽에 있는 사진(HERO_RIGHT): 세로 화면에서도 그쪽이 보이게 */
-.hero-slide.is-right > img,
-#intro .intro-photo.is-right > img {
+.hero-slide.is-right > img {
   object-position: 100% 50%;
+}
+/* 입장 화면은 가운데에 로고가 오므로, 얼굴이 로고에 가리지 않게 오른쪽으로 비킴 */
+#intro .intro-photo.is-right > img {
+  object-position: 82% 50%;
 }
 /* 입장 화면이 떠 있는 동안은 슬라이드쇼를 멈춰서, 걷힐 때 같은 사진으로 이어지게 */
 .intro-active .hero-slide,
@@ -537,6 +540,7 @@ html #intro .intro-dust {
 }
 #intro .intro-mark,
 #intro .intro-kicker,
+#intro .intro-crown,
 #intro .intro-sub {
   opacity: 0;
   transform: translateY(8px);
@@ -569,6 +573,9 @@ html #intro .intro-dust {
 }
 #intro.play .intro-kicker {
   animation: introRise 1s ease 0.4s forwards;
+}
+#intro.play .intro-crown {
+  animation: introRise 1s ease 0.55s forwards;
 }
 #intro.play .intro-title span {
   animation: introChar 1.1s cubic-bezier(0.2, 0.6, 0.2, 1) forwards;

@@ -8,6 +8,7 @@
 // 걷힐 때 아래에 같은 사진의 첫 화면이 있어서 끊김 없이 이어집니다.
 // 같은 방문(세션) 안에서는 다시 나오지 않습니다.
 import Image from '~/components/common/Image.astro';
+import BrandCrown from '~/components/common/BrandCrown.astro';
 import Mark from '~/components/common/Mark.astro';
 import { SHOP } from '~/data/shop';
 import { HERO_RIGHT, HERO_SLIDES, HERO_TALL, pick } from '~/data/works';
@@ -103,7 +104,12 @@ const reel = pick(['column-123', 'column-16', 'column-14', 'column-122', 'column
 
   <div class="intro-gate">
     <Mark class="mb-5 h-12 w-12 text-[#e0ba78]" />
-    <p class="font-heading text-3xl md:text-4xl font-bold text-[#f8f1e6]" translate="no">{SHOP.name}</p>
+    <div class="inline-flex flex-col gap-3">
+      <BrandCrown class="text-sm md:text-base text-[#e0ba78]" />
+      <p class="font-heading text-3xl md:text-4xl font-bold text-[#f8f1e6] tracking-[0.06em]" translate="no">
+        {SHOP.name}
+      </p>
+    </div>
     <p class="mt-3 text-[11px] md:text-xs tracking-[0.45em] pl-[0.45em] text-[#e0ba78]/85" translate="no">
       {SHOP.nameEn}
     </p>
@@ -117,9 +123,12 @@ const reel = pick(['column-123', 'column-16', 'column-14', 'column-122', 'column
     <p class="intro-kicker text-[11px] md:text-sm tracking-[0.45em] pl-[0.45em] text-[#e0ba78]" translate="no">
       {SHOP.nameEn}
     </p>
-    <p class="intro-title mt-5 font-heading text-5xl md:text-7xl font-bold text-[#fbf6ee]" translate="no">
-      {chars.map((char, i) => <span style={`--i:${i}`}>{char}</span>)}
-    </p>
+    <div class="mt-6 inline-flex flex-col gap-4 md:gap-5">
+      <BrandCrown class="intro-crown text-lg md:text-2xl text-[#e0ba78]" />
+      <p class="intro-title font-heading text-5xl md:text-7xl font-bold text-[#fbf6ee]" translate="no">
+        {chars.map((char, i) => <span style={`--i:${i}`}>{char}</span>)}
+      </p>
+    </div>
     <div class="intro-line mt-7"></div>
     <p class="intro-sub mt-6 text-sm md:text-lg text-[#efe6d8]/90">{t.intro.sub}</p>
   </div>
