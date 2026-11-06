@@ -20,19 +20,20 @@ const { class: className = '' } = Astro.props;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.6em;
+    gap: 0.5em;
     width: 100%;
-    font-weight: 500;
+    font-family: var(--aw-font-heading, inherit);
+    font-weight: 700;
     line-height: 1;
     white-space: nowrap;
   }
   .brand-crown-text {
-    letter-spacing: 0.42em;
-    margin-right: -0.42em;
+    letter-spacing: 0.2em;
+    margin-right: -0.2em;
   }
   .brand-crown-line {
     flex: 1 1 0;
-    min-width: 0.9em;
+    min-width: 0.6em;
     height: 1px;
     background: currentColor;
     opacity: 0.65;

@@ -59,6 +59,7 @@ const t = useT(langFromPath(Astro.url.pathname)).film;
           max="60"
           step="0.1"
           value="0"
+          autocomplete="off"
           aria-label={t.seek}
           data-film-seek
         />
@@ -243,10 +244,28 @@ const t = useT(langFromPath(Astro.url.pathname)).film;
     video.addEventListener('timeupdate', renderTime);
     video.addEventListener('loadedmetadata', renderTime);
     document.addEventListener('visibilitychange', onHidden);
-    render();
+
+    // 홈에 들어올 때마다 영상을 0초 표지 상태로. 새로고침·뒤로 가기 때 브라우저가 재생 위치와 진행 막대를 되살리는 것을 막음
+    const resetToStart = () => {
+      window.clearInterval(fadeTimer);
+      leaving = false;
+      resumeOnReturn = false;
+      video.pause();
+      video.volume = 1;
+      if (video.readyState > 0) video.load(); // 표지 사진으로 돌아감
+      seek.value = '0';
+      renderTime();
+      render();
+    };
+    const onPageShow = (e: PageTransitionEvent) => {
+      if (e.persisted) resetToStart();
+    };
+    window.addEventListener('pageshow', onPageShow);
+    resetToStart();
 
     cleanup = () => {
       io.disconnect();
+      window.removeEventListener('pageshow', onPageShow);
       window.clearInterval(fadeTimer);
       toggle.removeEventListener('click', onToggle);
       restart.removeEventListener('click', onRestart);

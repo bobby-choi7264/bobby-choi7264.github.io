@@ -294,7 +294,7 @@ const en: Dict = {
         title: 'Every piece by hand, however many',
         sub: 'Large-quantity parts',
         text: 'Each identical turned part is taken up again and bored one by one. Large orders get the same handwork.',
-        steps: ['Parts piling up in the workshop', 'Drilled one at a time', 'The full quantity, all alike'],
+        steps: ['Turned parts gathered together', 'Bored one at a time', 'Finished, all the same shape'],
       },
       {
         title: 'From one sample to hundreds',

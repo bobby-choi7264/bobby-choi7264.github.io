@@ -70,7 +70,12 @@ const reel = pick(['column-123', 'column-16', 'column-14', 'column-122', 'column
       alt=""
       {...tall
         ? { widths: [768, 1012], sizes: '57vh', width: 1012, height: 1800 }
-        : { widths: [768, 1280, 1800], sizes: '100vw', width: 1800, height: 1000 }}
+        : {
+            widths: [768, 1280, 1800],
+            sizes: right ? '(max-aspect-ratio: 1/1) 178vh, 100vw' : '100vw',
+            width: 1800,
+            height: 1000,
+          }}
       layout="none"
       format="webp"
       loading="eager"
@@ -105,7 +110,7 @@ const reel = pick(['column-123', 'column-16', 'column-14', 'column-122', 'column
   <div class="intro-gate">
     <Mark class="mb-5 h-12 w-12 text-[#e0ba78]" />
     <div class="inline-flex flex-col gap-3">
-      <BrandCrown class="text-sm md:text-base text-[#e0ba78]" />
+      <BrandCrown class="text-xl md:text-2xl text-[#f3d9a4]" />
       <p class="font-heading text-3xl md:text-4xl font-bold text-[#f8f1e6] tracking-[0.06em]" translate="no">
         {SHOP.name}
       </p>
@@ -124,7 +129,7 @@ const reel = pick(['column-123', 'column-16', 'column-14', 'column-122', 'column
       {SHOP.nameEn}
     </p>
     <div class="mt-6 inline-flex flex-col gap-4 md:gap-5">
-      <BrandCrown class="intro-crown text-lg md:text-2xl text-[#e0ba78]" />
+      <BrandCrown class="intro-crown text-3xl md:text-5xl text-[#f3d9a4]" />
       <p class="intro-title font-heading text-5xl md:text-7xl font-bold text-[#fbf6ee]" translate="no">
         {chars.map((char, i) => <span style={`--i:${i}`}>{char}</span>)}
       </p>
@@ -165,7 +170,8 @@ const reel = pick(['column-123', 'column-16', 'column-14', 'column-122', 'column
       }
       root.classList.remove('intro-active');
       root.classList.add('intro-reveal', 'intro-done');
-      window.removeEventListener('touchmove', block);
+      document.removeEventListener('touchmove', block, true);
+      document.removeEventListener('gesturestart', block, true);
       window.removeEventListener('wheel', block);
       window.removeEventListener('keydown', onKey, true);
       window.removeEventListener('keydown', enter, true);
@@ -181,7 +187,8 @@ const reel = pick(['column-123', 'column-16', 'column-14', 'column-122', 'column
       trySkip();
     };
 
-    window.addEventListener('touchmove', block, { passive: false });
+    document.addEventListener('touchmove', block, { passive: false, capture: true });
+    document.addEventListener('gesturestart', block, { passive: false, capture: true }); // iPhone 두 손가락 확대
     window.addEventListener('wheel', block, { passive: false });
     window.addEventListener('keydown', onKey, true);
     intro.addEventListener('click', trySkip);
