@@ -1648,3 +1648,25 @@ body {
   -webkit-touch-callout: none;
   user-select: none;
 }
+
+/* 줄바꿈: 제목·사진 설명처럼 짧은 글은 줄 길이를 고르게, 본문은 마지막 줄에 낱말 하나만 남지 않게.
+   base 층에 두어 text-balance 같은 개별 지정이 우선함. 한국어 낱말 묶기는 src/utils/koreanLineBreaks.ts */
+@layer base {
+  p,
+  li,
+  dd,
+  blockquote {
+    text-wrap: pretty;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  figcaption,
+  summary {
+    text-wrap: balance;
+  }
+}
+.ko-nobreak {
+  white-space: nowrap;
+}

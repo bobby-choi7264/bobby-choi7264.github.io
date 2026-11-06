@@ -47,11 +47,11 @@ const isKo = lang === 'ko';
         </div>
         <div class="flex gap-4">
           <dt><Icon name="tabler:phone" class="w-6 h-6 text-primary" /><span class="sr-only">{t.phone}</span></dt>
-          <dd class="text-heading">
+          <dd class="flex flex-col items-start text-heading sm:block">
             <a class="inline-flex min-h-11 items-center hover:text-primary" href={SHOP.tel.href}>{SHOP.tel.label}</a>
-            <span class="text-muted mx-2">/</span>
+            <span class="mx-2 hidden text-muted sm:inline">/</span>
             <a class="inline-flex min-h-11 items-center hover:text-primary" href={SHOP.tel2.href}>{SHOP.tel2.label}</a>
-            <span class="text-muted mx-2">/</span>
+            <span class="mx-2 hidden text-muted sm:inline">/</span>
             <a class="inline-flex min-h-11 items-center hover:text-primary" href={SHOP.mobile.href}
               >{SHOP.mobile.label}</a
             >
