@@ -46,6 +46,8 @@ const MAP_HL: Record<Lang, string> = { ko: 'ko', en: 'en', ja: 'ja', zh: 'zh-CN'
 export const MAP_LINKS = {
   // 네이버 스마트플레이스에 등록된 성창공예 가게 화면 (장소 번호 1605088597)
   naver: 'https://map.naver.com/p/entry/place/1605088597',
+  // 같은 가게의 방문자 리뷰 화면 (주문·문의 페이지 '후기 남기기' 칸, 가게 안내문 QR과 같은 주소)
+  naverReview: 'https://m.place.naver.com/place/1605088597/review/visitor',
   kakao: `https://map.kakao.com/link/search/${q}`,
   google: `https://www.google.com/maps/search/?api=1&query=${q}`,
   embed: `https://maps.google.com/maps?q=${q}&hl=ko&z=17&output=embed`,

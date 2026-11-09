@@ -1,0 +1,86 @@
+---
+// 네이버 후기 남기기 안내. 주문·문의 페이지 아래쪽, 한국어 페이지에만 보입니다.
+// (외국 손님은 네이버를 거의 쓰지 않아서 번역 파일에는 넣지 않았습니다.)
+// 리뷰 쓰는 순서는 2026-11-09 네이버 앱 화면 기준이고, 가게에 붙인 안내문
+// (smartplace/리뷰QR)과 같은 내용입니다. 네이버 화면이 바뀌면 둘 다 고쳐 주세요.
+import { Icon } from 'astro-icon/components';
+import { MAP_LINKS } from '~/data/shop';
+
+const steps = [
+  ['네이버 앱 오른쪽 위 ‘내 프로필 사진’ 누르기', '로그인한 상태에서 눌러 주세요.'],
+  ['‘MY플레이스’ 오른쪽 아래 ‘리뷰쓰기’ 누르기', '영수증 인증, 결제내역 인증 같은 단추가 나옵니다.'],
+  ['‘영수증 인증’ 누르고 받으신 영수증 찍기', '카드로 결제하셨다면 ‘결제내역 인증’도 됩니다.'],
+  ['‘성창공예’가 맞는지 확인하고 후기 남기기', '사진 한 장, 한 줄이면 충분합니다.'],
+];
+---
+
+<section id="review" class="px-4 pb-16 md:pb-24 scroll-mt-16">
+  <div class="review-card max-w-3xl mx-auto rounded-2xl border border-primary/30 bg-[#1b140e]/80 p-6 md:p-10">
+    <div class="text-center">
+      <Icon name="tabler:message-star" class="mx-auto h-10 w-10 text-primary" aria-hidden="true" />
+      <h2 class="mt-4 font-heading text-2xl md:text-3xl font-bold text-heading">후기 한 줄이 큰 힘이 됩니다</h2>
+      <p class="mt-4 text-muted text-pretty">
+        <span class="block">맡기신 물건이 마음에 드셨다면 네이버에 후기를 남겨 주세요.</span>
+        <span class="block mt-1"
+          >네이버 후기는 <strong class="text-primary font-semibold">영수증</strong>이 있어야 쓸 수 있어요.</span
+        >
+      </p>
+      <a href={MAP_LINKS.naverReview} target="_blank" rel="noopener" class="btn-primary mt-6">
+        <Icon name="tabler:star" class="w-5 h-5 mr-2" aria-hidden="true" />네이버에서 후기 보기
+      </a>
+    </div>
+
+    <details class="faq-item review-steps mt-8">
+      <summary>
+        <span class="faq-q inline-flex items-center gap-2">
+          <Icon name="tabler:receipt" class="h-5 w-5 text-primary" aria-hidden="true" />후기 쓰는 방법 보기
+        </span>
+        <Icon name="tabler:plus" class="faq-icon h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
+      </summary>
+      <ol class="faq-a review-list">
+        {
+          steps.map(([main, sub], index) => (
+            <li>
+              <span class="review-num" aria-hidden="true">
+                {index + 1}
+              </span>
+              <div>
+                <p class="text-heading font-medium">{main}</p>
+                <p class="text-sm text-muted">{sub}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </details>
+  </div>
+</section>
+
+<style>
+  .review-steps {
+    border-top: 1px solid rgb(196 150 84 / 0.25);
+  }
+  .review-list {
+    display: grid;
+    gap: 1rem;
+    padding-right: 0.25rem;
+    list-style: none;
+  }
+  .review-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+  }
+  .review-num {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 9999px;
+    background: #c49654;
+    color: #1b140e;
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+</style>

@@ -5,6 +5,7 @@ import Layout from '~/layouts/PageLayout.astro';
 import VisitInfo from '~/components/widgets/VisitInfo.astro';
 import OrderSteps from '~/components/widgets/OrderSteps.astro';
 import ShopFAQ from '~/components/widgets/ShopFAQ.astro';
+import ReviewGuide from '~/components/widgets/ReviewGuide.astro';
 import { SERVICES, shopFor } from '~/data/shop';
 import { useT, type Lang } from '~/i18n';
 
@@ -148,6 +149,8 @@ const cards = [
   </section>
 
   <ShopFAQ />
+
+  {lang === 'ko' && <ReviewGuide />}
 
   <VisitInfo />
 </Layout>
