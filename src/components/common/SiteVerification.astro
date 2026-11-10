@@ -1,5 +1,10 @@
 ---
 import { SITE } from 'astrowind:config';
+
+// 네이버 서치어드바이저 소유 확인 코드 (2026-11-10 등록). 지우면 소유 확인이 풀립니다.
+// 구글 코드는 src/config.yaml 의 googleSiteVerificationId 에 있습니다.
+const NAVER_SITE_VERIFICATION = 'cfa9d714edf4bfad6b52d47656d1ecf582949332';
 ---
 
 {SITE.googleSiteVerificationId && <meta name="google-site-verification" content={SITE.googleSiteVerificationId} />}
+<meta name="naver-site-verification" content={NAVER_SITE_VERIFICATION} />
