@@ -37,6 +37,7 @@ const ja: Dict = {
     mobilePhone: '携帯',
     visit: 'アクセス',
     rights: 'All rights reserved.',
+    blog: '店主のブログ（韓国語）',
   },
   intro: { sub: `${YEARS}年、木を挽き、暮らしの道具をつくる`, enter: '画面をタップして入る' },
   hero: {

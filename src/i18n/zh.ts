@@ -37,6 +37,7 @@ const zh: Dict = {
     mobilePhone: '手机',
     visit: '交通指南',
     rights: 'All rights reserved.',
+    blog: '店主博客（韩语）',
   },
   intro: { sub: `${YEARS}年，旋木成器，为生活所用`, enter: '轻触屏幕进入' },
   hero: {

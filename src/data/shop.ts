@@ -43,6 +43,9 @@ export const shopFor = (lang: Lang) => {
 const q = encodeURIComponent(SHOP.addressShort);
 const MAP_HL: Record<Lang, string> = { ko: 'ko', en: 'en', ja: 'ja', zh: 'zh-CN' };
 
+// 사장님이 2021년까지 쓰신 네이버 블로그 (바닥글, 소개 페이지에서 연결)
+export const BLOG_URL = 'https://blog.naver.com/choikg7264';
+
 export const MAP_LINKS = {
   // 네이버 스마트플레이스에 등록된 성창공예 가게 화면 (장소 번호 1605088597)
   naver: 'https://map.naver.com/p/entry/place/1605088597',

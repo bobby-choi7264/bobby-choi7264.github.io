@@ -38,6 +38,7 @@ const ko = {
     mobilePhone: '휴대폰',
     visit: '오시는 길',
     rights: 'All rights reserved.',
+    blog: '사장님 블로그',
   },
   intro: {
     sub: `${YEARS}년, 나무를 돌려 깎아 쓰임을 만듭니다`,

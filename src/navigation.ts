@@ -1,5 +1,5 @@
 import { getBlogPermalink } from './utils/permalinks';
-import { MAP_LINKS, shopFor } from './data/shop';
+import { BLOG_URL, MAP_LINKS, shopFor } from './data/shop';
 import { localize, useT, type Lang } from './i18n';
 
 // 상단 메뉴. 소식(블로그)은 한국어로만 있어서 한국어 페이지에서만 보여 줍니다.
@@ -33,6 +33,7 @@ export const getFooterData = (lang: Lang = 'ko') => {
           { text: t.nav.woods, href: localize(lang, '/woods') },
           { text: t.nav.works, href: localize(lang, '/works') },
           ...(lang === 'ko' ? [{ text: t.nav.news, href: getBlogPermalink() }] : []),
+          { text: t.footer.blog, href: BLOG_URL },
         ],
       },
       {

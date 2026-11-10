@@ -5,6 +5,8 @@ import { YEARS } from '~/data/years';
 import Image from '~/components/common/Image.astro';
 import Mark from '~/components/common/Mark.astro';
 import VisitInfo from '~/components/widgets/VisitInfo.astro';
+import { Icon } from 'astro-icon/components';
+import { BLOG_URL } from '~/data/shop';
 import { useT, type Lang } from '~/i18n';
 
 export interface Props {
@@ -85,6 +87,20 @@ const mosaic = [
           {a.title1}<br /><span class="gold-text">{a.title2}</span>
         </h2>
         {a.paragraphs.map((p) => <p class="about-copy text-pretty" set:html={p} />)}
+        {
+          lang === 'ko' && (
+            <a
+              href={BLOG_URL}
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center gap-2 text-base text-primary underline-offset-4 hover:underline"
+            >
+              <Icon name="tabler:notebook" class="h-5 w-5" aria-hidden="true" />
+              사장님이 쓰신 작업 일지 보기 (네이버 블로그)
+              <Icon name="tabler:external-link" class="h-4 w-4" aria-hidden="true" />
+            </a>
+          )
+        }
       </div>
     </div>
   </section>

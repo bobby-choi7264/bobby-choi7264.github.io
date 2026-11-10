@@ -37,6 +37,7 @@ const en: Dict = {
     mobilePhone: 'Mobile',
     visit: 'Visit',
     rights: 'All rights reserved.',
+    blog: 'Owner’s blog (Korean)',
   },
   intro: {
     sub: `${YEARS} years of turning wood into things of use`,
