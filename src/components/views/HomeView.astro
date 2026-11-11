@@ -15,7 +15,7 @@ import CraftFilm from '~/components/widgets/CraftFilm.astro';
 import Mark from '~/components/common/Mark.astro';
 import Image from '~/components/common/Image.astro';
 import { SITE } from 'astrowind:config';
-import { SERVICES, SHOP, shopFor } from '~/data/shop';
+import { BLOG_URL, MAP_LINKS, SERVICES, SHOP, shopFor } from '~/data/shop';
 import { FEATURED, GALLERY_COUNT, pick } from '~/data/works';
 import { localize, useT, type Lang } from '~/i18n';
 
@@ -49,6 +49,8 @@ const structuredData = {
   url: SITE?.site,
   telephone: ['+82-2-2292-0062', '+82-2-814-5998', '+82-10-8548-7264'],
   founder: { '@type': 'Person', name: lang === 'ko' ? SHOP.owner : 'Choi Gwan-gyu' },
+  // 같은 가게의 다른 채널 (네이버 지도, 카카오맵, 사장님 블로그). 검색엔진이 한 가게로 묶어 알아보게 합니다.
+  sameAs: [MAP_LINKS.naver, MAP_LINKS.kakao, BLOG_URL],
   address: {
     '@type': 'PostalAddress',
     streetAddress: '을지로 219',
