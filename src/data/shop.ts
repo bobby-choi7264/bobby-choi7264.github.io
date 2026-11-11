@@ -51,7 +51,8 @@ export const MAP_LINKS = {
   naver: 'https://map.naver.com/p/entry/place/1605088597',
   // 같은 가게의 방문자 리뷰 화면 (주문·문의 페이지 '후기 남기기' 칸, 가게 안내문 QR과 같은 주소)
   naverReview: 'https://m.place.naver.com/place/1605088597/review/visitor',
-  kakao: `https://map.kakao.com/link/search/${q}`,
+  // 카카오맵에 등록된 성창공예 장소 화면 (장소 번호 1830625693)
+  kakao: 'https://place.map.kakao.com/1830625693',
   google: `https://www.google.com/maps/search/?api=1&query=${q}`,
   embed: `https://maps.google.com/maps?q=${q}&hl=ko&z=17&output=embed`,
 };
